@@ -1,0 +1,3293 @@
+<html>
+<title>PAAF</title>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <style type="text/css">
+        @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+
+        body {
+            width: 900px;
+            margin: auto;
+            margin-bottom: 50px;
+        }
+
+        hr {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid darkgray;
+            padding: 0px;
+            padding-bottom: 0px;
+            margin: 2px 0px 2px 0px
+        }
+
+        .med-calc-section {
+            margin: 10px;
+            border: 1px solid darkgray;
+        }
+
+        label {
+            padding: 1px 5px 1px 5px;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        i {
+            display: inline-block;
+            font-size: 13px;
+        }
+
+        .paaf {
+            margin: 4px;
+            border: 1px solid rgb(139, 139, 139);
+            padding: 5px;
+            padding-bottom: 40px;
+            border-radius: 5px;
+            font-family: "Source Sans Pro", sans-serif;
+        }
+
+        .header {
+            font-weight: bold;
+            font-size: 17px;
+            height: 65px;
+            text-align: center;
+        }
+
+
+        .left {
+            width: 49.5%;
+            float: left;
+        }
+
+        .right {
+            width: 49.5%;
+            float: right;
+        }
+
+        .patient-info-label {
+            display: inline-block;
+            text-align: right;
+            width: 40%;
+        }
+
+        .patient-info-input {
+            display: inline-block;
+            width: 50%;
+        }
+
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        table,
+        th,
+        td {
+            border-spacing: 0px;
+            border: 1px solid rgb(216, 216, 216);
+            /* border-bottom: none;
+            border-top: none; */
+            text-align: center;
+            font-size: 13px;
+        }
+
+        label[for] {
+            cursor: pointer;
+        }
+
+        .text-align-right {
+            text-align: right;
+        }
+
+        .section {
+            border: 1px solid rgb(100, 100, 100);
+            display: inline-block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .accordion {
+            display: inline-block;
+            background: rgb(100, 100, 100);
+            width: calc(100% - 9px);
+            font-weight: bold;
+            color: white;
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-left: -1px;
+            margin-top: -1px;
+        }
+
+        .accordion-banner {
+            display: inline-block;
+            background: #fcf8e3;
+            width: calc(100% - 10px);
+            color: #8a6d3b;
+            /* font-style: italic; */
+            /* padding-left: 5px;
+            padding-right: 5px; */
+            padding: 5px;
+            border-color: #faebcc;
+
+        }
+
+        .close-btn {
+            float: right;
+            cursor: pointer;
+            line-height: 22px;
+            padding-right: 3px;
+            /* transition: 0.3s; */
+        }
+
+        .block {
+            display: block
+        }
+
+        .width-15 {
+            width: 15%;
+        }
+
+        input,
+        textarea {
+            border: 1px solid rgb(139, 139, 139);
+            padding: .1rem;
+            font-size: 13px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* radio {
+            display: inline-block;
+            float: left;
+            width: 25px;
+            clear: none
+        } */
+
+        td label {
+            display: block;
+            text-align: center;
+            cursor: pointer
+        }
+
+        .cursor {
+            cursor: pointer;
+        }
+
+        tr label {
+            display: block;
+            text-align: center;
+            cursor: pointer
+        }
+
+        .button {
+            padding: 5px;
+            font-size: medium;
+            float: right;
+        }
+    </style>
+
+
+    <!-- CSS Script that removes textarea and textbox borders when printing ---(put this inbetween <header></header>)----------------->
+    <style type="text/css" media="print">
+        img {
+            /* insure images don't get cut */
+            max-width: 100% !important;
+        }
+
+        div.DoNotPrint {
+            display: none;
+        }
+
+        input.noborder {
+            border: 0px;
+            background: transparent;
+        }
+
+        .accordion {
+            background: none;
+            width: calc(100% - 10px);
+            font-weight: bold;
+            color: black;
+        }
+
+        textarea.noborder {
+            scrollbar-3dlight-color: transparent;
+            scrollbar-3dlight-color: transparent;
+            scrollbar-arrow-color: transparent;
+            scrollbar-base-color: transparent;
+            scrollbar-darkshadow-color: transparent;
+            scrollbar-face-color: transparent;
+            scrollbar-highlight-color: transparent;
+            scrollbar-shadow-color: transparent;
+            scrollbar-track-color: transparent;
+            background: transparent;
+            overflow: hidden;
+            /* scrollbar : none; */
+            border: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <form method="post" name="PAAF" id="PAAF" class="paaf">
+        <div id="app">
+            <!-- Hidden fields -->
+            <div style="display:none;">
+                <input type="text" id="EMR_PatientID" v-model="EMR_PatientID" oscarDB=patient_id>
+                <input type="text" id="PatientGender" v-model="PatientGender" oscarDB=sex>
+                <input type="text" id="EMR_eAPIID" v-model="EMR_eAPIID" name="EMR_eAPIID" oscarDB=e$last#EMR_eAPIID>
+                <input type="text" id="PatientGender" v-model="PatientGender" oscarDB=sex>
+                <input type="text" id="ProviderName" v-model="ProviderName" oscarDB=current_user>
+                <input type="text" id="ProviderIdentifier" v-model="ProviderIdentifier" oscarDB=current_user_id>
+            </div>
+            <!-- Hidden fields end -->
+            <div style="height:75px">
+                <div class="left header">
+                    <span class="">
+                        Queen’s Family Health Team<br>
+                        Provider Asthma Assessment Form (PAAF)<br>
+                    </span>
+                    <label for="encounterDate" style="font-weight:normal">
+                        Encounter Date
+                    </label>
+                    <input type="text" id="encounterDate" v-model="encounterDate" class="patient-info-input"
+                        placeholder="YYYY/MM/DD">
+
+                </div>
+
+                <div class="right">
+                    <label for="patient-name" class="patient-info-label">
+                        Patient Name
+                    </label>
+
+                    <input type="text" id="patientName" oscarDB=first_last_name class="patient-info-input">
+
+                    <label class="patient-info-label">
+                        Date of Birth
+                    </label>
+
+                    <input type="text" name="dob" id="dob" v-model="dob" oscarDB=dobc2 class="patient-info-input"
+                        placeholder="YYYY/MM/DD">
+
+                    <label for="mrn" class="patient-info-label">
+                        Medical Record #
+                    </label>
+                    <input type="text" id="mrn" name="mrn" class="patient-info-input">
+
+                </div>
+                <!-- oscarDB=e$last#mrn -->
+            </div>
+
+
+            <div id="asthma-diagnosis-section" class="section">
+                <div class="accordion">
+                    <span class="left">
+                        Asthma Diagnosis
+                    </span>
+                    <span class="text-align-right right"
+                        onclick="toggleSection('asthma-diagnosis-na', 'asthma-diagnosis-content')">
+                        <input type="checkbox" id="asthma-diagnosis-na" name="diagnosisSectionNA">
+                        N/A
+                    </span>
+                </div>
+
+                <div id="asthma-diagnosis-content">
+                    <div class="accordion-banner" v-show="showDiagnosisBanner">
+                        Some fields in this section may have been imported from a previous assessment. Please review and
+                        update where necessary.
+                        <span class="close-btn" v-on:click="showDiagnosisBanner = false">&#10006;</span>
+                    </div>
+
+                    <label style="width:15%">
+                        <b>Asthma diagnosis</b>
+                    </label>
+                    <!-- Dummy field to pull previous diagnosis data -->
+                    <input id="pulledDiagnosis" type="hidden" oscarDB=e$last#diagnosis>
+                    <span onclick="toggleDiagnosisFields()">
+                        <label>
+                            <input type="radio" id="diagnosisUnknown" name="diagnosis" value="unknown"
+                                v-model="diagnosis">
+                            Unknown
+                        </label>
+                        <label>
+                            <input type="radio" id="diagnosisConfirmed" name="diagnosis" value="confirmed"
+                                v-model="diagnosis">
+                            Confirmed
+                        </label>
+                        <label>
+                            <input type="radio" id="diagnosisSuspected" name="diagnosis" value="suspected"
+                                v-model="diagnosis">
+                            Suspected
+                        </label>
+                        <label>
+                            <input type="radio" id="diagnosisExcluded" name="diagnosis" value="excluded"
+                                v-model="diagnosis">
+                            Excluded
+                        </label>
+                    </span>
+                    <br>
+                    <hr>
+                    <span id="_dateConfirmedExcluded">
+                        <label style="width:15%"></label>
+                        <label style="width:80%">
+                            Date confirmed/excluded
+                            <input type="textbox" name="dateConfirmedExcluded" oscarDB=e$last#dateConfirmedExcluded
+                                placeholder="YYYY/MM/DD">
+                        </label>
+                    </span>
+                    <span id="_ageAsthma">
+                        <label style="width:15%"></label>
+                        <label style="width:25%">
+                            Age asthma was confirmed
+                            <input type="textbox" id="ageConfirmed" name="ageConfirmed" style="width:50px"
+                                oscarDB=e$last#ageConfirmed>
+                        </label>
+                    </span>
+                    <span v-show="youngPatient">
+                        <label style="width:15%"></label>
+
+                        <label style="width:80%">
+                            Able to do spirometry
+                            <input type="checkbox" name="ableSpirometry" v-model="ableSpirometry"
+                                oscarDB=e$last#ableSpirometry id="ableSpirometry">
+                        </label>
+                    </span>
+
+                    <hr />
+
+                    <div id="oldSection" v-if="!youngPatient || (youngPatient && ableSpirometry)">
+                        <label><b>Method used to confirm asthma diagnosis</b></label>
+                        <label><i>(for individuals 6 years and older, and younger individuals able to do
+                                spirometry)</i></label>
+                        <table style="margin:5px; width: 99%;">
+                            <colgroup>
+                                <!-- <col span="1" style="border: 0px"> -->
+                            </colgroup>
+
+                            <tr>
+                                <th style="width:10%"></th>
+                                <th style="width:30%">Pulmonary Function Measurement</th>
+                                <th style="width:25%">Children (6 years+)</th>
+                                <th style="width:30%">Adults</th>
+
+                            </tr>
+                            <tr>
+                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption1"
+                                        oscarDB=e$last#methodChartOlderOption1>
+                                </td>
+                                <td colspan="3" style="border-bottom:none">
+                                    <i>PREFERRED: Spirometry showing reversible
+                                        airway obstruction</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Reduced FEV&#8321;/FVC <br>
+                                    <b>AND</b> <br>
+                                    Increased FEV&#8321; after a bronchodilator or after course of controller therapy
+                                </td>
+                                <td>
+                                    Less than lower limit of normal*<br>(&#60;0.8-0.9)**<br>
+                                    <b>AND</b> <br>
+                                    ≥ 12%
+                                </td>
+                                <td>
+                                    Less than lower limit of normal*<br>(&#60;0.75-0.8)**<br>
+                                    <b>AND</b> <br>
+                                    ≥ 12% <br><i>(and a minimum &#62; 200 mL)</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption2"
+                                        oscarDB=e$last#methodChartOlderOption2></td>
+                                <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Peak expiratory flow (PEF)
+                                        variability</i></td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    Increase after a bronchodilator or after a course of controller therapy <br>
+                                    <b>OR</b> <br>
+                                    Diurnal variation
+                                </td>
+                                <td>≥ 20%<br>
+                                    <b>OR</b> <br>
+                                    Not recommended
+                                </td>
+                                <td>
+                                    60 L/min <br>
+                                    (minimum ≥ 20%)
+                                    <br>
+                                    <b>OR</b> <br>
+                                    &#62;8% based upon twice daily readings;<br>
+                                    &#62;20% based upon multiple daily readings
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption3"
+                                        oscarDB=e$last#methodChartOlderOption3></td>
+                                <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Positive challenge test</i>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    a) Methacholine Challenge<br>
+                                    <b>OR</b> <br>
+                                    b) Exercise Challenge
+                                </td>
+                                <td colspan="2">
+                                    PC&#8322;&#8320; &#60;4mg/mL <br>
+                                    (4-16 mg/mL is borderline; 16 mg/mL is negative)<br>
+                                    <b>OR</b><br>
+                                    ≥10-15% decrease in FEV&#8321; post-exercise
+                                </td>
+                            </tr>
+                        </table>
+                        <label style="width:97%;text-align:right;"><i style="font-size:8pt">*Based on age, height and
+                                ethnicity. &nbsp; &nbsp;
+                                **Appropriate lower limits of normal ratios for adults and children.
+                            </i></label>
+                        <label style="width:97%;text-align:right;"><i style="font-size:8pt">
+                                This information was originally published in Can Respir J 2012; 19(2) 127-164
+                            </i></label>
+                    </div>
+                    <div id="youngSection" v-if="youngPatient && !ableSpirometry">
+                        <label><b>Method used to confirm asthma diagnosis</b></label>
+                        <label><i>(for individuals 1-5 years of age NOT able to do spirometry)</i></label>
+                        <table style="margin:5px; width: 99%;">
+                            <colgroup>
+                                <!-- <col span="1" style="border: 0px"> -->
+                            </colgroup>
+
+                            <tr>
+                                <th style="width:5%; border-bottom:none;"><input type="checkbox"
+                                        name="recurrentExacerbation"></th>
+                                <th style="width:95%" colspan="3">Recurrent asthma-like symptoms or exacerbation
+                                </th>
+
+                            </tr>
+                            <tr>
+                                <td rowspan="2" style="border-bottom: none; border-top: none;">
+                                    <b>AND</b> <br>
+                                </td>
+                                <td rowspan="2">
+                                    <b>Documentation of airflow obstruction</b>
+                                </td>
+                                <td style="text-align: left; border-right: none; border-bottom: none;">
+                                    <input type="checkbox" name="methodChartYoungFirstSectionPreferred">
+                                </td>
+                                <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
+                                    <i>Preferred</i><br>
+                                    Documented wheezing or other signs of airflow obstruction observed by a heath care
+                                    provider
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; border-right: none;">
+                                    <input type="checkbox" name="methodChartYoungFirstSectionAlt">
+
+                                </td>
+                                <td style="text-align: left; border-left: none; padding-left: 5px">
+                                    <i>Alternative</i><br>
+                                    Convincing parental report of wheezing or other symptoms
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3" style="border-bottom: none; border-top: none;">
+                                    <b>AND</b> <br>
+                                </td>
+                                <td rowspan="3">
+                                    <b>Documentation of reversibility of airflow obstruction</b>
+                                </td>
+                                <td style="text-align: left; border-right: none; border-bottom: none;">
+                                    <input type="checkbox" name="methodChartYoungSecondSectionPreferred">
+
+                                </td>
+                                <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
+                                    <i>Preferred</i><br>
+                                    Response to bronchodilator within 30 min confirmed by a health care provider
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; border-right: none; border-bottom: none;">
+                                    <input type="checkbox" name="methodChartYoungSecondSectionAlt1">
+
+                                </td>
+                                <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
+                                    <i>Alternative</i><br>
+                                    Gradual but clear response to anti-inflammatory therapy: after ≥ 4 hours of oral
+                                    corticosteroid
+                                    (OCS), within 3 months of moderate dose inhaled corticosteroid (ICS), expect
+                                    decreased
+                                    symptoms and exacerbation frequency and severity.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; border-right: none;">
+                                    <div><input type="checkbox" name="methodChartYoungSecondSectionAlt2">
+                                    </div>
+
+                                </td>
+                                <td style="text-align: left; border-left: none; padding-left: 5px">
+                                    <i>Alternative</i><br>
+                                    Response to bronchodilator within 30 min by parental history
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td style="border-top: none;">
+                                    <b>AND</b> <br>
+                                </td>
+                                <td colspan="3" style="text-align: left; padding-left:10px;">
+                                    <b>No clinical evidence of an alternative diagnosis</b><br>
+                                </td>
+                            </tr>                           
+                        </table>
+                        <label style="width:97%;text-align:right;"><i style="font-size:8pt">
+                                This information was originally published in Can Respir J2015;22(3);135-143
+                            </i></label>
+                    </div>
+                    <div>
+                        <br />                 
+                        <label style="width:192px"><b>Method confirmed by specialist</b></label>
+                        <input type="checkbox" id="confirmedBySpecialist"
+                        v-model="confirmedBySpecialist" name="confirmedBySpecialist"
+                        oscarDB=e$last#confirmedBySpecialist>
+                        
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- Family History -->
+            <div id="family-history-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Family History of Lung Disease
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="lungDisease"
+                            onclick="toggleSection('lungDisease','lungDiseaseContent')">
+                        N/A
+                    </span>
+                </div>
+                <div class="accordion-banner" v-show="showFamilyHistoryBanner">
+                    Some fields in this section may have been imported from a previous assessment. Please review and
+                    update where necessary.
+                    <span class="close-btn" v-on:click="showFamilyHistoryBanner = false">&#10006;</span>
+                </div>
+
+                <div id="lungDiseaseContent">
+
+                    <table style="margin:5px; width: 99%;">
+                        <tr>
+                            <th style="width:40%"></th>
+                            <th style="width:20%">Parent</th>
+                            <th style="width:20%">Sibling</th>
+                            <th style="width:20%">Unknown</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Allergy - Drug</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergyDrugParent"
+                                        oscarDB=e$last#allergyDrugParent></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergyDrugSibling"
+                                        oscarDB=e$last#allergyDrugSibling></label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyDrugOther" oscarDB=e$last#allergyDrugOther>
+                            </td>
+                            </label>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Allergy - Environmental</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergyEnvParent"
+                                        oscarDB=e$last#allergyEnvParent></label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyEnvSibling"
+                                        oscarDB=e$last#allergyEnvSibling>
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyEnvUnknown"
+                                        oscarDB=e$last#allergyEnvUnknown>
+                                </label>
+                            </td>
+                        </tr>                        
+                        <tr>
+                            <td>
+                                <b>Allergy - Food</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergyFoodParent"
+                                        oscarDB=e$last#allergyFoodParent></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergyFoodSibling"
+                                        oscarDB=e$last#allergyFoodSibling></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergyFoodUnknown"
+                                        oscarDB=e$last#allergyFoodUnknown></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Allergy - Furry Pets</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergyFurryPetsParent"
+                                        oscarDB=e$last#allergyFurryPetsParent></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergyFurryPetsSibling"
+                                        oscarDB=e$last#allergyFurryPetsSibling></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergyFurryPetsUnknown"
+                                        oscarDB=e$last#allergyFurryPetsUnknown></label>
+                            </td>
+                        </tr>                        
+                        <tr>
+                            <td>
+                                <b>Asthma</b>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyAsthmaParent"
+                                        oscarDB=e$last#allergyAsthmaParent>
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyAsthmaSibling"
+                                        oscarDB=e$last#allergyAsthmaSibling>
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyAsthmaUnknown"
+                                        oscarDB=e$last#allergyAsthmaUnknown>
+                                </label>
+                            </td>
+                        </tr>                        
+                        <tr>
+                            <td>
+                                <b>Atopic Dermatitis</b>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyAtopicDermatitisParent"
+                                        oscarDB=e$last#allergyAtopicDermatitisParent>
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyAtopicDermatitisSibling"
+                                        oscarDB=e$last#allergyAtopicDermatitisSibling>
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyAtopicDermatitisUnknown"
+                                        oscarDB=e$last#allergyAtopicDermatitisUnknown>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>COPD</b>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyCOPDParent"
+                                        oscarDB=e$last#allergyCOPDParent>
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyCOPDSibling"
+                                        oscarDB=e$last#allergyCOPDSibling>
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyCOPDUnknown"
+                                        oscarDB=e$last#allergyCOPDUnknown>
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Smoking -->
+            <div id="smoking-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Smoking
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="smokingNA" onclick="toggleSection('smokingNA', 'smokingContent')">
+                        N/A
+                    </span>
+                </div>
+                <div class="accordion-banner" v-show="showSmokingBanner">
+                    Some fields in this section may have been imported from a previous assessment. Please review and
+                    update where necessary.
+                    <span class="close-btn" v-on:click="showSmokingBanner = false">&#10006;</span>
+                </div>
+
+                <div id="smokingContent">
+                    <label style="width:25%;"><b>Smoking status</b> <i>(Cigarettes)</i></label>
+                    <label onclick="smokingStatusChange()">
+                        <input type="radio" id="nonSmoker" name="smokingStatus" value="nonSmoker">
+                        Non-smoker
+                    </label>
+                    <label onclick="smokingStatusChange()">
+                        <input type="radio" id="exSmoker" name="smokingStatus" value="exSmoker">
+                        Ex-smoker
+                    </label>
+
+                    <label onclick="smokingStatusChange()">
+                        <input type="radio" id="currentSmoker" name="smokingStatus" value="currentSmoker">
+                        Current smoker
+                    </label>
+
+                    <div id="isExSmoker" style="width:100%">
+
+                        <hr style="margin:2px 0px 2px 0px">
+                        <div>
+                            <label style="width:25%;"><b>Quit duration</b></label>
+                            <label>
+                                <input type="radio" id="quitDuration" name="allergy" value="nonSmoker">
+                                &#62; 6 months
+                            </label>
+                            <label>
+                                <input type="radio" id="quitDuration" name="allergy" value="exSmoker">
+                                1-6 months
+                            </label>
+
+                            <label>
+                                <input type="radio" id="quitDuration" name="allergy" value="currentSmoker">
+                                &#60; 1 month
+                            </label>
+                        </div>
+                        <div>
+                            <label><i>
+                                    When was the last time you smoked a cigarette, even a
+                                    puff?</i></label>
+                        </div>
+
+                        <hr style="margin:2px 0px 2px 0px">
+                        <div>
+                            <label style="width:25%;"><b>Quit when</b></label>
+                            <label>
+                                <input type="textbox" name="quitWhen" oscarDB=e$last#quitWhen placeholder="YYYY/MM/DD">
+                            </label>
+                        </div>
+                    </div>
+                    <div id="smoker" style="width:100%">
+                        <hr style="margin:2px 0px 2px 0px">
+                        <label style="width:25%"><b>Average number of cigarettes smoked</b></label>
+                        <label><input type="textbox" name="cigarettesDay" v-model="cigarettesDay" id="cigarettesDay"
+                                placeholder="#" style="width:30px" onchange="calcSmokingYears()">/day</label>
+                        <label><input type="textbox" name="cigarettesMonth" v-model="cigarettesMonth"
+                                id="cigarettesMonth" onchange="calcSmokingYears()" placeholder="#"
+                                style="width:30px">/month</label>
+                        <hr style="margin:2px 0px 2px 0px">
+                        <label style="width:25%"><b>Years smoked</b></label>
+                        <label><input type="textbox" name="yearsSmoked" id="yearsSmoked" v-model="yearsSmoked"
+                                placeholder="#" style="width:50px" onchange="calcSmokingYears()"></label>
+                        <hr style="margin:2px 0px 2px 0px">
+                        <label style="width:25%"><b>Pack Years</b></label>
+                        <label>{{ packYears }}</label>
+                    </div>
+
+                    <div id="isCurrentSmoker" style="width:100%">
+                        <hr style="margin:2px 0px 2px 0px">
+                        <label style="width:25%"><b>Smoking cessation addressed</b></label>
+                        <!-- onclick="toggleSectionFloat('smokingCessationNotAddressed', 'cessationAddressedSection')"> -->
+                        <label v-on:click="showCessationAddressedSection = true"><input type="radio"
+                                id="smokingCessationAddressed" name="smokingCessationAddressed" value="yes">
+                            Yes
+                        </label>
+                        <!-- onclick="toggleSectionFloat('smokingCessationNotAddressed', 'cessationAddressedSection')"> -->
+                        <label v-on:click="showCessationAddressedSection = false"><input type="radio"
+                                id="smokingCessationNotAddressed" name="smokingCessationAddressed" value="no">
+                            No
+                        </label>
+
+                        <div id="cessationAddressedSection" v-show="showCessationAddressedSection"
+                            style="width:400px; display:block; margin-left:119px">
+                            <label style=" width:25%; "><b>Ask</b></label>
+                            <input type="hidden" id="pulled-cessationAsk" oscarDB=e$last#cessationAsk />
+                            <label>
+                                <input type="radio" name="cessationAsk" value="yes" v-model="cessationAsk">
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="cessationAsk" value='no' v-model="cessationAsk">
+                                No
+                            </label>
+                            <br>
+                            <label style="width:25%"><b>Advise</b></label>
+                            <input type="hidden" id="pulled-cessationAdvise" oscarDB=e$last#cessationAdvise />
+                            <label>
+                                <input type="radio" name="cessationAdvise" value="yes" v-model="cessationAdvise">
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="cessationAdvise" value="no" v-model="cessationAdvise">
+                                No
+                            </label>
+                            <br>
+                            <label style="width:25%"><b>Arrange</b></label>
+                            <input type="hidden" id="pulled-cessationArrange" oscarDB=e$last#cessationArrange />
+                            <label>
+                                <input type="radio" name="cessationArrange" value="yes" v-model="cessationArrange">
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="cessationArrange" value="no" v-model="cessationArrange">
+                                No
+                            </label>
+                        </div>
+                        <div style="width:100%; display:block">
+                            <hr style="width:100%; margin:2px 0px 2px 0px; display:block">
+                            <label style="width:25%;"><b>Smoking cessation quit intentions</b></label>
+                            <input type="hidden" id="pulled-quitIntentions" oscarDB=e$last#quitIntentions />
+                            <label>
+                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                    value="withinMonth">
+                                Within a month
+                            </label>
+                            <label>
+                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                    value="within6months">
+                                Within 6 months
+                            </label>
+                            <label>
+                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                    value="beyond6months">
+                                Beyond 6 months
+                            </label>
+                            <label>
+                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                    value="none">
+                                Not planning to quit
+                            </label>
+                        </div>
+                        <div>
+                            <label><i>(Are you planning to quit smoking?)</i></label>
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:25%;"><b>E-cigarette/vaping</b></label>
+                        <input type="hidden" id="pulled-vaping" oscarDB=e$last#vaping />
+                        <label>
+                            <input type="radio" name="vaping" v-model="vaping" value="current">
+                            Current
+                        </label>
+                        <label>
+                            <input type="radio" name="vaping" v-model="vaping" value="past">
+                            Past
+                        </label>
+                        <label>
+                            <input type="radio" name="vaping" v-model="vaping" value="never">
+                            Never
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:25%;"><b>Cannabis use</b></label>
+                        <input type="hidden" id="pulled-cannabis" oscarDB=e$last#cannabis />
+                        <label>
+                            <input type="radio" name="cannabis" v-model="cannabis" value="current">
+                            Current
+                        </label>
+                        <label>
+                            <input type="radio" name="cannabis" v-model="cannabis" value="past">
+                            Past
+                        </label>
+                        <label>
+                            <input type="radio" name="cannabis" v-model="cannabis" value="never">
+                            Never
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:25%;"><b>Exposure to second-hand smoke</b></label>
+                        <input type="hidden" id="pulled-secondHandSmoke" oscarDB=e$last#secondHandSmoke />
+                        <label>
+                            <input type="radio" name="secondHandSmoke" v-model="secondHandSmoke" value="current">
+                            Current
+                        </label>
+                        <label>
+                            <input type="radio" name="secondHandSmoke" v-model="secondHandSmoke" value="past">
+                            Past
+                        </label>
+                        <label>
+                            <input type="radio" name="secondHandSmoke" v-model="secondHandSmoke" value="never">
+                            Never
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Severity -->
+            <div id="severity-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Asthma Severity
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="asthmaSeverityNA"
+                            onclick="toggleSection('asthmaSeverityNA', 'severityContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="severityContent">
+                    <div onclick="familyPhysicianVisitsChange()">
+                        <label><b>Visit(s) to family physician in the last year for asthma symptoms</b></label>
+                        <label>
+                            <input type="radio" id="yesFamilyPhysicianVisits" name="physicianVisits" value="yes">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" id="noFamilyPhysicianVisits" name="physicianVisits" value="no">
+                            No
+                        </label>
+                        <label>
+                            <input type="radio" id="unknownFamilyPhysicianVisits" name="physicianVisits"
+                                value="unknown">
+                            Unknown
+                        </label>
+                    </div>
+                    <div id="yesRoutineCareVisits">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Routine primary care visits</label>
+                        <input type=textbox style="width:50px;" name="routinePrimaryVisits" id="routinePrimaryVisits"
+                            placeholder="#">
+                        <label>Urgent primary care visits</label>
+                        <input type=textbox style="width:50px;" placeholder="#" name="urgentPrimaryVisits"
+                            id="urgentPrimaryVisits">
+                    </div>
+                    <hr>
+                    <label><b>Visit(s) to specialist for asthma</b></label>
+                    <table style="margin:5px; width: 99%;">
+                        <tr>
+                            <th style="width:20%"></th>
+                            <th style="width:20%">Yes</th>
+                            <th style="width:20%">No</th>
+                            <th style="width:20%">Unknown</th>
+                            <th style="width:20%">Recent (≤ 1 year)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Respirologist</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="respirologistYes"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="respirologistNo"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="respirologistUnknown"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="respirologistRecent"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>General Internist</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="generalInternistYes"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="generalInternistNo"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="generalInternistUnknown"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="generalInternistRecent"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Allergist</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergistYes"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergistNo"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergistUnknown"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="allergistRecent"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Pediatrician</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="pediatricianYes"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="pediatricianNo"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="pediatricianUnknown"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="pediatricianRecent"></label>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <table style="margin:5px; width: 99%;">
+                        <tr>
+                            <th style="width:20%"></th>
+                            <th style="width:16%">Yes</th>
+                            <th style="width:16%">No</th>
+                            <th style="width:16%">Unknown</th>
+                            <th style="width:16%">Recent (≤ 1 year)</th>
+                            <th style="width:16%">Total # ever</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Asthma exacerbation ever</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="asthmaExacerbationYes"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="asthmaExacerbationNo"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="asthmaExacerbationUnknown"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" style="width:30px;" name="asthmaExacerbationLastYear"
+                                        id="asthmaExacerbationLastYear"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" name="asthmaExacerbationTotalNumber"
+                                        style="width:30px;"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>ED visits ever for asthma</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="edVisitsYes"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="edVisitsNo"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="edVisitsUnknown"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" style="width:30px;" name="edVisitsLastYear"
+                                        id="Number_EDVisits_Last12mos"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" name="edVisitsTotalNumber" style="width:30px;"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Hospitalized ever for asthma</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="hospitalizedYes"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="hospitalizedNo"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="hospitalizedUnknown"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" style="width:30px;" name="hospitalizedLastYear"
+                                        id="Number_UrgentCareVisits_Last12mos"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" name="hospitalizedTotalNumber" style="width:30px;"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Near fatal asthma episode</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="nearFatalEpisodeYes"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="nearFatalEpisodeNo"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="nearFatalEpisodeUnknown"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" style="width:30px;"
+                                        name="nearFatalEpisodeLastYear"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" name="nearFatalEpisodeTotalNumber"
+                                        style="width:30px;"></label>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <label style="width:30%;">
+                        <b>Recent best FEV&#8321; or PEF &#60; 60% predicted</b>
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest">
+                        No
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest">
+                        Unknown
+                    </label>
+                    <label>
+                    </label>
+                    <br>
+                    <hr>
+
+                    <label style="width:30%;">
+                        <b>ICU admissions</b> &le;<b> 1 year</b>
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest" value="yes">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest" value="no">
+                        No
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest" value="unknown">
+                        Unknown
+                    </label>
+                    <label>
+                        <input type="textbox" style="width:105px;" name="numberOfICUAdmissions"
+                            placeholder="#ICU admissions">
+                    </label>
+                    <label>
+                        <input type="textbox" style="width:100px;" name="numberOfIntubations"
+                            placeholder="# intubations">
+                    </label>
+                    <br>
+                </div>
+            </div>
+
+
+            <!-- Occupational -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Occupational History
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="occupationalNA" name="occupationalHistoryNA"
+                            onclick="toggleSection('occupationalNA', 'occupationalContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="occupationalContent">
+                    <div>
+                        <label style="width:35%; display:block"><b>Current employment status: check all that
+                                apply.</b></label>
+                        <span>&nbsp;&nbsp;
+                            <label>
+                                <input type="checkbox" name="fullTimeEmployment" oscarDB=e$last#fullTimeEmployment>
+                                Full-Time
+                            </label>
+                            <label>
+                                <input type="checkbox" name="partTimeEmployment" oscarDB=e$last#partTimeEmployment>
+                                Part-Time
+                            </label>
+                            <label>
+                                <input type="checkbox" name="shiftWorkEmployment" oscarDB=e$last#shiftWorkEmployment>
+                                Shift work
+                            </label>
+                            <label>
+                                <input type="checkbox" name="retiredEmployment" oscarDB=e$last#retiredEmployment>
+                                Retired
+                            </label>
+                            <label>
+                                <input type="checkbox" name="modifiedDutiesEmployment"
+                                    oscarDB=e$last#modifiedDutiesEmployment>
+                                Modified duties
+                            </label>
+                            <label>
+                                <input type="checkbox" name="offWorkRespiratoryEmployment"
+                                    oscarDB=e$last#offWorkRespiratoryEmployment>
+                                Off work due to respiratory health
+                            </label>
+                            <br>
+                            <label>&nbsp;&nbsp;
+                                <input type="checkbox" oscarDB=e$last#otherEmployment name="otherEmployment"
+                                    id="otherEmployment"
+                                    onclick="toggleSectionInline('otherEmployment','otherDutiesSpecify')">
+                                Other
+                                <input id="otherDutiesSpecify" style="display:none; margin-left: 10px; width:300px"
+                                    type="textbox" name="otherDutiesSpecify" oscarDB=e$last#otherDutiesSpecify>
+                            </label>
+                        </span>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%">
+                            <b>Current employment</b>
+                        </label>
+                        <input type="textbox" name="currentEmployment" oscarDB=e$last#currentEmployment>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Did your asthma symptoms start at work?</b></label>
+                        <input type="hidden" id="pulled-workStart" oscarDB=e$last#workStart />
+                        <label>
+                            <input type="radio" name="workStart" value="yes" v-model="workStart">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="workStart" value="no" v-model="workStart">
+                            No
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Do/did your asthma symptoms worsen at work?</b></label>
+                        <input type="hidden" id="pulled-workWorsen" oscarDB=e$last#workWorsen />
+                        <label>
+                            <input type="radio" name="workWorsen" value="yes" v-model="workWorsen">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="workWorsen" value="no" v-model="workWorsen">
+                            No
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Complete WRASQ(L) today?</b></label>
+                        <input type="hidden" id="pulled-completeWrasql" oscarDB=e$last#completeWrasql />
+                        <label>
+                            <input type="radio" name="completeWrasql" v-model="completeWrasql" value="yes">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="completeWrasql" v-model="completeWrasql" value="no">
+                            No
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medications -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Medications
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="medicationNA"
+                            onclick="toggleSection('medicationNA', 'medicationContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="medicationContent">
+                    <!-- <div v-show="false" style="display:block; height:110px;">
+                        <div style="width:49%; float: left;">
+                            <div>
+                                <label><i>Current medications in Oscar (for reference only)</i></label>
+                            </div>
+                            <textarea readonly style="width:98%; margin-left:1%; height: 100px; cursor: default"
+                                name="oscarMeds" oscarDB=current_Rx></textarea>
+                        </div>
+                        <div style="width:49%; float: left;">
+                            <div>
+                                <label><i>All generic medications Oscar (for reference only)</i></label>
+                            </div>
+                            <textarea v-show="true" readonly="true"
+                                style="width:98%; margin-left:1%; height: 100px; cursor: default" id="oscarGenericDrugs"
+                                oscarDB=druglist_generic></textarea>
+                        </div>
+                    </div> -->
+                    <label>
+                        <b>Green Zone Controllers</b>
+                    </label><br>
+                    <label><i>The following medications are required to determine asthma severity. <br>
+                            Do not include yellow or red zone medications. </i></label>
+                    <!-- <textarea readonly style="width:98%; margin-left:1%" name="oscarMeds" oscarDB=current_Rx></textarea> -->
+                    <!-- <span onclick="parseMeds()">parse meds</span> -->
+                    <!-- <div>
+                        <label><b>Current relevant medications</b></label>
+                    </div> -->
+                    <div class="med-calc-section">
+                        <div class="flex-center">
+                            <input type="checkbox" id="qvar" name="qvar" v-model="qvar">
+                            <label for="qvar" style="width:25%">
+                                <b>QVAR</b><br>
+                                <i>Beclomethasone dipropionate HFA</i>
+                            </label>
+                            <span v-if="qvar">
+                                <label>
+                                    Strength:
+                                    <select name="qvarStrength" id="qvarStrength" v-model="qvarStrength"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="50">50mcg</option>
+                                        <option value="100">100mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="qvarDose" id="qvarDose" v-model="qvarDose" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+
+                                <label>
+                                    Frequency:
+                                    <select name="qvarFreq" id="qvarFreq" v-model="qvarFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="pulmicortTurbuhaler" id="pulmicortTurbuhaler"
+                                v-model="pulmicortTurbuhaler">
+                            <label for="pulmicortTurbuhaler" style="width:25%">
+                                <b>Pulmicort Turbuhaler</b><br>
+                                <i>Budesonide</i>
+                            </label>
+                            <span v-if="pulmicortTurbuhaler">
+                                <label>
+                                    Strength:
+                                    <select name="pulmicortTurbuhalerStrength" id="pulmicortTurbuhalerStrength"
+                                        v-model="pulmicortTurbuhalerStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                        <option value="400.0">400mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="pulmicortTurbuhalerDose" id="pulmicortTurbuhalerDose"
+                                        v-model="pulmicortTurbuhalerDose" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                        <option value="5">5 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="pulmicortTurbuhalerFreq" id="pulmicortTurbuhalerFreq"
+                                        v-model="pulmicortTurbuhalerFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="symbicortTurbuhaler" id="symbicortTurbuhaler"
+                                v-model="symbicortTurbuhaler">
+                            <label for="symbicortTurbuhaler" style="width:25%">
+                                <b>Symbicort Turbuhaler</b><br>
+                                <i>Budesonide/formoterol</i>
+                            </label>
+                            <span v-if="symbicortTurbuhaler">
+                                <label>
+                                    Strength:
+                                    <select name="symbicortTurbuhalerStrength" id="symbicortTurbuhalerStrength"
+                                        v-model="symbicortTurbuhalerStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">100/6mcg</option>
+                                        <option value="200.0">200/6mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="symbicortTurbuhalerDose" id="symbicortTurbuhalerDose"
+                                        v-model="symbicortTurbuhalerDose" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="symbicortTurbuhalerFreq" id="symbicortTurbuhalerFreq"
+                                        v-model="symbicortTurbuhalerFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="alvesco" id="alvesco" v-model="alvesco">
+                            <label for="alvesco" style="width:25%">
+                                <b>Alvesco</b>
+                                <br><i>Ciclesonide</i>
+                            </label>
+                            <span v-if="alvesco">
+                                <label>
+                                    Strength:
+                                    <select name="alvescoStrength" id="alvescoStrength" v-model="alvescoStrength"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="alvescoDose" id="alvescoDose" v-model="alvescoDose"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="alvescoFreq" id="alvescoFreq" v-model="alvescoFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="floventMDI" id="floventMDI" v-model="floventMDI">
+                            <label for="floventMDI" style="width:25%;">
+                                <b>Flovent MDI and spacer</b><br>
+                                <i>Fluticasone propionate</i>
+                            </label>
+                            <span v-if="floventMDI">
+                                <label>
+                                    Strength:
+                                    <select name="floventMDIStrength" id="floventMDIStrength"
+                                        v-model="floventMDIStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="50.0">50mcg</option>
+                                        <option value="125.0">125mcg</option>
+                                        <option value="250.0">250mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="floventMDIDose" id="floventMDIDose" v-model="floventMDIDose"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="floventMDIFreq" id="floventMDIFreq" v-model="floventMDIFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="floventDiskus" id="floventDiskus" v-model="floventDiskus">
+                            <label for="floventDiskus" style="width:25%;">
+                                <b>Flovent Diskus</b><br>
+                                <i>Fluticasone propionate</i>
+                            </label>
+                            <span v-if="floventDiskus">
+                                <label>
+                                    Strength:
+                                    <select name="floventDiskusStrength" id="floventDiskusStrength"
+                                        v-model="floventDiskusStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">100mcg</option>
+                                        <option value="250.0">250mcg</option>
+                                        <option value="500.0">500mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="floventDiskusDose" id="floventDiskusDose" v-model="floventDiskusDose"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                        <option value="5">5 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="floventDiskusFreq" id="floventDiskusFreq" v-model="floventDiskusFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="advairDiskus" id="advairDiskus" v-model="advairDiskus">
+                            <label for="advairDiskus" style="width:25%">
+                                <b>Advair Diskus</b>
+                                <br><i>Fluticasone/salmeterol</i>
+                            </label>
+                            <span v-if="advairDiskus">
+                                <label>
+                                    Strength:
+                                    <select name="advairDiskusStrength" id="advairDiskusStrength"
+                                        v-model="advairDiskusStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">100/50mcg</option>
+                                        <option value="250.0">250/50mcg</option>
+                                        <option value="500.0">500/50mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="advairDiskusDose" id="advairDiskusDose" v-model="advairDiskusDose"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="advairDiskusFreq" id="advairDiskusFreq" v-model="advairDiskusFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="advairPMDI" id="advairPMDI" v-model="advairPMDI">
+                            <label for="advairPMDI" style="width:25%">
+                                <b>Advair pMDI</b>
+                                <br><i>Fluticasone/salmeterol</i>
+                            </label>
+                            <span v-if="advairPMDI">
+                                <label>
+                                    Strength:
+                                    <select name="advairPMDIStrength" id="advairPMDIStrength"
+                                        v-model="advairPMDIStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">125/25mcg</option>
+                                        <option value="250.0">250/25mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="advairPMDIDose" id="advairPMDIDose" v-model="advairPMDIDose"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="advairPMDIFreq" id="advairPMDIFreq" v-model="advairPMDIFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="wixelaInhub" id="wixelaInhub" v-model="wixelaInhub">
+                            <label for="wixelaInhub" style="width:25%">
+                                <b>Wixela Inhub</b>
+                                <br><i>Fluticasone/salmeterol</i>
+                            </label>
+                            <span v-if="wixelaInhub">
+                                <label>
+                                    Strength:
+                                    <select name="wixelaInhubStrength" id="wixelaInhubStrength"
+                                        v-model="wixelaInhubStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">100/50mcg</option>
+                                        <option value="250.0">250/50mcg</option>
+                                        <option value="500.0">500/50mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="wixelaInhubDose" id="wixelaInhubDose" v-model="wixelaInhubDose"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="wixelaInhubFreq" id="wixelaInhubFreq" v-model="wixelaInhubFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="arnuityEllipta" id="arnuityEllipta" v-model="arnuityEllipta">
+                            <label for="arnuityEllipta" style="width:25%">
+                                <b>Arnuity Ellipta</b>
+                                <br><i>Fluticasone furoate</i>
+                            </label>
+                            <span v-if="arnuityEllipta">
+                                <label>
+                                    Strength:
+                                    <select name="arnuityElliptaStrength" id="arnuityElliptaStrength"
+                                        v-model="arnuityElliptaStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="arnuityElliptaDose" id="arnuityElliptaDose"
+                                        v-model="arnuityElliptaDose" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="arnuityElliptaFreq" id="arnuityElliptaFreq"
+                                        v-model="arnuityElliptaFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="bid">tid</option>
+                                        <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="breoEllipta" id="breoEllipta" v-model="breoEllipta">
+                            <label for="breoEllipta" style="width:25%">
+                                <b>Breo Ellipta</b>
+                                <br><i>Fluticasone/vilanterol Ellipta</i>
+                            </label>
+                            <span v-if="breoEllipta">
+                                <label>
+                                    Strength:
+                                    <select name="breoElliptaStrength" id="breoElliptaStrength"
+                                        v-model="breoElliptaStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">100/25mcg</option>
+                                        <option value="200.0">200/25mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="breoElliptaDose" id="breoElliptaDose" v-model="breoElliptaDose"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="breoElliptaFreq" id="breoElliptaFreq" v-model="breoElliptaFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="trelegyEllipta" id="trelegyEllipta" v-model="trelegyEllipta">
+                            <label for="trelegyEllipta" style="width:25%">
+                                <b>Trelegy Ellipta </b>
+                                <br><i>Fluticasone/vilanterol/umeclidinium</i>
+                            </label>
+                            <span v-if="trelegyEllipta">
+                                <label>
+                                    Strength:
+                                    <select name="trelegyElliptaStrength" id="trelegyElliptaStrength"
+                                        v-model="trelegyElliptaStrength" style="width: 125px">
+                                        <option value=""></option>
+                                        <option value="100.0">100/62.5/25mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="trelegyElliptaDose" id="trelegyElliptaDose"
+                                        v-model="trelegyElliptaDose" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="trelegyElliptaFreq" id="trelegyElliptaFreq"
+                                        v-model="trelegyElliptaFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="asmanexTwisthaler" id="asmanexTwisthaler"
+                                v-model="asmanexTwisthaler">
+                            <label for="asmanexTwisthaler" style="width:25%">
+                                <b>Asmanex Twisthaler </b>
+                                <br><i>Mometasone furoate</i>
+                            </label>
+                            <span v-if="asmanexTwisthaler">
+                                <label>
+                                    Strength:
+                                    <select name="asmanexTwisthalerStrength" id="asmanexTwisthalerStrength"
+                                        v-model="asmanexTwisthalerStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                        <option value="400.0">400mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="asmanexTwisthalerDose" id="asmanexTwisthalerDose"
+                                        v-model="asmanexTwisthalerDose" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puff</option>
+                                        <option value="3">3 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="asmanexTwisthalerFreq" id="asmanexTwisthalerFreq"
+                                        v-model="asmanexTwisthalerFreq">
+                                        <option value=""></option>
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="zenhaleMDI" id="zenhaleMDI" v-model="zenhaleMDI">
+                            <label for="zenhaleMDI" style="width:25%">
+                                <b>Zenhale MDI</b>
+                                <br><i>Mometasone/formoterol</i>
+                            </label>
+                            <span v-if="zenhaleMDI">
+                                <label>
+                                    Strength:
+                                    <select name="zenhaleMDIStrength" id="zenhaleMDIStrength"
+                                        v-model="zenhaleMDIStrength" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="50.0">50/5mcg</option>
+                                        <option value="100.0">100/5mcg</option>
+                                        <option value="200.0">200/5mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="zenhaleMDIDose" id="zenhaleMDIDose" v-model="zenhaleMDIDose"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puff</option>
+                                        <option value="3">3 puff</option>
+                                        <option value="4">4 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="zenhaleMDIFreq" id="zenhaleMDIFreq" v-model="zenhaleMDIFreq">
+                                        <option value=""></option>
+                                        <option value="od">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <label><b>Additional Asthma Controllers</b></label>
+                        <table style="margin:5px; width: 99%;">
+                            <tr style="background: #f1f1f1;">
+                                <th style="width:16.6%">LABA</th>
+                                <th style="width:16.6%">LAMA</th>
+                                <th style="width:16.6%">LABA/LAMA</th>
+                                <th style="width:16.6%">LTRA</th>
+                                <th style="width:16.6%">Biologics</th>
+                                <th style="width:16.6%">Other</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="SereventDiskus" id="SereventDiskus">
+                                        <label for="SereventDiskus" style="width:100%">
+                                            <b>Serevent Diskus</b>
+                                            <br><i>Salmeterol </i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="SpirivaRespimat" id="SpirivaRespimat">
+                                        <label for="SpirivaRespimat" style="width:100%">
+                                            <b>Spiriva Respimat</b>
+                                            <br><i>Tiotropium bromide</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="InspioltoRespimat" id="InspioltoRespimat">
+                                        <label for="InspioltoRespimat" style="width:100%">
+                                            <b>Inspiolto Respimat</b>
+                                            <br><i>Tiotropium/olodaterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Singulair" id="Singulair">
+                                        <label for="Singulair" style="width:100%">
+                                            <b>Singulair</b>
+                                            <br><i>Montelukast sodium</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Xolair" id="Xolair">
+                                        <label for="Xolair" style="width:100%">
+                                            <b>Xolair</b>
+                                            <br><i>Omalizumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Prednisone" id="Prednisone">
+                                        <label for="Prednisone" style="width:100%">
+                                            <b>Prednisone</b>
+                                        </label>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="OxezeTurbuhaler" id="OxezeTurbuhaler">
+                                        <label for="OxezeTurbuhaler" style="width:100%">
+                                            <b>Oxeze Turbuhaler</b>
+                                            <br><i>Formoterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="SpirivaHandihaler" id="SpirivaHandihaler">
+                                        <label for="SpirivaHandihaler" style="width:100%">
+                                            <b>Spiriva Handihaler</b>
+                                            <br><i>Tiotropium bromide</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Anoro" id="Anoro">
+                                        <label for="Anoro" style="width:100%">
+                                            <b>Anoro Ellipta</b>
+                                            <br><i>Umeclidinium/vilanterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Nucala" id="Nucala">
+                                        <label for="Nucala" style="width:100%">
+                                            <b>Nucala</b>
+                                            <br><i>Mepolizumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Dexamethasone" id="Dexamethasone">
+                                        <label for="Dexamethasone" style="width:100%">
+                                            <b>Dexamethasone</b>
+                                        </label>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="ForadilAerolizer" id="ForadilAerolizer">
+                                        <label for="ForadilAerolizer">
+                                            <b>Foradil Aerolizer</b>
+                                            <br><i>Formoterol</i>
+                                        </label>
+                                    </span>
+
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="TudorzaGenuair" id="TudorzaGenuair">
+                                        <label for="TudorzaGenuair" style="width:100%">
+                                            <b>Tudorza Genuair</b>
+                                            <br><i>Aclidinium</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="UltibroBreezhaler" id="UltibroBreezhaler">
+                                        <label for="UltibroBreezhaler" style="width:100%">
+                                            <b>Ultibro Breezhaler</b>
+                                            <br><i>Indacaterol/ glycopyrronium</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Fasenra" id="Fasenra">
+                                        <label for="Fasenra" class="flex-start" style="width:100%">
+                                            <b>Fasenra</b>
+                                            <br><i>Benralizumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Theophylline" id="Theophylline">
+                                        <label for="Theophylline" style="width:100%">
+                                            <b>Theophylline</b>
+                                        </label>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="OnbrezBreezhaler" id="OnbrezBreezhaler">
+                                        <label for="OnbrezBreezhaler" style="width:100%">
+                                            <b>Onbrez Breezhaler</b>
+                                            <br><i>Indacaterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="SeebriBreezhaler" id="SeebriBreezhaler">
+                                        <label for="SeebriBreezhaler" style="width:100%">
+                                            <b>Seebri Breezhaler</b>
+                                            <br><i>Glycopyrronium </i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="DuaklirGenuair" id="DuaklirGenuair">
+                                        <label for="DuaklirGenuair" style="width:100%">
+                                            <b>Duaklir Genuair</b>
+                                            <br><i>Aclidinium/formoterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Cinquair" id="Cinquair">
+                                        <label for="Cinquair" style="width:100%">
+                                            <b>Cinquair</b>
+                                            <br><i>Reslizumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="StriverdiRespimat" id="StriverdiRespimat">
+                                        <label for="StriverdiRespimat" style="width:100%">
+                                            <b>Striverdi Respimat</b>
+                                            <br><i>Olodaterol </i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="IncruseEllipta" id="IncruseEllipta">
+                                        <label for="IncruseEllipta" style="width:100%">
+                                            <b>Incruse Ellipta</b>
+                                            <br><i>Umeclidinium</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Dupixent" id="Dupixent">
+                                        <label for="Dupixent" style="width:100%">
+                                            <b>Dupixent</b>
+                                            <br><i>Dupilumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <label style="width:11%; margin-bottom: 15px;">
+                        <b>Severe Asthma</b>
+                    </label>
+                    <span>-</span>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <input type="button" style="padding: 3px;" value="Calculate" />
+                    <br>
+                    <hr>
+                    <table style="margin:5px; width: 99%; text-align: left;">
+                        <tr>
+                            <th style="width:40%"></th>
+                            <th style="width:20%">Yes</th>
+                            <th style="width:20%">No</th>
+                            <th style="width:20%">Unknown</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Is patient using inhaled corticosteroids (ICS)?</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="ics" value="yes" id="isUsing_Inhaled_ICS"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="ics" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="ics" value="unknown"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Beta-Blockers </b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="betaBlockers" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="betaBlockers" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="betaBlockers" value="unknown"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>NSAIDS</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="nsaids" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="nsaids" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="nsaids" value="unknown"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Patient has a spacing device</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="spacingDevice" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="spacingDevice" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="spacingDevice" value="unknown"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Does at least one prescribed medication allow for a spacing device to be
+                                    used?</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="spacingDeviceAllowed" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="spacingDeviceAllowed" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="spacingDeviceAllowed" value="unknown"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Adherence issues known or suspected</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="adherenceIssues" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="adherenceIssues" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="adherenceIssues" value="unknown"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Unfilled prescriptions</b><br>
+                                <i>(In the last 6 months has the patient been prescribed any asthma medication
+                                    he/she
+                                    has
+                                    not obtained.)</i>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="unfilledPrescriptions" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="unfilledPrescriptions" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="unfilledPrescriptions" value="unknown"></label>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <div>
+                        <label><b>Number of inhaled corticosteroid prescriptions
+                                filled in the last year</b></label>
+                        <label>
+                            <input type=textbox style="width:30px;" name="numInhaledCorticosteroid" placeholder="#"
+                                id="selfReported_ICS_last12mos"></label>
+                        <label><i>(Prescription = one month supply)</i></label>
+
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Short-Acting Beta Agonists use</b></label>
+                        <label>
+                            <select name="saba" id="saba">
+                                <option value="unknown">Unknown</option>
+                                <option value="less-than-1">&#60; 1 canister a month</option>
+                                <option value="1-2">1-2 canister(s) a month</option>
+                                <option value="more-than2">&#62; 2 canisters a month</option>
+                            </select>
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Beta&#8322;-agonist free day(s) in the last 4 weeks?</b></label>
+                        <label>
+                            <input type="textbox" name="beta2freeDays" id="SelfReported_b2free_last4wks"
+                                style="width:30px" placeholder="#">
+                        </label>
+
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Systemic steroid use ever</b></label>
+                        <label>
+                            <input type="radio" name="systemicSteroid" value="yes">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="systemicSteroid" value="no">
+                            No
+                        </label>
+                        <label>
+                            <input type="radio" name="systemicSteroid" value="unknown">
+                            Unknown
+                        </label>
+                    </div>
+                    <hr>
+
+                    <div>
+                        <label style="width:35%"><b>If yes, indication for systemic steroid use</b></label>
+                        <label>
+                            <input type="radio" name="steroidIndication" value="asthma">
+                            Asthma
+                        </label>
+                        <label>
+                            <input type="radio" name="steroidIndication" value="copd">
+                            COPD
+                        </label>
+                        <label>
+                            <input type="radio" name="steroidIndication" value="both">
+                            Both
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label><b>Total number of times systemic steroid used within the last
+                                year</b></label>
+                        <label>
+                            <input type="textbox" name="numSystemicSteroidLastYear" style="width:30px" placeholder="#">
+                        </label>
+                        <label>
+                            <input type="textbox" name="systemicSteroidDateLastUsed" placeholder="YYYY//MM/DD">
+                            Date last used
+
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label><b>Systemic steroid used for 50% of the previous year</b>
+                        </label>
+                        <label>
+                            <input type="radio" name="corticosteroidUsedPreviousYear" value="yes">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="corticosteroidUsedPreviousYear" value="no">
+                            No
+                        </label>
+                        <label>
+                            <input type="radio" name="corticosteroidUsedPreviousYear" value="unknown">
+                            Unknown
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asthma Control -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Asthma Control
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="controlNA" onclick="toggleSection('controlNA', 'controlContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="controlContent">
+                    <div>
+                        <label><i><b>(Note time interval for capture asthma control data is the last four
+                                    weeks)</b></i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Daytime symptoms*</b></label>
+                        <input type="textbox" placeholder="# of days/week" name="daytimeSymptoms" id="daytimeSymptoms"
+                            onchange="calcIsControlled()">
+                        <label>Control &#8804; 2</label>
+                    </div>
+                    <div>
+                        <label><i>(Average number of days/week in the last 4 weeks with dyspnea, cough, wheeze,
+                                and/or
+                                chest
+                                tightness)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Nighttime symptoms*</b></label>
+                        <input type="textbox" name="nighttimeSymptoms" id="nighttimeSymptoms"
+                            onchange="calcIsControlled()" placeholder="# of Nights/Week">
+                        <label>Control &#8804; 1</label>
+                    </div>
+                    <div>
+                        <label><i>(Average number of nights/week in the last 4 weeks with dyspnea, cough, wheeze,
+                                and/or
+                                chest tightness)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Physical activity limited*</b></label>
+                        <label>
+                            <input type="radio" id="activityIsLimited" name="activityLimited" value="yes"
+                                onchange="calcIsControlled()">Yes
+                        </label>
+                        <label>
+                            <input type="radio" id="activityNotLimited" name="activityLimited" value="no"
+                                onchange="calcIsControlled()">No
+                        </label>
+                    </div>
+                    <div>
+                        <label><i>(Due to asthma in the last 4 weeks)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Exacerbations since last visit</b></label>
+                        <label>
+                            <input type="radio" name="exacerbationsSinceLast" value="yes"
+                                onchange="calcIsControlled()">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="exacerbationsSinceLast" id="noExacerbationsSinceLast"
+                                value="no">No
+                        </label>
+                        <label>
+                            <input type="textbox" id="numberExacerbations" name="numberExacerbations"
+                                onchange="calcIsControlled()" placeholder="# of Exacerbations">
+                        </label>
+                    </div>
+                    <div>
+                        <label><i>(Hospital admission, ED visit, Walk-in-Clinic)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+
+                    <div>
+                        <label style="width:32%"><b>Dates of exacerbations</b></label>
+                        <label>
+                            <input type="textbox" placeholder="YYYY/MM/DD" name="exacerbationDate1">
+                        </label>
+                        <label>
+                            <input type="textbox" placeholder="YYYY/MM/DD" name="exacerbationDate2">
+                        </label>
+                    </div>
+                    <div>
+                        <label><i>(Hospital admission, ED visit, Walk-in-Clinic)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label><b>School/work/social activity absences due to asthma*</b></label>
+                        <label>
+                            <input type="radio" name="workSchoolAbsences" value="yes">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="workSchoolAbsences" id="noWorkSchoolAbsences" value="no">No
+                        </label>
+                        <label>
+                            <input type="textbox" name="numberWorkSchoolAbsences" id="numberWorkSchoolAbsences"
+                                placeholder="# of days/week" onchange="calcIsControlled()">
+                        </label>
+                    </div>
+                    <div>
+                        <label><i>(Average number of days/week in the last 4 weeks)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Needs reliever*</b></label>
+                        <label>
+                            <input type="textbox" placeholder="# of doses/week" onchange="calcIsControlled()"
+                                name="needReliever" id="needReliever">
+                        </label>
+                        <label>Control &#8804; 2</label>
+                    </div>
+                    <div>
+                        <label><i>(Average number of days/week in the last 4 weeks)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Sputum eosinophils</b></label>
+                        <label>
+                            <input type="radio" name="sputumEosinophils" value="yes">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="sputumEosinophils" value="no">No
+                        </label>
+                        &nbsp;&nbsp;&nbsp;
+                        <input type="textbox" placeholder="%" style="width:40px">
+                        <label>Control &#8804; 2-3%</label>
+                    </div>
+                    <div>
+                        <label><i>(Measured Yes/no: if yes, %)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>FEV&#8321; or PEF &#62;= 90% predicted or personal
+                                best</b></label>
+                        <label>
+                            <input type="radio" name="FEVPersonalBest">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="FEVPersonalBest">No
+                        </label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label><b>PEF Diurnal Variation <15% Over A 2 Week Period</b></label>
+                        <label>
+                            <input type="radio" name="PEVDiurnalVariation">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="PEVDiurnalVariation">No
+                        </label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <label><b>Number of days missed from school or work due to asthma in last year
+                        </b>
+                        <input type="textbox" name="numberDaysMissedLastYear" style="vertical-align: bottom; width:50px"
+                            placeholder="#" id="Absences_SchoolWork_Last12mos">
+                    </label>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Asthma controlled</b></label>
+                        <label v-show="false">
+                            <input type="radio" readonly name="asthmaControlled" v-model="asthmaControlled"
+                                id="asthmaControlled" value="yes">Yes
+                        </label>
+                        <label v-show="false">
+                            <input type="radio" readonly name="asthmaControlled" v-model="asthmaControlled"
+                                value="no">No
+                        </label>
+                        <span id="asthmaControlledSpan"><b>{{ asthmaControlled }}</b></span>
+                    </div>
+                    <div>
+                        <label><i>Based on control criteria from the Canadian Thoracic Society 2021 Asthma
+                                Guidelines.<br>
+                                Any ONE element NOT in control - OVERALL NOT in control.</i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Care and Management / Referrals -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Care and Management / Referrals
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="careNA" onclick="toggleSection('careNA', 'careContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="careContent">
+                    <table style="margin:5px; width: 99%;">
+                        <tr>
+                            <th style="width:50%"></th>
+                            <th style="width:25%">Yes</th>
+                            <th style="width:25%">No</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Device Technique Assessed</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="techniqueAssessed" value="yes"
+                                        id="Demonstrated_Correct_Technique"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="techniqueAssessed" value="no"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Triggers addressed</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="triggersAddressed" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="triggersAddressed" value="no"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Environmental controls reviewed</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="environmentalControlsReviewed" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="environmentalControlsReviewed" value="no"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Barriers addressed</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="barriersAddressed" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="barriersAddressed" value="no"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Referral to asthma education program/CRE</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="referralToEducation" id="ReferredToCAE"
+                                        value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="referralToEducation" value="no"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- Asthma Action Plan -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Asthma Action Plan
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="actionPlanNA"
+                            onclick="toggleSection('actionPlanNA', 'actionPlanContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="actionPlanContent">
+                    <table style="margin:5px; width: 99%; border: none">
+                        <tr>
+                            <th style="width:40%"></th>
+                            <th style="width:20%">Yes</th>
+                            <th style="width:20%">No</th>
+                            <th style="width:20%"></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Written asthma action plan provided</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="writtenPlanProvided" id="writtenPlanProvidedYes"
+                                        value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="writtenPlanProvided" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" name="writtenPlanProvidedDate"
+                                        placeholder="YYYY/MM/DDY"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Written asthma action plan revised</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="writtenPlanRevised" id="writtenPlanRevisedYes"
+                                        value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="writtenPlanRevised" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" name="writtenPlanRevisedDate"
+                                        placeholder="YYYY/MM/DDY"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Asthma action plan reviewed & not changed</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="reviewedNotChanged" id="reviewedNotChangedYes"
+                                        value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="reviewedNotChanged" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" name="reviewedNotChangedDate"
+                                        placeholder="YYYY/MM/DDY"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Yellow or red zone of action plan followed since last visit</b>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="yellowOrRed" value="yes"></label>
+                            </td>
+                            <td>
+                                <label><input type="radio" name="yellowOrRed" value="no"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" name="yellowOrRedDate" placeholder="# of times"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <!-- Asthma Control Zone -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Asthma Control Zone
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="controlZoneNA"
+                            onclick="toggleSection('controlZoneNA', 'controlZoneContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="controlZoneContent">
+                    <label style="text-align:center">
+                        <i>Provider assessment based upon prior Asthma Control parameter responses</i>
+                    </label>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <!-- <label class="width-15"><b>Quit Duration</b></label> -->
+
+                        <label>
+                            <input type="radio" name="controlZone" value="green">
+                            <b>Green</b>
+                        </label>
+                        <label>
+                            <input type="radio" name="controlZone" value="yellow">
+                            <b>Yellow</b>
+                        </label>
+                        <label>
+                            <input type="radio" name="controlZone" value="red">
+                            <b>Red</b>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <i>If Asthma controlled option is green. If Asthma uncontrolled option is yellow or
+                                red.</i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pulmonary Function Test -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Pulmonary Function Test
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="pulmonaryNA"
+                            onclick="toggleSection('pulmonaryNA', 'pulmonaryContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="pulmonaryContent">
+                    <label style="width:45%"><b>Patient was monitored for spirometry in the 12 months</b></label>
+                    <label>
+                        <input type="radio" name="spirometryLast12" id="Monitored_Spirometry_Last12mos" value="yes">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="spirometryLast12" value="no">
+                        No
+                    </label>
+
+                    <hr style="margin:2px 0px 2px 0px">
+                    <label style="width:45%"><b>Persistent airflow obstruction</b></label>
+                    <label>
+                        <input type="radio" name="persistentAirflowObstruction" value="yes">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="persistentAirflowObstruction" value="no">
+                        No
+                    </label>
+                    <label> <i>
+                            After appropriate bronchodilator withold FEV&#8321; &#60; 80% of personal best OR &#60
+                            LLN;
+                            AND
+                            reduced FEV&#8321;/FVC defined as less than the LLN
+                        </i>
+                    </label>
+
+
+                </div>
+            </div>
+
+            <!-- Assessment Tools -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Assessment Tools
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="assessmentToolsNA"
+                            onclick="toggleSection('assessmentToolsNA', 'assessmentToolsContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="assessmentToolsContent">
+                    <label style="width:45%"><b>Quality of Life assessment completed
+                        </b></label>
+                    <label>
+                        <input type="radio" name="qualityAssessmentCompleted" value="yes">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="qualityAssessmentCompleted" value="no">
+                        No
+                    </label>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <label style="width:45%"><b>Yellow or Red Zone of Action plan followed since last visit
+                        </b></label>
+                    <label>
+                        <input type="radio" name="actionPlanSinceLast" value="yes">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="actionPlanSinceLast" value="no">
+                        No
+                    </label>
+                    <input type="number" id="score1" name="actionPlanSinceLastNum" placeholder="# of times"
+                        style="width:80px; margin-left: 20px;">
+                    <hr style="margin:2px 0px 2px 0px">
+                    <label style="width:45%"><b>Mini Asthma Quality of Life Questionnaire score
+                        </b></label>
+                    <input type="number" id="score1" name="score1" min="1" max="7" placeholder="#">
+                    <hr style="margin:2px 0px 2px 0px">
+
+                    <label style="width:45%"><b>Asthma Control Questionnaire score
+                        </b></label>
+                    <input type="number" id="score1" name="score1" min="0" max="6" placeholder="#">
+                    <hr style="margin:2px 0px 2px 0px">
+
+                    <label style="width:45%"><b>Asthma Control Test score
+                        </b></label>
+                    <input type="number" id="score1" name="score1" min="5" max="25" placeholder="#">
+                    <hr style="margin:2px 0px 2px 0px">
+
+                    <label style="width:45%"><b>Child Asthma Control Test score
+                        </b></label>
+                    <input style="margin-bottom: 5px;" type="number" id="score1" name="score1" min="0" max="27"
+                        placeholder="#">
+                </div>
+            </div>
+            <div>
+                <input value="Save & Close" class="button" name="SubmitButton" id="SubmitButton" type="submit"
+                    onclick="beforeSubmit()" />
+            </div>
+        </div>
+
+    </form>
+    <!-------Script to optimize window on loading----------->
+    <script type="text/javascript" language="javascript">
+        smokingStatusChange = function () {
+            if (document.getElementById("currentSmoker").checked) {
+                document.getElementById("isCurrentSmoker").style.display = "inline-block";
+                document.getElementById("smoker").style.display = "inline-block";
+                document.getElementById("isExSmoker").style.display = "none";
+
+            } else if (document.getElementById("exSmoker").checked) {
+                document.getElementById("isExSmoker").style.display = "inline-block"
+                document.getElementById("smoker").style.display = "inline-block";
+                document.getElementById("isCurrentSmoker").style.display = "none"
+
+            } else {
+                document.getElementById("isExSmoker").style.display = "none"
+                document.getElementById("smoker").style.display = "none";
+                document.getElementById("isCurrentSmoker").style.display = "none"
+            }
+        }
+
+        familyPhysicianVisitsChange = function () {
+            if (document.getElementById("yesFamilyPhysicianVisits").checked) {
+                document.getElementById("yesRoutineCareVisits").style.display = "inline-block";
+
+            } else {
+                document.getElementById("yesRoutineCareVisits").style.display = "none";
+
+            }
+        }
+
+        toggleDiagnosisFields = function () {
+            if (document.getElementById("diagnosisUnknown").checked) {
+                document.getElementById("_dateConfirmedExcluded").style.display = "none";
+                document.getElementById("_ageAsthma").style.display = "none";
+
+            } else if (document.getElementById("diagnosisConfirmed").checked) {
+                document.getElementById("_dateConfirmedExcluded").style.display = "block";
+                document.getElementById("_ageAsthma").style.display = "block";
+
+            } else if (document.getElementById("diagnosisSuspected").checked) {
+                document.getElementById("_dateConfirmedExcluded").style.display = "none";
+                document.getElementById("_ageAsthma").style.display = "none";
+
+            } else if (document.getElementById("diagnosisExcluded").checked) {
+                document.getElementById("_dateConfirmedExcluded").style.display = "block";
+                document.getElementById("_ageAsthma").style.display = "none";
+            }
+        }
+
+        toggleSection = function (_checkBoxName, _sectionName) {
+            if (document.getElementById(_checkBoxName).checked) {
+                document.getElementById(_sectionName).style.display = "none";
+            } else {
+                document.getElementById(_sectionName).style.display = "block";
+            }
+        }
+
+        toggleSectionInline = function (_checkBoxName, _sectionName) {
+            if (document.getElementById(_checkBoxName).checked) {
+                document.getElementById(_sectionName).style.display = "inline-block";
+            } else {
+                document.getElementById(_sectionName).style.display = "none";
+            }
+        }
+        toggleSectionFloat = function (_checkBoxName, _sectionName) {
+            if (document.getElementById(_checkBoxName).checked) {
+                document.getElementById(_sectionName).style.display = "none";
+
+            } else {
+                document.getElementById(_sectionName).style.display = "inline-block";
+                document.getElementById(_sectionName).style.float = "left";
+            }
+        }
+
+        top.window.moveTo(0, 0);
+        if (document.all) {
+            top.window.resizeTo(screen.availWidth, screen.availHeight);
+        }
+        else if (document.layers || document.getElementById) {
+            if (top.window.outerHeight < screen.availHeight || top.window.outerWidth < screen.availWidth) {
+                top.window.outerHeight = screen.availHeight;
+                top.window.outerWidth = 1050;
+            }
+        }
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                //hidden fields for seamless link
+                EMR_PatientID: document.getElementById("EMR_PatientID").value,
+                ProviderName: document.getElementById("ProviderName").value,
+                ProviderIdentifier: document.getElementById("ProviderIdentifier").value,
+                PatientGender: document.getElementById("PatientGender").value,
+                EMR_eAPIID: document.getElementById("EMR_eAPIID").value,
+
+                showCessationAddressedSection: false,
+                dob: document.getElementById("dob").value,
+                youngPatient: false,
+                ableSpirometry: document.getElementById("ableSpirometry").value,
+                // warning banners if follow up assessment 
+                showDiagnosisBanner: false,
+                showFamilyHistoryBanner: false,
+                showSmokingBanner: false,
+                //is controlled indicators
+                // activityLimited: _activityLimited,
+                asthmaControlled: null,
+                asthmaControlledBool: null,
+                encounterDate: document.getElementById("encounterDate").value,
+                diagnosis: document.getElementById("pulledDiagnosis").value,
+                cessationAsk: document.getElementById("pulled-cessationAsk").value,
+                cessationAdvise: document.getElementById("pulled-cessationAdvise").value,
+                cessationArrange: document.getElementById("pulled-cessationArrange").value,
+                quitIntentions: document.getElementById("pulled-quitIntentions").value,
+                vaping: document.getElementById("pulled-vaping").value,
+                cannabis: document.getElementById("pulled-cannabis").value,
+                secondHandSmoke: document.getElementById("pulled-secondHandSmoke").value,
+                workStart: document.getElementById("pulled-workStart").value,
+                workWorsen: document.getElementById("pulled-workWorsen").value,
+                completeWrasql: document.getElementById("pulled-completeWrasql").value,
+                confirmedBySpecialist: document.getElementById("confirmedBySpecialist").checked,
+                // smoking for pack years calc
+                cigarettesDay: document.getElementById("cigarettesDay").value,
+                cigarettesMonth: document.getElementById("cigarettesMonth").value,
+                yearsSmoked: document.getElementById("yearsSmoked").value,
+                packYears: "-",
+                // medications
+                qvar: document.getElementById("qvar").checked,
+                qvarStrength: document.getElementById("qvarStrength").value,
+                qvarDose: document.getElementById("qvarDose").value,
+                qvarFreq: document.getElementById("qvarFreq").value,
+                pulmicortTurbuhaler: document.getElementById("pulmicortTurbuhaler").checked,
+                pulmicortTurbuhalerStrength: document.getElementById("pulmicortTurbuhalerStrength").value,
+                pulmicortTurbuhalerDose: document.getElementById("pulmicortTurbuhalerDose").value,
+                pulmicortTurbuhalerFreq: document.getElementById("pulmicortTurbuhalerFreq").value,
+                symbicortTurbuhaler: document.getElementById("symbicortTurbuhaler").checked,
+                symbicortTurbuhalerStrength: document.getElementById("symbicortTurbuhalerStrength").value,
+                symbicortTurbuhalerDose: document.getElementById("symbicortTurbuhalerDose").value,
+                symbicortTurbuhalerFreq: document.getElementById("symbicortTurbuhalerFreq").value,
+                alvesco: document.getElementById("alvesco").checked,
+                alvescoStrength: document.getElementById("alvescoStrength").value,
+                alvescoDose: document.getElementById("alvescoDose").value,
+                alvescoFreq: document.getElementById("alvescoFreq").value,
+                floventMDI: document.getElementById("floventMDI").checked,
+                floventMDIStrength: document.getElementById("floventMDIStrength").checked,
+                floventMDIDose: document.getElementById("floventMDIDose").value,
+                floventMDIFreq: document.getElementById("floventMDIFreq").value,
+                floventDiskus: document.getElementById("floventDiskus").checked,
+                floventDiskusStrength: document.getElementById("floventDiskusStrength").value,
+                floventDiskusDose: document.getElementById("floventDiskusDose").value,
+                floventDiskusFreq: document.getElementById("floventDiskusFreq").value,
+                advairDiskus: document.getElementById("advairDiskus").checked,
+                advairDiskusStrength: document.getElementById("advairDiskusStrength").value,
+                advairDiskusDose: document.getElementById("advairDiskusDose").value,
+                advairDiskusFreq: document.getElementById("advairDiskusFreq").value,
+                advairPMDI: document.getElementById("advairPMDI").checked,
+                advairPMDIStrength: document.getElementById("advairPMDIStrength").value,
+                advairPMDIDose: document.getElementById("advairPMDIDose").value,
+                advairPMDIFreq: document.getElementById("advairPMDIFreq").value,
+                wixelaInhub: document.getElementById("wixelaInhub").checked,
+                wixelaInhubStrength: document.getElementById("wixelaInhubStrength").value,
+                wixelaInhubDose: document.getElementById("wixelaInhubDose").value,
+                wixelaInhubFreq: document.getElementById("wixelaInhubFreq").value,
+                arnuityEllipta: document.getElementById("arnuityEllipta").checked,
+                arnuityElliptaStrength: document.getElementById("arnuityElliptaStrength").value,
+                arnuityElliptaFreq: document.getElementById("arnuityElliptaFreq").value,
+                arnuityElliptaDose: document.getElementById("arnuityElliptaDose").value,
+                breoEllipta: document.getElementById("breoEllipta").checked,
+                breoElliptaStrength: document.getElementById("breoElliptaStrength").value,
+                breoElliptaFreq: document.getElementById("breoElliptaFreq").value,
+                breoElliptaDose: document.getElementById("breoElliptaDose").value,
+                trelegyEllipta: document.getElementById("trelegyEllipta").checked,
+                trelegyElliptaStrength: document.getElementById("trelegyElliptaStrength").value,
+                trelegyElliptaFreq: document.getElementById("trelegyElliptaFreq").value,
+                trelegyElliptaDose: document.getElementById("trelegyElliptaDose").value,
+                asmanexTwisthaler: document.getElementById("asmanexTwisthaler").checked,
+                asmanexTwisthalerStrength: document.getElementById("asmanexTwisthalerStrength").value,
+                asmanexTwisthalerFreq: document.getElementById("asmanexTwisthalerFreq").value,
+                asmanexTwisthalerDose: document.getElementById("asmanexTwisthalerDose").value,
+                zenhaleMDI: document.getElementById("zenhaleMDI").checked,
+                zenhaleMDIStrength: document.getElementById("zenhaleMDIStrength").value,
+                zenhaleMDIFreq: document.getElementById("zenhaleMDIFreq").value,
+                zenhaleMDIDose: document.getElementById("zenhaleMDIDose").value
+            },
+            watch: {
+                // whenever question changes, this function will run
+                dob: function (newDob) {
+                    calcAge(newDob)
+                },
+                qvar: function (v) {
+                    if (!v) {
+                        app.qvarStrength = "";
+                        app.qvarDose = "";
+                        app.qvarFreq = "";
+                    }
+                },
+                pulmicortTurbuhaler: function (v) {
+                    if (!v) {
+                        app.budesonideStrength = "";
+                        app.budesonideDose = "";
+                        app.budesonideFreq = "";
+                    }
+                },
+                symbicortTurbuhaler: function (v) {
+                    if (!v) {
+                        app.budesonideStrength = "";
+                        app.budesonideDose = "";
+                        app.budesonideFreq = "";
+                    }
+                },
+                alvesco: function (v) {
+                    if (!v) {
+                        app.alvescoStrength = "";
+                        app.alvescoDose = "";
+                        app.alvescoFreq = "";
+                    }
+                },
+                floventMDI: function (v) {
+                    if (!v) {
+                        app.floventMDIStrength = "";
+                        app.floventMDIDose = "";
+                        app.floventMDIFreq = "";
+                    }
+                },
+                floventDiskus: function (v) {
+                    if (!v) {
+                        app.floventDiskusStrength = "";
+                        app.floventDiskusDose = "";
+                        app.floventDiskusFreq = "";
+                    }
+                },
+                advairDiskus: function (v) {
+                    if (!v) {
+                        app.advairDiskusStrength = "";
+                        app.advairDiskusDose = "";
+                        app.advairDiskusFreq = "";
+                    }
+                },
+                advairPMDI: function (v) {
+                    if (!v) {
+                        app.advairPMDIStrength = "";
+                        app.advairPMDIDose = "";
+                        app.advairPMDIFreq = "";
+                    }
+                },
+                wixelaInhub: function (v) {
+                    if (!v) {
+                        app.wixelaInhubStrength = "";
+                        app.wixelaInhubDose = "";
+                        app.wixelaInhubFreq = "";
+                    }
+                },
+                arnuityEllipta: function (v) {
+                    if (!v) {
+                        app.arnuityElliptaStrength = "";
+                        app.arnuityElliptaFreq = "";
+                        app.arnuityElliptaDose = "";
+                    }
+                },
+                breoEllipta: function (v) {
+                    if (!v) {
+                        app.breoElliptaStrength = "";
+                        app.breoElliptaFreq = "";
+                        app.breoElliptaDose = "";
+                    }
+                },
+                trelegyEllipta: function (v) {
+                    if (!v) {
+                        app.trelegyElliptaStrength = "";
+                        app.trelegyElliptaFreq = "";
+                        app.trelegyElliptaDose = "";
+                    }
+                },
+                asmanexTwisthaler: function (v) {
+                    if (!v) {
+                        app.asmanexTwisthalerStrength = "";
+                        app.asmanexTwisthalerFreq = "";
+                        app.asmanexTwisthalerDose = "";
+                    }
+                },
+                zenhaleMDI: function (v) {
+                    if (!v) {
+                        app.zenhaleMDIStrength = "";
+                        app.zenhaleMDIFreq = "";
+                        app.zenhaleMDIDose = "";
+                    }
+                }
+            }
+        });
+
+        let _checkboxList = document.querySelectorAll("input[type='checkbox']");
+
+        //value pulled from oscar but need to loop through to check the boxes
+        _checkboxList.forEach(function (element) {
+            if (element.value == "true") {
+                element.checked = true;
+            }
+        });
+
+        if (!app.EMR_eAPIID) {
+            function uuidv4() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+            app.EMR_eAPIID = uuidv4();
+        } else {
+            app.showDiagnosisBanner = true;
+            app.showFamilyHistoryBanner = true;
+            app.showSmokingBanner = true;
+        }
+
+        beforeSubmit = function () {
+            _checkboxList.forEach(function (element) {
+                if (element.checked) {
+                    element.value = "true";
+                }
+            });
+
+            var asthmaLifePayload = {
+                "EMR_PatientID": app.EMR_PatientID,
+                "ProviderName": app.ProviderName,
+                "ProviderIdentifier": app.ProviderIdentifier, // "Oscar User No"
+                "PatientDOB": (app.dob ? new Date(app.dob) : null),
+                "PatientGender": (app.PatientGender == "M" || "F" ? app.PatientGender : "U"), //set to "U" if not "M" or "F"
+                //"API_ID": EMR INSTANCE
+                "EMR_eAPIID": app.EMR_eAPIID,
+                "VisitDate": (app.encounterDate ? new Date(app.encounterDate) : null),
+                "Dx_Confirmed_by_PFTs": (app.diagnosis == "confirmed" ? true : false),
+                "Monitored_Spirometry_Last12mos": document.getElementById("Monitored_Spirometry_Last12mos").checked,
+                "isUsing_Inhaled_ICS": document.getElementById("isUsing_Inhaled_ICS").checked,
+                "selfReported_ICS_last12mos": parseInt(document.getElementById("selfReported_ICS_last12mos").value),
+                "selfReported_B2_last4wks": parseInt(document.getElementById("needReliever").value),
+                "SelfReported_b2free_last4wks": parseInt(document.getElementById("SelfReported_b2free_last4wks").value),
+                "Demonstrated_Correct_Technique": document.getElementById("Demonstrated_Correct_Technique").checked,
+                // "Asthma_SmptomControlAx_Last6mos": Defaulted on sever
+                "Asthma_wellControlled_last4wks": app.asthmaControlledBool,
+                "Symptom_Free_Days_Last4wks": 7 - parseInt(document.getElementById("daytimeSymptoms").value),
+                "Absences_SchoolWork_Last12mos": parseInt(document.getElementById("Absences_SchoolWork_Last12mos").value),
+                "Patient_MoreThanOne_Exacerbation_Last12mos": (~~parseInt(document.getElementById("asthmaExacerbationLastYear").value) > 1 ? true : false),
+                "Number_EDVisits_Last12mos": parseInt(document.getElementById("Number_EDVisits_Last12mos").value),
+                "Number_UrgentCareVisits_Last12mos": parseInt(document.getElementById("Number_UrgentCareVisits_Last12mos").value),
+                "Number_PrimaryCareVisits_Last12mos": ~~parseInt(document.getElementById("routinePrimaryVisits").value) + ~~parseInt(document.getElementById("urgentPrimaryVisits").value),
+                // "hasRoutineHCP": Always yes
+                "hasReceivedWrittenActionPlan": (document.getElementById("writtenPlanProvidedYes") || document.getElementId("writtenPlanRevisedYes") || document.getElementById("reviewedNotChangedYes") ? true : false),
+                "ReferredToCAE": document.getElementById("ReferredToCAE").checked,
+                "NonSmoker": document.getElementById("currentSmoker").checked,
+                "Smoking_Advised": (app.cessationAsk == "yes" || app.cessationAdvise == "yes" || app.cessationArrange == "yes" ? true : false)
+            }
+
+        }
+
+
+        // check if new form based on existing encounter date data
+        if (!app.encounterDate) {
+            var d = new Date();
+            app.encounterDate = (d.getFullYear() + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + ("0" + d.getDate()).slice(-2));
+        }
+
+        calcAge = function (_dob) {
+            var dob = new Date(_dob);
+
+            var month_diff = Date.now() - dob.getTime();
+
+            //convert the calculated difference in date format  
+            var age_dt = new Date(month_diff);
+
+            //extract year from date      
+            var year = age_dt.getUTCFullYear();
+
+            //now calculate the age of the user  
+            var age = Math.abs(year - 1970);
+
+            if (age > 5) {
+                app.youngPatient = false;
+                app.ableSpirometry = true;
+            } else {
+                app.youngPatient = true;
+                app.ableSpirometry = false;
+            }
+        }
+
+        calcSmokingYears = function () {
+            // use cigarettes per day before using cigs per month to calc 
+            if (app.cigarettesDay && app.yearsSmoked) {
+                var _cigDay = parseInt(app.cigarettesDay);
+                var _yearsSmoked = parseInt(app.yearsSmoked);
+                if (typeof _cigDay == 'number' && typeof _yearsSmoked == 'number') {
+                    app.packYears = (_cigDay * _yearsSmoked) / 20;
+                } else {
+                    app.packYears = "-";
+                }
+            } else if (app.cigarettesMonth && app.yearsSmoked) {
+                var _cigMonth = parseInt(app.cigarettesMonth);
+                var _yearsSmoked = parseInt(app.yearsSmoked);
+                if (typeof _cigMonth == 'number' && typeof _yearsSmoked == 'number') {
+                    app.packYears = ((_cigMonth / 30) * _yearsSmoked) / 20;
+                } else {
+                    app.packYears = "-";
+                }
+            } else {
+                app.packYears = "-";
+            }
+        }
+
+        calcIsControlled = function () {
+            if (document.getElementById('activityIsLimited').checked ||
+                parseInt(document.getElementById('needReliever').value) >= 2 ||
+                parseInt(document.getElementById("daytimeSymptoms").value) >= 2 ||
+                parseInt(document.getElementById("numberWorkSchoolAbsences").value) >= 1 ||
+                parseInt(document.getElementById("nighttimeSymptoms").value) >= 1 ||
+                parseInt(document.getElementById("numberExacerbations").value) >= 1) {
+                app.asthmaControlled = "NO";
+                app.asthmaControlledBool = false;
+                document.getElementById('asthmaControlledSpan').style.color = "red";
+            } else if (document.getElementById('activityNotLimited').checked &&
+                parseInt(document.getElementById('needReliever').value) < 2 &&
+                parseInt(document.getElementById("daytimeSymptoms").value) < 2 &&
+                document.getElementById("noWorkSchoolAbsences").checked &&
+                parseInt(document.getElementById("nighttimeSymptoms").value) < 1 &&
+                document.getElementById("noExacerbationsSinceLast").checked) {
+                app.asthmaControlled = "Yes";
+                app.asthmaControlledBool = true;
+                document.getElementById('asthmaControlledSpan').style.color = "black";
+            } else {
+                app.asthmaControlled = "-";
+                app.asthmaControlledBool = null;
+                document.getElementById('asthmaControlledSpan').style.color = "black";
+            }
+
+        }
+        calcAge(app.dob);
+        calcIsControlled()
+
+    </script>
+</body>
+
+</html>
