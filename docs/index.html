@@ -3,6 +3,10 @@
 
 <head>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script type="text/javascript" src="js/lib/lodash.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="js/lib/growl/growl-notification.min.js"></script>
+    <script type="text/javascript" src="js/algorithm/SevereAlgorithm.js"></script>
     <style type="text/css">
         @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
 
@@ -1366,7 +1370,7 @@
                             <span v-if="qvar">
                                 <label>
                                     Strength:
-                                    <select name="qvarStrength" id="qvarStrength" v-model="qvarStrength"
+                                    <select name="qvarStrength" id="qvarStrength" v-model="qvarStrength" onblur="TriggerAlgorithm()"
                                         style="width: 90px">
                                         <option value=""></option>
                                         <option value="50">50mcg</option>
@@ -1375,7 +1379,7 @@
                                 </label>
                                 <label>
                                     Dose:
-                                    <select name="qvarDose" id="qvarDose" v-model="qvarDose" style="width: 90px">
+                                    <select name="qvarDose" id="qvarDose" v-model="qvarDose" onblur="TriggerAlgorithm()" style="width: 90px">
                                         <option value=""></option>
                                         <option value="1">1 puff</option>
                                         <option value="2">2 puffs</option>
@@ -1386,10 +1390,10 @@
 
                                 <label>
                                     Frequency:
-                                    <select name="qvarFreq" id="qvarFreq" v-model="qvarFreq">
+                                    <select name="qvarFreq" id="qvarFreq" onblur="TriggerAlgorithm()" v-model="qvarFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
+                                        <option value="1">od</option>
+                                        <option value="2">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -1430,8 +1434,8 @@
                                     <select name="pulmicortTurbuhalerFreq" id="pulmicortTurbuhalerFreq"
                                         v-model="pulmicortTurbuhalerFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
+                                        <option value="1">od</option>
+                                        <option value="2">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -1470,8 +1474,8 @@
                                     <select name="symbicortTurbuhalerFreq" id="symbicortTurbuhalerFreq"
                                         v-model="symbicortTurbuhalerFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
+                                        <option value="1">od</option>
+                                        <option value="2">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -1508,8 +1512,8 @@
                                     Frequency:
                                     <select name="alvescoFreq" id="alvescoFreq" v-model="alvescoFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
+                                        <option value="1">od</option>
+                                        <option value="2">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -1588,9 +1592,9 @@
                                     Frequency:
                                     <select name="floventDiskusFreq" id="floventDiskusFreq" v-model="floventDiskusFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
-                                        <option value="qid">qid</option>
+                                        <option value="1">od</option>
+                                        <option value="2">bid</option>
+                                        <option value="4">qid</option>
                                     </select>
                                 </label>
                             </span>
@@ -1625,8 +1629,8 @@
                                     Frequency:
                                     <select name="advairDiskusFreq" id="advairDiskusFreq" v-model="advairDiskusFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
+                                        <option value="1">od</option>
+                                        <option value="2">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -1661,8 +1665,8 @@
                                     Frequency:
                                     <select name="advairPMDIFreq" id="advairPMDIFreq" v-model="advairPMDIFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
+                                        <option value="1">od</option>
+                                        <option value="2">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -1699,8 +1703,8 @@
                                     Frequency:
                                     <select name="wixelaInhubFreq" id="wixelaInhubFreq" v-model="wixelaInhubFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
+                                        <option value="1">od</option>
+                                        <option value="2">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -1774,7 +1778,7 @@
                                     Frequency:
                                     <select name="breoElliptaFreq" id="breoElliptaFreq" v-model="breoElliptaFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
+                                        <option value="1">od</option>
                                     </select>
                                 </label>
                             </span>
@@ -1808,7 +1812,7 @@
                                     <select name="trelegyElliptaFreq" id="trelegyElliptaFreq"
                                         v-model="trelegyElliptaFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
+                                        <option value="1">od</option>
                                     </select>
                                 </label>
                             </span>
@@ -1847,8 +1851,8 @@
                                     <select name="asmanexTwisthalerFreq" id="asmanexTwisthalerFreq"
                                         v-model="asmanexTwisthalerFreq">
                                         <option value=""></option>
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
+                                        <option value="1">od</option>
+                                        <option value="2">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -1886,7 +1890,7 @@
                                     Frequency:
                                     <select name="zenhaleMDIFreq" id="zenhaleMDIFreq" v-model="zenhaleMDIFreq">
                                         <option value=""></option>
-                                        <option value="od">bid</option>
+                                        <option value="1">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -3054,6 +3058,7 @@
                     calcAge(newDob)
                 },
                 qvar: function (v) {
+                    console.log(v);
                     if (!v) {
                         app.qvarStrength = "";
                         app.qvarDose = "";
@@ -3300,6 +3305,11 @@
         calcIsControlled()
 
     </script>
+
+
+    
+
+
 </body>
 
 </html>
