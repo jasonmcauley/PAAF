@@ -273,7 +273,7 @@
                     </label>
 
                     <input type="text" name="dob" id="dob" v-model="dob" oscarDB=dobc2 class="patient-info-input"
-                        placeholder="YYYY/MM/DD">
+                        placeholder="YYYY/MM/DD" value='1988/01/01'>
 
                     <label for="mrn" class="patient-info-label">
                         Medical Record #
@@ -1362,15 +1362,15 @@
                     </div> -->
                     <div class="med-calc-section">
                         <div class="flex-center">
-                            <input type="checkbox" id="qvar" name="qvar" v-model="qvar">
+                            <input class="severe-med-checkbox" type="checkbox" id="qvar" name="qvar" v-model="qvar">
                             <label for="qvar" style="width:25%">
                                 <b>QVAR</b><br>
                                 <i>Beclomethasone dipropionate HFA</i>
                             </label>
-                            <span v-if="qvar">
+                            <span v-show="qvar">
                                 <label>
                                     Strength:
-                                    <select name="qvarStrength" id="qvarStrength" v-model="qvarStrength" onblur="TriggerAlgorithm()"
+                                    <select name="qvarStrength" id="qvarStrength" v-model="qvarStrength"
                                         style="width: 90px">
                                         <option value=""></option>
                                         <option value="50">50mcg</option>
@@ -1379,7 +1379,7 @@
                                 </label>
                                 <label>
                                     Dose:
-                                    <select name="qvarDose" id="qvarDose" v-model="qvarDose" onblur="TriggerAlgorithm()" style="width: 90px">
+                                    <select name="qvarDose" id="qvarDose" v-model="qvarDose" style="width: 90px">
                                         <option value=""></option>
                                         <option value="1">1 puff</option>
                                         <option value="2">2 puffs</option>
@@ -1390,7 +1390,7 @@
 
                                 <label>
                                     Frequency:
-                                    <select name="qvarFreq" id="qvarFreq" onblur="TriggerAlgorithm()" v-model="qvarFreq">
+                                    <select name="qvarFreq" id="qvarFreq" v-model="qvarFreq">
                                         <option value=""></option>
                                         <option value="1">od</option>
                                         <option value="2">bid</option>
@@ -1400,13 +1400,13 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="pulmicortTurbuhaler" id="pulmicortTurbuhaler"
+                            <input class="severe-med-checkbox"  type="checkbox" name="pulmicortTurbuhaler" id="pulmicortTurbuhaler"
                                 v-model="pulmicortTurbuhaler">
                             <label for="pulmicortTurbuhaler" style="width:25%">
                                 <b>Pulmicort Turbuhaler</b><br>
                                 <i>Budesonide</i>
                             </label>
-                            <span v-if="pulmicortTurbuhaler">
+                            <span v-show="pulmicortTurbuhaler">
                                 <label>
                                     Strength:
                                     <select name="pulmicortTurbuhalerStrength" id="pulmicortTurbuhalerStrength"
@@ -1442,13 +1442,13 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="symbicortTurbuhaler" id="symbicortTurbuhaler"
+                            <input class="severe-med-checkbox"  type="checkbox" name="symbicortTurbuhaler" id="symbicortTurbuhaler"
                                 v-model="symbicortTurbuhaler">
                             <label for="symbicortTurbuhaler" style="width:25%">
                                 <b>Symbicort Turbuhaler</b><br>
                                 <i>Budesonide/formoterol</i>
                             </label>
-                            <span v-if="symbicortTurbuhaler">
+                            <span v-show="symbicortTurbuhaler">
                                 <label>
                                     Strength:
                                     <select name="symbicortTurbuhalerStrength" id="symbicortTurbuhalerStrength"
@@ -1482,12 +1482,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="alvesco" id="alvesco" v-model="alvesco">
+                            <input class="severe-med-checkbox" type="checkbox" name="alvesco" id="alvesco" v-model="alvesco">
                             <label for="alvesco" style="width:25%">
                                 <b>Alvesco</b>
                                 <br><i>Ciclesonide</i>
                             </label>
-                            <span v-if="alvesco">
+                            <span v-show="alvesco">
                                 <label>
                                     Strength:
                                     <select name="alvescoStrength" id="alvescoStrength" v-model="alvescoStrength"
@@ -1520,12 +1520,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="floventMDI" id="floventMDI" v-model="floventMDI">
+                            <input class="severe-med-checkbox" type="checkbox" name="floventMDI" id="floventMDI" v-model="floventMDI">
                             <label for="floventMDI" style="width:25%;">
                                 <b>Flovent MDI and spacer</b><br>
                                 <i>Fluticasone propionate</i>
                             </label>
-                            <span v-if="floventMDI">
+                            <span v-show="floventMDI">
                                 <label>
                                     Strength:
                                     <select name="floventMDIStrength" id="floventMDIStrength"
@@ -1560,12 +1560,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="floventDiskus" id="floventDiskus" v-model="floventDiskus">
+                            <input class="severe-med-checkbox"  type="checkbox" name="floventDiskus" id="floventDiskus" v-model="floventDiskus">
                             <label for="floventDiskus" style="width:25%;">
                                 <b>Flovent Diskus</b><br>
                                 <i>Fluticasone propionate</i>
                             </label>
-                            <span v-if="floventDiskus">
+                            <span v-show="floventDiskus">
                                 <label>
                                     Strength:
                                     <select name="floventDiskusStrength" id="floventDiskusStrength"
@@ -1601,12 +1601,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="advairDiskus" id="advairDiskus" v-model="advairDiskus">
+                            <input class="severe-med-checkbox"  type="checkbox" name="advairDiskus" id="advairDiskus" v-model="advairDiskus">
                             <label for="advairDiskus" style="width:25%">
                                 <b>Advair Diskus</b>
                                 <br><i>Fluticasone/salmeterol</i>
                             </label>
-                            <span v-if="advairDiskus">
+                            <span v-show="advairDiskus">
                                 <label>
                                     Strength:
                                     <select name="advairDiskusStrength" id="advairDiskusStrength"
@@ -1637,12 +1637,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="advairPMDI" id="advairPMDI" v-model="advairPMDI">
+                            <input class="severe-med-checkbox"  type="checkbox" name="advairPMDI" id="advairPMDI" v-model="advairPMDI">
                             <label for="advairPMDI" style="width:25%">
                                 <b>Advair pMDI</b>
                                 <br><i>Fluticasone/salmeterol</i>
                             </label>
-                            <span v-if="advairPMDI">
+                            <span v-show="advairPMDI">
                                 <label>
                                     Strength:
                                     <select name="advairPMDIStrength" id="advairPMDIStrength"
@@ -1673,12 +1673,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="wixelaInhub" id="wixelaInhub" v-model="wixelaInhub">
+                            <input class="severe-med-checkbox" type="checkbox" name="wixelaInhub" id="wixelaInhub" v-model="wixelaInhub">
                             <label for="wixelaInhub" style="width:25%">
                                 <b>Wixela Inhub</b>
                                 <br><i>Fluticasone/salmeterol</i>
                             </label>
-                            <span v-if="wixelaInhub">
+                            <span v-show="wixelaInhub">
                                 <label>
                                     Strength:
                                     <select name="wixelaInhubStrength" id="wixelaInhubStrength"
@@ -1711,12 +1711,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="arnuityEllipta" id="arnuityEllipta" v-model="arnuityEllipta">
+                            <input class="severe-med-checkbox"  type="checkbox" name="arnuityEllipta" id="arnuityEllipta" v-model="arnuityEllipta">
                             <label for="arnuityEllipta" style="width:25%">
                                 <b>Arnuity Ellipta</b>
                                 <br><i>Fluticasone furoate</i>
                             </label>
-                            <span v-if="arnuityEllipta">
+                            <span v-show="arnuityEllipta">
                                 <label>
                                     Strength:
                                     <select name="arnuityElliptaStrength" id="arnuityElliptaStrength"
@@ -1751,12 +1751,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="breoEllipta" id="breoEllipta" v-model="breoEllipta">
+                            <input class="severe-med-checkbox" type="checkbox" name="breoEllipta" id="breoEllipta" v-model="breoEllipta">
                             <label for="breoEllipta" style="width:25%">
                                 <b>Breo Ellipta</b>
                                 <br><i>Fluticasone/vilanterol Ellipta</i>
                             </label>
-                            <span v-if="breoEllipta">
+                            <span v-show="breoEllipta">
                                 <label>
                                     Strength:
                                     <select name="breoElliptaStrength" id="breoElliptaStrength"
@@ -1785,12 +1785,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="trelegyEllipta" id="trelegyEllipta" v-model="trelegyEllipta">
+                            <input class="severe-med-checkbox"  type="checkbox" name="trelegyEllipta" id="trelegyEllipta" v-model="trelegyEllipta">
                             <label for="trelegyEllipta" style="width:25%">
                                 <b>Trelegy Ellipta </b>
                                 <br><i>Fluticasone/vilanterol/umeclidinium</i>
                             </label>
-                            <span v-if="trelegyEllipta">
+                            <span v-show="trelegyEllipta">
                                 <label>
                                     Strength:
                                     <select name="trelegyElliptaStrength" id="trelegyElliptaStrength"
@@ -1819,13 +1819,13 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="asmanexTwisthaler" id="asmanexTwisthaler"
+                            <input class="severe-med-checkbox"  type="checkbox" name="asmanexTwisthaler" id="asmanexTwisthaler"
                                 v-model="asmanexTwisthaler">
                             <label for="asmanexTwisthaler" style="width:25%">
                                 <b>Asmanex Twisthaler </b>
                                 <br><i>Mometasone furoate</i>
                             </label>
-                            <span v-if="asmanexTwisthaler">
+                            <span v-show="asmanexTwisthaler">
                                 <label>
                                     Strength:
                                     <select name="asmanexTwisthalerStrength" id="asmanexTwisthalerStrength"
@@ -1859,12 +1859,12 @@
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="zenhaleMDI" id="zenhaleMDI" v-model="zenhaleMDI">
+                            <input class="severe-med-checkbox" type="checkbox" name="zenhaleMDI" id="zenhaleMDI" v-model="zenhaleMDI">
                             <label for="zenhaleMDI" style="width:25%">
                                 <b>Zenhale MDI</b>
                                 <br><i>Mometasone/formoterol</i>
                             </label>
-                            <span v-if="zenhaleMDI">
+                            <span v-show="zenhaleMDI">
                                 <label>
                                     Strength:
                                     <select name="zenhaleMDIStrength" id="zenhaleMDIStrength"
@@ -1897,7 +1897,7 @@
                         </div>
                         <hr>
                         <label><b>Additional Asthma Controllers</b></label>
-                        <table style="margin:5px; width: 99%;">
+                        <table id="additional-controllers" style="margin:5px; width: 99%;">
                             <tr style="background: #f1f1f1;">
                                 <th style="width:16.6%">LABA</th>
                                 <th style="width:16.6%">LAMA</th>
