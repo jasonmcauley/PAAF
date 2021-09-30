@@ -1,10 +1,25 @@
 //(function() {
     // Need to pull these 
     const _Medications = [{"MedicationFieldID":"qvar","MedicationName":"QVAR (Beclomethasone dipropionate HFA)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"pulmicortTurbuhaler","MedicationName":"Pulmicort Turbuhaler (Budesonide)","IsSevere":true,"SevereThresholdAdult":800,"SevereThresholdChild":800,"BudesonideMultiplierChild":1,"BudesonideMultiplierAdult":1,"ControllersCount":1},{"MedicationFieldID":"symbicortTurbuhaler","MedicationName":"Symbicort Turbuhaler (Budesonide/formoterol)","IsSevere":true,"SevereThresholdAdult":800,"SevereThresholdChild":800,"BudesonideMultiplierChild":1,"BudesonideMultiplierAdult":1,"ControllersCount":2},{"MedicationFieldID":"alvesco","MedicationName":"Alvesco (Ciclesonide)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"floventMDI","MedicationName":"Flovent MDI and spacer (Fluticasone propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"floventDiskus","MedicationName":"Flovent Diskus (Fluticasone propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"advairDiskus","MedicationName":"Advair Diskus (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"advairPMDI","MedicationName":"Advair pMDI (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"wixelaInhub","MedicationName":"Wixela Inhub (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"arnuityEllipta","MedicationName":"Arnuity Ellipta (Fluticasone furoate)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":1},{"MedicationFieldID":"breoEllipta","MedicationName":"Breo Ellipta (Fluticasone/vilanterol Ellipta)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":2},{"MedicationFieldID":"trelegyEllipta","MedicationName":"Trelegy Ellipta (Fluticasone/vilanterol/umeclidinium)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":3},{"MedicationFieldID":"asmanexTwisthaler","MedicationName":"Asmanex Twisthaler (Mometasone furoate)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"zenhaleMDI","MedicationName":"Zenhale MDI (Mometasone/formoterol)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":2}];
+    //const _Medications = null;
     const _isAdult = true;
 
     $(document).ready(function(){        
+        // $.ajax({
+        //     url: 'MedData.json',
+        //     dataType: 'json',
+        //     async: false,
+        //     success: function(data) {
+        //         console.log(data);
+        //         _Medications = data;
+        //     }
+        // });
+
         _BindAlgorithmTriggerEvents();
+
+        // Tigger on initial load
+        TriggerAlgorithm();
+
     });
 
     function _CalculateDailyIntakeByMedName(medName) {
@@ -23,7 +38,7 @@
     function _BindAlgorithmTriggerEvents() {
         // Medication checkbox event binding
         $('.med-calc-section input[type=checkbox]').each(function() {
-            $(this).blur(function(e) {
+            $(this).click(function(e) {
                 TriggerAlgorithm();
             })
         });
@@ -39,49 +54,63 @@
             TriggerAlgorithm();
         });
 
+        $('input[name=corticosteroidUsedPreviousYear]').click(function(){
+            TriggerAlgorithm();
+        });
     }
 
     function TriggerAlgorithm() {
-        _isConfirmedAsthma();
-
-        const multiSevereMed = _hasMultiSevereMeds();
-        let medSevere = null;
-
-        if (multiSevereMed) {
-            medSevere = _isMultiMedSevere();
-        } 
-        else {            
-            medSevere = _isSingleMedSevere();
+        if(_isConfirmedAsthma()) {
+            const multiSevereMed = _hasMultiSevereMeds();
+            let medSevere = null;
+    
+            if (multiSevereMed) {
+                medSevere = _isMultiMedSevere();
+            } 
+            else {            
+                medSevere = _isSingleMedSevere();
+            }
+    
+            console.log('med severe: ', medSevere);
+    
+            if (medSevere || _isSystemicSteroidSevere()) {
+                $(".severe-asthma-footer").show();
+            }
+            else {
+                $(".severe-asthma-footer").hide();
+            }
+    
         }
 
-        console.log('med severe: ', medSevere);
+       
 
     }
 
-    function _isSingleMedSevere() {
-        const isChild = _isChild();
+    function _isSingleMedSevere() {        
         let isSevereAmount = false;
         let numberControllers = 0;
 
         _Medications.forEach(function(med) {
-            const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);           
-            if (medDailyIntake) {
-                let medThreshhold = null;
-                if (isChild) 
-                {
-                    medThreshhold = med.SevereThresholdChild;
-                }
-                else {
-                    medThreshhold = med.SevereThresholdAdult;
-                }
-                
-                isSevereAmount = medDailyIntake > medThreshhold;
-                numberControllers += med.ControllersCount;
-            }            
+            if ($("#" + med.MedicationFieldID + ":checked").val()){
+                const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);           
+                if (medDailyIntake) {
+                    let medThreshhold = null;
+                    if (_isChild()) 
+                    {
+                        medThreshhold = med.SevereThresholdChild;
+                    }
+                    else {
+                        medThreshhold = med.SevereThresholdAdult;
+                    }
+                    
+                    isSevereAmount = medDailyIntake > medThreshhold;
+                    numberControllers += med.ControllersCount;
+                } 
+            }           
         });
         
         numberControllers += _getNumberAdditionalControllers();
-        //console.log('single num controllers', numberControllers);
+        console.log('single num controllers', numberControllers);
 
         return isSevereAmount && numberControllers > 1;
     }
@@ -93,19 +122,21 @@
         let numberControllers = 0;
 
         _Medications.forEach(function(med) {            
-            const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);
-            if (medDailyIntake) {
-                if(isChild) {
-                    budesonideMultiplier = med.BudesonideMultiplierChild;
-                }
-                else {
-                    budesonideMultiplier = med.BudesonideMultiplierAdult;
-                }
-                //console.log(medDailyIntake, medDailyIntake * budesonideMultiplier);
-                medTotal += medDailyIntake * budesonideMultiplier;
-                
-                numberControllers += med.ControllersCount;
+            if ($("#" + med.MedicationFieldID + ":checked").val()){
+                const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);
+                if (medDailyIntake) {
+                    if(isChild) {
+                        budesonideMultiplier = med.BudesonideMultiplierChild;
+                    }
+                    else {
+                        budesonideMultiplier = med.BudesonideMultiplierAdult;
+                    }
+                    //console.log(medDailyIntake, medDailyIntake * budesonideMultiplier);
+                    medTotal += medDailyIntake * budesonideMultiplier;
+                    
+                    numberControllers += med.ControllersCount;
 
+                }
             }
         });
 
@@ -123,16 +154,21 @@
 
         numberControllers +=  _getNumberAdditionalControllers();
         //console.log('*', medTotal, medThreshhold);
-        //console.log('multi num controllers', numberControllers);
+        console.log('multi num controllers', numberControllers);
 
         return medTotal > medThreshhold && numberControllers > 1;
 
     }
 
 
+    function _isSystemicSteroidSevere() {
+        return $('input[name=corticosteroidUsedPreviousYear]:checked').val()?.toUpperCase() === "YES"
+    }
+
     function _isConfirmedAsthma() {
-        console.log('confirmed?', $('input[name=diagnosis]:checked').val().toUpperCase() == "CONFIRMED");
-        $('input[name=diagnosis]:checked').val().toUpperCase() == "CONFIRMED";
+        //Nullish supported by IE11?
+        //console.log('confirmed?', $('input[name=diagnosis]:checked').val()?.toUpperCase() == "CONFIRMED");
+        return $('input[name=diagnosis]:checked').val()?.toUpperCase() === "CONFIRMED";
     }
 
     function _getBudesonideObject() {
