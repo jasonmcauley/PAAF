@@ -141,7 +141,7 @@
         });
 
         // Compare budsonide 
-        const budsonideObject = _getBudesonideObject();           
+        const budsonideObject = _getBudesonideObject();
 
         let medThreshhold = null;
         if (isChild) 
@@ -154,7 +154,7 @@
 
         numberControllers +=  _getNumberAdditionalControllers();
         //console.log('*', medTotal, medThreshhold);
-        console.log('multi num controllers', numberControllers);
+        //console.log('multi num controllers', numberControllers);
 
         return medTotal > medThreshhold && numberControllers > 1;
 
@@ -166,8 +166,6 @@
     }
 
     function _isConfirmedAsthma() {
-        //Nullish supported by IE11?
-        //console.log('confirmed?', $('input[name=diagnosis]:checked').val()?.toUpperCase() == "CONFIRMED");
         return $('input[name=diagnosis]:checked').val()?.toUpperCase() === "CONFIRMED";
     }
 
