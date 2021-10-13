@@ -286,7 +286,7 @@ var app = new Vue({
 });
 
 let _checkboxList = document.querySelectorAll("input[type='checkbox']");
-
+_checkboxList = [].slice.call(_checkboxList);
 //value pulled from oscar but need to loop through to check the boxes
 _checkboxList.forEach(function (element) {
     if (element.value == "true") {

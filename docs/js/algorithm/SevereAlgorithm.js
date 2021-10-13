@@ -71,13 +71,15 @@
                 medSevere = _isSingleMedSevere();
             }
     
-            console.log('med severe: ', medSevere);
+            //console.log('med severe: ', medSevere);
     
             if (medSevere || _isSystemicSteroidSevere()) {
                 $(".severe-asthma-footer").show();
+                $("#IsSevere").val(1);
             }
             else {
                 $(".severe-asthma-footer").hide();
+                $("#IsSevere").val(0);
             }
     
         }
@@ -110,7 +112,7 @@
         });
         
         numberControllers += _getNumberAdditionalControllers();
-        console.log('single num controllers', numberControllers);
+        //console.log('single num controllers', numberControllers);
 
         return isSevereAmount && numberControllers > 1;
     }
@@ -162,11 +164,21 @@
 
 
     function _isSystemicSteroidSevere() {
-        return $('input[name=corticosteroidUsedPreviousYear]:checked').val()?.toUpperCase() === "YES"
+        var corticosteroidUsedPreviousYear = $('input[name=corticosteroidUsedPreviousYear]:checked').val();        
+        if(corticosteroidUsedPreviousYear && corticosteroidUsedPreviousYear.toUpperCase() === "YES") {
+            return true;
+        }
+        return false;
+        //return $('input[name=corticosteroidUsedPreviousYear]:checked').val()?.toUpperCase() === "YES"
     }
 
     function _isConfirmedAsthma() {
-        return $('input[name=diagnosis]:checked').val()?.toUpperCase() === "CONFIRMED";
+        var diagnosis = $('input[name=diagnosis]:checked').val();        
+        if(diagnosis && diagnosis.toUpperCase() === "CONFIRMED") {
+            return true;
+        }
+        return false;
+        //return $('input[name=diagnosis]:checked').val()?.toUpperCase() === "CONFIRMED";
     }
 
     function _getBudesonideObject() {
