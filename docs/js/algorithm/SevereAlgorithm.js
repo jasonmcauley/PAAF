@@ -57,6 +57,11 @@
         $('input[name=corticosteroidUsedPreviousYear]').click(function(){
             TriggerAlgorithm();
         });
+
+        $('#dob').blur(function(){
+            TriggerAlgorithm();
+        })
+
     }
 
     function TriggerAlgorithm() {
@@ -70,8 +75,6 @@
             else {            
                 medSevere = _isSingleMedSevere();
             }
-    
-            //console.log('med severe: ', medSevere);
     
             if (medSevere || _isSystemicSteroidSevere()) {
                 $(".severe-asthma-footer").show();
@@ -89,9 +92,9 @@
         let isSevereAmount = false;
         let numberControllers = 0;
 
-        _Medications.forEach(function(med) {
+        _Medications.forEach(function(med) {            
             if ($("#" + med.MedicationFieldID + ":checked").val()){
-                const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);           
+                const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);                        
                 if (medDailyIntake) {
                     let medThreshhold = null;
                     if (_isChild()) 
@@ -109,7 +112,6 @@
         });
         
         numberControllers += _getNumberAdditionalControllers();
-        //console.log('single num controllers', numberControllers);
 
         return isSevereAmount && numberControllers > 1;
     }
@@ -130,9 +132,8 @@
                     else {
                         budesonideMultiplier = med.BudesonideMultiplierAdult;
                     }
-                    //console.log(medDailyIntake, medDailyIntake * budesonideMultiplier);
-                    medTotal += medDailyIntake * budesonideMultiplier;
                     
+                    medTotal += medDailyIntake * budesonideMultiplier;                    
                     numberControllers += med.ControllersCount;
 
                 }
@@ -152,8 +153,6 @@
         }
 
         numberControllers +=  _getNumberAdditionalControllers();
-        //console.log('*', medTotal, medThreshhold);
-        //console.log('multi num controllers', numberControllers);
 
         return medTotal > medThreshhold && numberControllers > 1;
 
@@ -165,8 +164,7 @@
         if(corticosteroidUsedPreviousYear && corticosteroidUsedPreviousYear.toUpperCase() === "YES") {
             return true;
         }
-        return false;
-        //return $('input[name=corticosteroidUsedPreviousYear]:checked').val()?.toUpperCase() === "YES"
+        return false;        
     }
 
     function _isConfirmedAsthma() {
@@ -174,8 +172,7 @@
         if(diagnosis && diagnosis.toUpperCase() === "CONFIRMED") {
             return true;
         }
-        return false;
-        //return $('input[name=diagnosis]:checked').val()?.toUpperCase() === "CONFIRMED";
+        return false;        
     }
 
     function _getBudesonideObject() {
@@ -193,18 +190,12 @@
     }
 
     function _isChild() {
-        const encounterDate = $('#encounterDate').val();
+        const encounterDateString = $('#encounterDate').val();
         const birthdate = $('#dob').val();
-
         const dob = new Date(birthdate);
-        var month_diff = Date.now() - dob.getTime();
-
-        //convert the calculated difference in date format  
-        var age_dt = new Date(month_diff);
-
-        //extract year from date      
-        var year = age_dt.getUTCFullYear();
+        const encounterDate = new Date(encounterDateString);        
+        const diffYears = encounterDate.getFullYear() - dob.getFullYear();
         
-        return year < 12;
+        return diffYears < 12;
     }
 //})();
