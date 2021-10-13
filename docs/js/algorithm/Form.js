@@ -309,6 +309,7 @@ if (!app.EMR_eAPIID) {
 }
 
 beforeSubmit = function () {
+    
     _checkboxList.forEach(function (element) {
         if (element.checked) {
             element.value = "true";
@@ -345,6 +346,8 @@ beforeSubmit = function () {
         "NonSmoker": document.getElementById("currentSmoker").checked,
         "Smoking_Advised": (app.cessationAsk == "yes" || app.cessationAdvise == "yes" || app.cessationArrange == "yes" ? true : false)
     }
+
+    console.log(asthmaLifePayload);
 
 }
 
