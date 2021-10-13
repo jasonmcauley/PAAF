@@ -83,9 +83,6 @@
             }
     
         }
-
-       
-
     }
 
     function _isSingleMedSevere() {        
