@@ -77,12 +77,12 @@
             }
     
             if (medSevere || _isSystemicSteroidSevere()) {
-                $(".severe-asthma-footer").show();
-                $("#IsSevere").val(1);
+                $(".severe-asthma-footer").show();                
+                $("#IsSevere").val(true);
             }
             else {
                 $(".severe-asthma-footer").hide();
-                $("#IsSevere").val(0);
+                $("#IsSevere").val(false);
             }
     
         }

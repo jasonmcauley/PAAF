@@ -1,3 +1,5 @@
+const API_URL = 'http://localhost:65431/api/eAPI';
+
 smokingStatusChange = function () {
     if (document.getElementById("currentSmoker").checked) {
         document.getElementById("isCurrentSmoker").style.display = "inline-block";
@@ -319,11 +321,11 @@ beforeSubmit = function () {
     var asthmaLifePayload = {
         "EMR_PatientID": app.EMR_PatientID,
         "ProviderName": app.ProviderName,
-        "ProviderIdentifier": app.ProviderIdentifier, // "Oscar User No"
+        "ProviderEMRIdentifier": app.ProviderIdentifier, // "Oscar User No"
         "PatientDOB": (app.dob ? new Date(app.dob) : null),
         "PatientGender": (app.PatientGender == "M" || "F" ? app.PatientGender : "U"), //set to "U" if not "M" or "F"
         //"API_ID": EMR INSTANCE
-        "EMR_eAPIID": app.EMR_eAPIID,
+        "EMR_eAPIID": app.EMR_eAPIID,        
         "VisitDate": (app.encounterDate ? new Date(app.encounterDate) : null),
         "Dx_Confirmed_by_PFTs": (app.diagnosis == "confirmed" ? true : false),
         "Monitored_Spirometry_Last12mos": document.getElementById("Monitored_Spirometry_Last12mos").checked,
@@ -332,7 +334,7 @@ beforeSubmit = function () {
         "selfReported_B2_last4wks": parseInt(document.getElementById("needReliever").value),
         "SelfReported_b2free_last4wks": parseInt(document.getElementById("SelfReported_b2free_last4wks").value),
         "Demonstrated_Correct_Technique": document.getElementById("Demonstrated_Correct_Technique").checked,
-        // "Asthma_SmptomControlAx_Last6mos": Defaulted on sever
+        // "Asthma_SmptomControlAx_Last6mos": Defaulted on server
         "Asthma_wellControlled_last4wks": app.asthmaControlledBool,
         "Symptom_Free_Days_Last4wks": 7 - parseInt(document.getElementById("daytimeSymptoms").value),
         "Absences_SchoolWork_Last12mos": parseInt(document.getElementById("Absences_SchoolWork_Last12mos").value),
@@ -341,13 +343,33 @@ beforeSubmit = function () {
         "Number_UrgentCareVisits_Last12mos": parseInt(document.getElementById("Number_UrgentCareVisits_Last12mos").value),
         "Number_PrimaryCareVisits_Last12mos": ~~parseInt(document.getElementById("routinePrimaryVisits").value) + ~~parseInt(document.getElementById("urgentPrimaryVisits").value),
         // "hasRoutineHCP": Always yes
-        "hasReceivedWrittenActionPlan": (document.getElementById("writtenPlanProvidedYes") || document.getElementId("writtenPlanRevisedYes") || document.getElementById("reviewedNotChangedYes") ? true : false),
+        "hasReceivedWrittenActionPlan": (document.getElementById("writtenPlanProvidedYes").checked || document.getElementById("writtenPlanRevisedYes").checked || document.getElementById("reviewedNotChangedYes").checked ? true : false),
         "ReferredToCAE": document.getElementById("ReferredToCAE").checked,
-        "NonSmoker": document.getElementById("currentSmoker").checked,
-        "Smoking_Advised": (app.cessationAsk == "yes" || app.cessationAdvise == "yes" || app.cessationArrange == "yes" ? true : false)
+        "NonSmoker": !document.getElementById("currentSmoker").checked,
+        "Smoking_Advised": (app.cessationAsk == "yes" || app.cessationAdvise == "yes" || app.cessationArrange == "yes" ? true : false),
+        "IsSevere" : document.getElementById("IsSevere").value
     }
 
-    console.log(asthmaLifePayload);
+    console.log(JSON.stringify(asthmaLifePayload));
+
+
+    // setTimeout(function() {
+    //     $("#PAAF").submit();
+    //   }, 3000);
+    
+
+    // $.ajax({
+    //     type: 'POST',
+    //     url: API_URL + '/AddeAPI',
+    //     data: data,
+    //     success: function() {
+    //         console.log('***did it***');
+    //     },
+    //     fail: function() {
+    //         console.log('FAIL');
+    //     },
+    //     dataType: 'JSON'
+    //   });
 
 }
 
