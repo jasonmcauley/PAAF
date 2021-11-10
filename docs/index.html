@@ -2625,8 +2625,9 @@
                 </div>
             </div>
             <div>
-                <input value="Save & Close" class="button" name="SubmitButton" id="SubmitButton" type="submit"
-                    onclick="beforeSubmit()" />
+                <input value="Save & Close" class="button" type="button" onclick="beforeSubmit()" />
+                <!-- Hide actual submit button to only hit programmatically after http response  -->
+                <input value="Save & Close" style="display: none;" name="SubmitButton" id="SubmitButton" type="submit"/>
             </div>
            
         </div>
