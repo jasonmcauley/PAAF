@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:65431/api/eAPI';
+const API_URL = 'https://asthmalife.ca/eAPI_Test/api/eAPI/AddeAPI';
 
 smokingStatusChange = function () {
     if (document.getElementById("currentSmoker").checked) {
@@ -296,19 +296,21 @@ _checkboxList.forEach(function (element) {
     }
 });
 
-if (!app.EMR_eAPIID) {
-    function uuidv4() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-    app.EMR_eAPIID = uuidv4();
-} else {
+// if follow up assessment
+if (app.EMR_eAPIID) {
     app.showDiagnosisBanner = true;
     app.showFamilyHistoryBanner = true;
     app.showSmokingBanner = true;
 }
+
+//overwrite visit id even if previously assessed
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+app.EMR_eAPIID = uuidv4();
 
 beforeSubmit = function () {
     
@@ -352,24 +354,21 @@ beforeSubmit = function () {
 
     console.log(JSON.stringify(asthmaLifePayload));
 
+    $.ajax({
+        type: 'POST',
+        url: API_URL,
+        data: asthmaLifePayload,
+        success: function() {
+            console.log('***did it***');
+            $("#PAAF").submit();
+        },
+        fail: function() {
+            console.log('FAIL');
+            $("#PAAF").submit();
 
-    // setTimeout(function() {
-    //     $("#PAAF").submit();
-    //   }, 3000);
-    
-
-    // $.ajax({
-    //     type: 'POST',
-    //     url: API_URL + '/AddeAPI',
-    //     data: data,
-    //     success: function() {
-    //         console.log('***did it***');
-    //     },
-    //     fail: function() {
-    //         console.log('FAIL');
-    //     },
-    //     dataType: 'JSON'
-    //   });
+        },
+        dataType: 'JSON'
+      });
 
 }
 
