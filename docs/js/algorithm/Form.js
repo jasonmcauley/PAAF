@@ -1,4 +1,4 @@
-const API_URL = 'https://asthmalife.ca/eAPI_Test/api/eAPI/AddeAPI';
+const API_URL = 'https://asthmalife.ca/eAPI_Test/api/eAPI/AddeAPI'; //;  //'http://localhost:65431/api/eAPI/AddeAPI'
 
 smokingStatusChange = function () {
     if (document.getElementById("currentSmoker").checked) {
@@ -352,24 +352,33 @@ beforeSubmit = function () {
         "IsSevere" : document.getElementById("IsSevere").value
     }
 
-    console.log(JSON.stringify(asthmaLifePayload));
+    //console.log(JSON.stringify(asthmaLifePayload));
 
+    $("#initialSubmitButton").val("Saving...");
+    $("#initialSubmitButton").prop('disabled', true);
+   
     $.ajax({
         type: 'POST',
         url: API_URL,
-        data: asthmaLifePayload,
-        success: function() {
-            console.log('***did it***');
+        data: JSON.stringify(asthmaLifePayload),
+        success: function() {                    
+            $("#initialSubmitButton").val("Save & Close");
+            $("#initialSubmitButton").prop('disabled', false);
+            $("#PAAF").submit();                    
+        },                
+        error: function() {
+            $("#initialSubmitButton").val("Save & Close");
+            $("#initialSubmitButton").prop('disabled', false);
             $("#PAAF").submit();
         },
-        fail: function() {
-            console.log('FAIL');
+        fail: function() {                    
+            $("#initialSubmitButton").val("Save & Close");
+            $("#initialSubmitButton").prop('disabled', false);
             $("#PAAF").submit();
-
         },
+        contentType: "application/json",
         dataType: 'JSON'
-      });
-
+        });
 }
 
 
