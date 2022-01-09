@@ -6,15 +6,26 @@
 <body>
     <form method="post" name="PAAF" id="PAAF" class="paaf">
         <div id="app">
+            <div class="accordion-banner" v-show="showFollowUpBanner">
+                <span style="width:90%;"><b>Start Follow up Assessment?</b><br>This will reset the sections that should be filled in again. Saving will not overwrite the existing assessment.</span>
+                <span><input type="button" class="button" value="Yes" v-on:click="showFollowUpBanner = false" onclick="startFollowUpAssessment()"/>
+                <input type="button" style="margin-right: 10px" class="button" value="No" onclick="startFollowUpAssessment()" v-on:click="showFollowUpBanner = false"/></span>
+            </div>
+        
+            <div class="accordion-banner" v-show="showFirstBanner">
+                <span style="width:90%;">If you are looking to complete a follow-up assessment, it is recommended you reopen the previously saved form.</span>
+                <input type="button" class="button" value="Dismiss" v-on:click="showFirstBanner = false"/>
+            </div>
+        
             <!-- Hidden fields -->
             <div style="display:none;">
                 <input type="text" id="EMR_PatientID" v-model="EMR_PatientID" oscarDB=patient_id>
                 <input type="text" id="PatientGender" v-model="PatientGender" oscarDB=sex>
-                <input type="text" id="EMR_eAPIID" v-model="EMR_eAPIID" name="EMR_eAPIID" oscarDB=e$last#EMR_eAPIID>
+                <input type="text" id="EMR_eAPIID" v-model="EMR_eAPIID" name="EMR_eAPIID">
                 <input type="text" id="PatientGender" v-model="PatientGender" oscarDB=sex>
                 <input type="text" id="ProviderName" v-model="ProviderName" oscarDB=current_user>
                 <input type="text" id="ProviderIdentifier" v-model="ProviderIdentifier" oscarDB=current_user_id>
-                <input type="text" id="IsSevere">
+                <input type="text" id="IsSevere" name="IsSevere">
             </div>
             <!-- Hidden fields end -->
             <div style="height:75px">
@@ -36,7 +47,7 @@
                         Patient Name
                     </label>
 
-                    <input type="text" id="patientName" oscarDB=first_last_name class="patient-info-input">
+                    <input type="text" id="patientName" name="patientName" oscarDB=first_last_name class="patient-info-input">
 
                     <label class="patient-info-label">
                         Date of Birth
@@ -48,10 +59,9 @@
                     <label for="mrn" class="patient-info-label">
                         Medical Record #
                     </label>
-                    <input type="text" id="mrn" name="mrn" class="patient-info-input">
+                    <input type="text" id="mrn" name="mrn" class="patient-info-input" oscarDB=patient_id>
 
                 </div>
-                <!-- oscarDB=e$last#mrn -->
             </div>
 
 
@@ -68,36 +78,24 @@
                 </div>
 
                 <div id="asthma-diagnosis-content">
-                    <div class="accordion-banner" v-show="showDiagnosisBanner">
-                        Some fields in this section may have been imported from a previous assessment. Please review and
-                        update where necessary.
-                        <span class="close-btn" v-on:click="showDiagnosisBanner = false">&#10006;</span>
-                    </div>
-
                     <label style="width:15%">
                         <b>Asthma diagnosis</b>
                     </label>
-                    <!-- Dummy field to pull previous diagnosis data -->
-                    <input id="pulledDiagnosis" type="hidden" oscarDB=e$last#diagnosis>
                     <span onclick="toggleDiagnosisFields()">
                         <label>
-                            <input type="radio" id="diagnosisUnknown" name="diagnosis" value="unknown"
-                                v-model="diagnosis">
+                            <input type="radio" id="diagnosisUnknown" name="diagnosis" value="unknown">
                             Unknown
                         </label>
                         <label>
-                            <input type="radio" id="diagnosisConfirmed" name="diagnosis" value="confirmed"
-                                v-model="diagnosis">
+                            <input type="radio" id="diagnosisConfirmed" name="diagnosis" value="confirmed">
                             Confirmed
                         </label>
                         <label>
-                            <input type="radio" id="diagnosisSuspected" name="diagnosis" value="suspected"
-                                v-model="diagnosis">
+                            <input type="radio" id="diagnosisSuspected" name="diagnosis" value="suspected">
                             Suspected
                         </label>
                         <label>
-                            <input type="radio" id="diagnosisExcluded" name="diagnosis" value="excluded"
-                                v-model="diagnosis">
+                            <input type="radio" id="diagnosisExcluded" name="diagnosis" value="excluded">
                             Excluded
                         </label>
                     </span>
@@ -107,16 +105,14 @@
                         <label style="width:15%"></label>
                         <label style="width:80%">
                             Date confirmed/excluded
-                            <input type="textbox" name="dateConfirmedExcluded" oscarDB=e$last#dateConfirmedExcluded
-                                placeholder="YYYY/MM/DD">
+                            <input type="text" name="dateConfirmedExcluded" placeholder="YYYY/MM/DD">
                         </label>
                     </span>
                     <span id="_ageAsthma">
                         <label style="width:15%"></label>
                         <label style="width:25%">
                             Age asthma was confirmed
-                            <input type="textbox" id="ageConfirmed" name="ageConfirmed" style="width:50px"
-                                oscarDB=e$last#ageConfirmed>
+                            <input type="text" id="ageConfirmed" name="ageConfirmed" style="width:50px">
                         </label>
                     </span>
                     <span v-show="youngPatient">
@@ -124,8 +120,7 @@
 
                         <label style="width:80%">
                             Able to do spirometry
-                            <input type="checkbox" name="ableSpirometry" v-model="ableSpirometry"
-                                oscarDB=e$last#ableSpirometry id="ableSpirometry">
+                            <input type="checkbox" name="ableSpirometry" v-model="ableSpirometry" id="ableSpirometry">
                         </label>
                     </span>
 
@@ -148,8 +143,7 @@
 
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption1"
-                                        oscarDB=e$last#methodChartOlderOption1>
+                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption1">
                                 </td>
                                 <td colspan="3" style="border-bottom:none">
                                     <i>PREFERRED: Spirometry showing reversible
@@ -173,8 +167,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption2"
-                                        oscarDB=e$last#methodChartOlderOption2></td>
+                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption2"></td>
                                 <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Peak expiratory flow (PEF)
                                         variability</i></td>
 
@@ -199,8 +192,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption3"
-                                        oscarDB=e$last#methodChartOlderOption3></td>
+                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption3"></td>
                                 <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Positive challenge test</i>
                                 </td>
 
@@ -326,9 +318,7 @@
                         <br />                 
                         <label style="width:192px"><b>Method confirmed by specialist</b></label>
                         <input type="checkbox" id="confirmedBySpecialist"
-                        v-model="confirmedBySpecialist" name="confirmedBySpecialist"
-                        oscarDB=e$last#confirmedBySpecialist>
-                        
+                        v-model="confirmedBySpecialist" name="confirmedBySpecialist">
                     </div>
                 </div>
             </div>
@@ -343,15 +333,10 @@
                         Family History of Lung Disease
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="lungDisease"
+                        <input type="checkbox" id="lungDisease" name="lungDiseaseNA"
                             onclick="toggleSection('lungDisease','lungDiseaseContent')">
                         N/A
                     </span>
-                </div>
-                <div class="accordion-banner" v-show="showFamilyHistoryBanner">
-                    Some fields in this section may have been imported from a previous assessment. Please review and
-                    update where necessary.
-                    <span class="close-btn" v-on:click="showFamilyHistoryBanner = false">&#10006;</span>
                 </div>
 
                 <div id="lungDiseaseContent">
@@ -368,16 +353,14 @@
                                 <b>Allergy - Drug</b>
                             </td>
                             <td>
-                                <label><input type="checkbox" name="allergyDrugParent"
-                                        oscarDB=e$last#allergyDrugParent></label>
+                                <label><input type="checkbox" name="allergyDrugParent"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" name="allergyDrugSibling"
-                                        oscarDB=e$last#allergyDrugSibling></label>
+                                <label><input type="checkbox" name="allergyDrugSibling"></label>
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyDrugOther" oscarDB=e$last#allergyDrugOther>
+                                    <input type="checkbox" name="allergyDrugOther">
                             </td>
                             </label>
                         </tr>
@@ -386,19 +369,16 @@
                                 <b>Allergy - Environmental</b>
                             </td>
                             <td>
-                                <label><input type="checkbox" name="allergyEnvParent"
-                                        oscarDB=e$last#allergyEnvParent></label>
+                                <label><input type="checkbox" name="allergyEnvParent"></label>
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyEnvSibling"
-                                        oscarDB=e$last#allergyEnvSibling>
+                                    <input type="checkbox" name="allergyEnvSibling">
                                 </label>
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyEnvUnknown"
-                                        oscarDB=e$last#allergyEnvUnknown>
+                                    <input type="checkbox" name="allergyEnvUnknown">
                                 </label>
                             </td>
                         </tr>                        
@@ -407,16 +387,13 @@
                                 <b>Allergy - Food</b>
                             </td>
                             <td>
-                                <label><input type="checkbox" name="allergyFoodParent"
-                                        oscarDB=e$last#allergyFoodParent></label>
+                                <label><input type="checkbox" name="allergyFoodParent"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" name="allergyFoodSibling"
-                                        oscarDB=e$last#allergyFoodSibling></label>
+                                <label><input type="checkbox" name="allergyFoodSibling"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" name="allergyFoodUnknown"
-                                        oscarDB=e$last#allergyFoodUnknown></label>
+                                <label><input type="checkbox" name="allergyFoodUnknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -424,16 +401,13 @@
                                 <b>Allergy - Furry Pets</b>
                             </td>
                             <td>
-                                <label><input type="checkbox" name="allergyFurryPetsParent"
-                                        oscarDB=e$last#allergyFurryPetsParent></label>
+                                <label><input type="checkbox" name="allergyFurryPetsParent"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" name="allergyFurryPetsSibling"
-                                        oscarDB=e$last#allergyFurryPetsSibling></label>
+                                <label><input type="checkbox" name="allergyFurryPetsSibling"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" name="allergyFurryPetsUnknown"
-                                        oscarDB=e$last#allergyFurryPetsUnknown></label>
+                                <label><input type="checkbox" name="allergyFurryPetsUnknown"></label>
                             </td>
                         </tr>                        
                         <tr>
@@ -442,20 +416,17 @@
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyAsthmaParent"
-                                        oscarDB=e$last#allergyAsthmaParent>
+                                    <input type="checkbox" name="allergyAsthmaParent">
                                 </label>
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyAsthmaSibling"
-                                        oscarDB=e$last#allergyAsthmaSibling>
+                                    <input type="checkbox" name="allergyAsthmaSibling">
                                 </label>
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyAsthmaUnknown"
-                                        oscarDB=e$last#allergyAsthmaUnknown>
+                                    <input type="checkbox" name="allergyAsthmaUnknown">
                                 </label>
                             </td>
                         </tr>                        
@@ -465,20 +436,17 @@
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyAtopicDermatitisParent"
-                                        oscarDB=e$last#allergyAtopicDermatitisParent>
+                                    <input type="checkbox" name="allergyAtopicDermatitisParent">
                                 </label>
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyAtopicDermatitisSibling"
-                                        oscarDB=e$last#allergyAtopicDermatitisSibling>
+                                    <input type="checkbox" name="allergyAtopicDermatitisSibling">
                                 </label>
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyAtopicDermatitisUnknown"
-                                        oscarDB=e$last#allergyAtopicDermatitisUnknown>
+                                    <input type="checkbox" name="allergyAtopicDermatitisUnknown">
                                 </label>
                             </td>
                         </tr>
@@ -488,20 +456,17 @@
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyCOPDParent"
-                                        oscarDB=e$last#allergyCOPDParent>
+                                    <input type="checkbox" name="allergyCOPDParent">
                                 </label>
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyCOPDSibling"
-                                        oscarDB=e$last#allergyCOPDSibling>
+                                    <input type="checkbox" name="allergyCOPDSibling">
                                 </label>
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="allergyCOPDUnknown"
-                                        oscarDB=e$last#allergyCOPDUnknown>
+                                    <input type="checkbox" name="allergyCOPDUnknown">
                                 </label>
                             </td>
                         </tr>
@@ -516,14 +481,9 @@
                         Smoking
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="smokingNA" onclick="toggleSection('smokingNA', 'smokingContent')">
+                        <input type="checkbox" id="smokingNA" name="smokingNA" onclick="toggleSection('smokingNA', 'smokingContent')">
                         N/A
                     </span>
-                </div>
-                <div class="accordion-banner" v-show="showSmokingBanner">
-                    Some fields in this section may have been imported from a previous assessment. Please review and
-                    update where necessary.
-                    <span class="close-btn" v-on:click="showSmokingBanner = false">&#10006;</span>
                 </div>
 
                 <div id="smokingContent">
@@ -571,21 +531,21 @@
                         <div>
                             <label style="width:25%;"><b>Quit when</b></label>
                             <label>
-                                <input type="textbox" name="quitWhen" oscarDB=e$last#quitWhen placeholder="YYYY/MM/DD">
+                                <input type="text" name="quitWhen" placeholder="YYYY/MM/DD">
                             </label>
                         </div>
                     </div>
                     <div id="smoker" style="width:100%">
                         <hr style="margin:2px 0px 2px 0px">
                         <label style="width:25%"><b>Average number of cigarettes smoked</b></label>
-                        <label><input type="textbox" name="cigarettesDay" v-model="cigarettesDay" id="cigarettesDay"
+                        <label><input type="text" name="cigarettesDay" v-model="cigarettesDay" id="cigarettesDay"
                                 placeholder="#" style="width:30px" onchange="calcSmokingYears()">/day</label>
-                        <label><input type="textbox" name="cigarettesMonth" v-model="cigarettesMonth"
+                        <label><input type="text" name="cigarettesMonth" v-model="cigarettesMonth"
                                 id="cigarettesMonth" onchange="calcSmokingYears()" placeholder="#"
                                 style="width:30px">/month</label>
                         <hr style="margin:2px 0px 2px 0px">
                         <label style="width:25%"><b>Years smoked</b></label>
-                        <label><input type="textbox" name="yearsSmoked" id="yearsSmoked" v-model="yearsSmoked"
+                        <label><input type="text" name="yearsSmoked" id="yearsSmoked" v-model="yearsSmoked"
                                 placeholder="#" style="width:50px" onchange="calcSmokingYears()"></label>
                         <hr style="margin:2px 0px 2px 0px">
                         <label style="width:25%"><b>Pack Years</b></label>
@@ -595,12 +555,10 @@
                     <div id="isCurrentSmoker" style="width:100%">
                         <hr style="margin:2px 0px 2px 0px">
                         <label style="width:25%"><b>Smoking cessation addressed</b></label>
-                        <!-- onclick="toggleSectionFloat('smokingCessationNotAddressed', 'cessationAddressedSection')"> -->
                         <label v-on:click="showCessationAddressedSection = true"><input type="radio"
                                 id="smokingCessationAddressed" name="smokingCessationAddressed" value="yes">
                             Yes
                         </label>
-                        <!-- onclick="toggleSectionFloat('smokingCessationNotAddressed', 'cessationAddressedSection')"> -->
                         <label v-on:click="showCessationAddressedSection = false"><input type="radio"
                                 id="smokingCessationNotAddressed" name="smokingCessationAddressed" value="no">
                             No
@@ -609,59 +567,55 @@
                         <div id="cessationAddressedSection" v-show="showCessationAddressedSection"
                             style="width:400px; display:block; margin-left:119px">
                             <label style=" width:25%; "><b>Ask</b></label>
-                            <input type="hidden" id="pulled-cessationAsk" oscarDB=e$last#cessationAsk />
                             <label>
-                                <input type="radio" name="cessationAsk" value="yes" v-model="cessationAsk">
+                                <input type="radio" name="cessationAsk" id="cessationAskYes" value="yes">
                                 Yes
                             </label>
                             <label>
-                                <input type="radio" name="cessationAsk" value='no' v-model="cessationAsk">
+                                <input type="radio" name="cessationAsk" value='no'>
                                 No
                             </label>
                             <br>
                             <label style="width:25%"><b>Advise</b></label>
-                            <input type="hidden" id="pulled-cessationAdvise" oscarDB=e$last#cessationAdvise />
                             <label>
-                                <input type="radio" name="cessationAdvise" value="yes" v-model="cessationAdvise">
+                                <input type="radio" name="cessationAdvise" id="cessationAdviseYes" value="yes">
                                 Yes
                             </label>
                             <label>
-                                <input type="radio" name="cessationAdvise" value="no" v-model="cessationAdvise">
+                                <input type="radio" name="cessationAdvise" value="no">
                                 No
                             </label>
                             <br>
                             <label style="width:25%"><b>Arrange</b></label>
-                            <input type="hidden" id="pulled-cessationArrange" oscarDB=e$last#cessationArrange />
                             <label>
-                                <input type="radio" name="cessationArrange" value="yes" v-model="cessationArrange">
+                                <input type="radio" name="cessationArrange" value="yes" id="cessationArrangeYes">
                                 Yes
                             </label>
                             <label>
-                                <input type="radio" name="cessationArrange" value="no" v-model="cessationArrange">
+                                <input type="radio" name="cessationArrange" value="no">
                                 No
                             </label>
                         </div>
                         <div style="width:100%; display:block">
                             <hr style="width:100%; margin:2px 0px 2px 0px; display:block">
                             <label style="width:25%;"><b>Smoking cessation quit intentions</b></label>
-                            <input type="hidden" id="pulled-quitIntentions" oscarDB=e$last#quitIntentions />
                             <label>
-                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                <input type="radio" name="quitIntentions"
                                     value="withinMonth">
                                 Within a month
                             </label>
                             <label>
-                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                <input type="radio"name="quitIntentions"
                                     value="within6months">
                                 Within 6 months
                             </label>
                             <label>
-                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                <input type="radio"name="quitIntentions"
                                     value="beyond6months">
                                 Beyond 6 months
                             </label>
                             <label>
-                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                <input type="radio" name="quitIntentions"
                                     value="none">
                                 Not planning to quit
                             </label>
@@ -673,51 +627,48 @@
                     <hr>
                     <div>
                         <label style="width:25%;"><b>E-cigarette/vaping</b></label>
-                        <input type="hidden" id="pulled-vaping" oscarDB=e$last#vaping />
                         <label>
-                            <input type="radio" name="vaping" v-model="vaping" value="current">
+                            <input type="radio" name="vaping" value="current">
                             Current
                         </label>
                         <label>
-                            <input type="radio" name="vaping" v-model="vaping" value="past">
+                            <input type="radio" name="vaping" value="past">
                             Past
                         </label>
                         <label>
-                            <input type="radio" name="vaping" v-model="vaping" value="never">
+                            <input type="radio" name="vaping" value="never">
                             Never
                         </label>
                     </div>
                     <hr>
                     <div>
                         <label style="width:25%;"><b>Cannabis use</b></label>
-                        <input type="hidden" id="pulled-cannabis" oscarDB=e$last#cannabis />
                         <label>
-                            <input type="radio" name="cannabis" v-model="cannabis" value="current">
+                            <input type="radio" name="cannabis" value="current">
                             Current
                         </label>
                         <label>
-                            <input type="radio" name="cannabis" v-model="cannabis" value="past">
+                            <input type="radio" name="cannabis" value="past">
                             Past
                         </label>
                         <label>
-                            <input type="radio" name="cannabis" v-model="cannabis" value="never">
+                            <input type="radio" name="cannabis" value="never">
                             Never
                         </label>
                     </div>
                     <hr>
                     <div>
                         <label style="width:25%;"><b>Exposure to second-hand smoke</b></label>
-                        <input type="hidden" id="pulled-secondHandSmoke" oscarDB=e$last#secondHandSmoke />
                         <label>
-                            <input type="radio" name="secondHandSmoke" v-model="secondHandSmoke" value="current">
+                            <input type="radio" name="secondHandSmoke" value="current">
                             Current
                         </label>
                         <label>
-                            <input type="radio" name="secondHandSmoke" v-model="secondHandSmoke" value="past">
+                            <input type="radio" name="secondHandSmoke" value="past">
                             Past
                         </label>
                         <label>
-                            <input type="radio" name="secondHandSmoke" v-model="secondHandSmoke" value="never">
+                            <input type="radio" name="secondHandSmoke" value="never">
                             Never
                         </label>
                     </div>
@@ -732,7 +683,7 @@
                         Asthma Severity
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="asthmaSeverityNA"
+                        <input type="checkbox" id="asthmaSeverityNA" name="asthmaSeverityNA"
                             onclick="toggleSection('asthmaSeverityNA', 'severityContent')">
                         N/A
                     </span>
@@ -756,10 +707,10 @@
                     </div>
                     <div id="yesRoutineCareVisits">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Routine primary care visits</label>
-                        <input type=textbox style="width:50px;" name="routinePrimaryVisits" id="routinePrimaryVisits"
+                        <input type="text" style="width:50px;" name="routinePrimaryVisits" id="routinePrimaryVisits"
                             placeholder="#">
                         <label>Urgent primary care visits</label>
-                        <input type=textbox style="width:50px;" placeholder="#" name="urgentPrimaryVisits"
+                        <input type="text" style="width:50px;" placeholder="#" name="urgentPrimaryVisits"
                             id="urgentPrimaryVisits">
                     </div>
                     <hr>
@@ -777,16 +728,16 @@
                                 <b>Respirologist</b>
                             </td>
                             <td>
-                                <label><input type="radio" id="SpecialistVistsRespirologistYes" name="specialistVistsRespirologist"></label>
+                                <label><input type="radio" value="yes" id="SpecialistVisitsRespirologistYes" name="specialistVisitsRespirologist"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="SpecialistVistsRespirologistNo" name="specialistVistsRespirologist"></label>
+                                <label><input type="radio" value="no" id="SpecialistVisitsRespirologistNo" name="specialistVisitsRespirologist"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="SpecialistVistsRespirologistUnknown" name="specialistVistsRespirologist"></label>
+                                <label><input type="radio" value="unknown" id="SpecialistVisitsRespirologistUnknown" name="specialistVisitsRespirologist"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" id="SpecialistVistsRespirologistRecent" name="specialistVistsRespirologist"></label>
+                                <label><input type="checkbox" id="SpecialistVisitsRespirologistRecent" name="specialistVisitsRespirologistRecent"></label>
                             </td>
                         </tr>
                         <tr>
@@ -794,16 +745,16 @@
                                 <b>General Internist</b>
                             </td>
                             <td>
-                                <label><input type="radio" id="generalInternistYes" name="specialistVistsGeneralInternist"></label>
+                                <label><input type="radio" value="yes" id="generalInternistYes" name="specialistVisitsGeneralInternist"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="generalInternistNo" name="specialistVistsGeneralInternist"></label>
+                                <label><input type="radio" value="no" id="generalInternistNo" name="specialistVisitsGeneralInternist"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="generalInternistUnknown" name="specialistVistsGeneralInternist"></label>
+                                <label><input type="radio" value="unknown" id="generalInternistUnknown" name="specialistVisitsGeneralInternist"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" id="generalInternistRecent" name="specialistVistsGeneralInternist"></label>
+                                <label><input type="checkbox" id="generalInternistRecent" name="specialistVisitsGeneralInternistRecent"></label>
                             </td>
                         </tr>
                         <tr>
@@ -811,16 +762,16 @@
                                 <b>Allergist</b>
                             </td>
                             <td>
-                                <label><input type="radio" id="allergistYes" name="specialistVistsAllergist"></label>
+                                <label><input type="radio" value="yes" id="allergistYes" name="specialistVisitsAllergist"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="allergistNo" name="specialistVistsAllergist"></label>
+                                <label><input type="radio" value="no" id="allergistNo" name="specialistVisitsAllergist"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="allergistUnknown" name="specialistVistsAllergist"></label>
+                                <label><input type="radio" value="unknown" id="allergistUnknown" name="specialistVisitsAllergist"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" id="allergistRecent" name="specialistVistsAllergist"></label>
+                                <label><input type="checkbox" id="allergistRecent" name="specialistVisitsAllergistRecent"></label>
                             </td>
                         </tr>
                         <tr>
@@ -828,16 +779,16 @@
                                 <b>Pediatrician</b>
                             </td>
                             <td>
-                                <label><input type="radio" id="pediatricianYes" name="specialistVistsPediatrician"></label>
+                                <label><input type="radio" value="yes" id="pediatricianYes" name="specialistVisitsPediatrician"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="pediatricianNo" name="specialistVistsPediatrician"></label>
+                                <label><input type="radio" value="no" id="pediatricianNo" name="specialistVisitsPediatrician"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="pediatricianUnknown" name="specialistVistsPediatrician"></label>
+                                <label><input type="radio" value="unknown" id="pediatricianUnknown" name="specialistVisitsPediatrician"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" id="pediatricianRecent" name="specialistVistsPediatrician"></label>
+                                <label><input type="checkbox" id="pediatricianRecent" name="specialistVisitsPediatricianRecent"></label>
                             </td>
                         </tr>
                     </table>
@@ -856,20 +807,20 @@
                                 <b>Asthma exacerbation ever</b>
                             </td>
                             <td>
-                                <label><input type="radio" id="asthmaExacerbationYes" name="AsthmaExacerbation"></label>
+                                <label><input type="radio" value="yes" id="asthmaExacerbationYes" name="AsthmaExacerbation"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="asthmaExacerbationNo" name="AsthmaExacerbation"></label>
+                                <label><input type="radio" value="no" id="asthmaExacerbationNo" name="AsthmaExacerbation"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="asthmaExacerbationUnknown" name="AsthmaExacerbation"></label>
+                                <label><input type="radio" value="unknown" id="asthmaExacerbationUnknown" name="AsthmaExacerbation"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" style="width:30px;" name="asthmaExacerbationLastYear"
+                                <label><input type="text" style="width:30px;" name="asthmaExacerbationLastYear"
                                         id="asthmaExacerbationLastYear"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" name="asthmaExacerbationTotalNumber"
+                                <label><input type="text" name="asthmaExacerbationTotalNumber"
                                         style="width:30px;"></label>
                             </td>
                         </tr>
@@ -878,20 +829,20 @@
                                 <b>ED visits ever for asthma</b>
                             </td>
                             <td>
-                                <label><input type="radio" id="edVisitsYes" name="EdVisits"></label>
+                                <label><input type="radio" id="edVisitsYes" value="yes" name="EdVisits"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="edVisitsNo" name="EdVisits"></label>
+                                <label><input type="radio" id="edVisitsNo" value="no" name="EdVisits"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="edVisitsUnknown" name="EdVisits"></label>
+                                <label><input type="radio" id="edVisitsUnknown" value="unknown" name="EdVisits"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" style="width:30px;" name="edVisitsLastYear"
+                                <label><input type="text" style="width:30px;" name="edVisitsLastYear"
                                         id="Number_EDVisits_Last12mos"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" name="edVisitsTotalNumber" style="width:30px;"></label>
+                                <label><input type="text" name="edVisitsTotalNumber" style="width:30px;"></label>
                             </td>
                         </tr>
                         <tr>
@@ -899,20 +850,20 @@
                                 <b>Hospitalized ever for asthma</b>
                             </td>
                             <td>
-                                <label><input type="radio" id="hospitalizedYes" name="Hospitalized"></label>
+                                <label><input type="radio" value="yes" id="hospitalizedYes" name="Hospitalized"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="hospitalizedNo" name="Hospitalized"></label>
+                                <label><input type="radio" value="no" id="hospitalizedNo" name="Hospitalized"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="hospitalizedUnknown" name="Hospitalized"></label>
+                                <label><input type="radio" value="unknown" id="hospitalizedUnknown" name="Hospitalized"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" style="width:30px;" name="hospitalizedLastYear"
+                                <label><input type="text" style="width:30px;" name="hospitalizedLastYear"
                                         id="Number_UrgentCareVisits_Last12mos"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" name="hospitalizedTotalNumber" style="width:30px;"></label>
+                                <label><input type="text" name="hospitalizedTotalNumber" style="width:30px;"></label>
                             </td>
                         </tr>
                         <tr>
@@ -920,20 +871,20 @@
                                 <b>Near fatal asthma episode</b>
                             </td>
                             <td>
-                                <label><input type="radio" id="nearFatalEpisodeYes" name="NearFatalEpisode"></label>
+                                <label><input type="radio" value="yes" id="nearFatalEpisodeYes" name="NearFatalEpisode"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="nearFatalEpisodeNo" name="NearFatalEpisode"></label>
+                                <label><input type="radio" value="no" id="nearFatalEpisodeNo" name="NearFatalEpisode"></label>
                             </td>
                             <td>
-                                <label><input type="radio" id="nearFatalEpisodeUnknown" name="NearFatalEpisode"></label>
+                                <label><input type="radio" value="unknown" id="nearFatalEpisodeUnknown" name="NearFatalEpisode"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" style="width:30px;"
+                                <label><input type="text" style="width:30px;"
                                         name="nearFatalEpisodeLastYear"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" name="nearFatalEpisodeTotalNumber"
+                                <label><input type="text" name="nearFatalEpisodeTotalNumber"
                                         style="width:30px;"></label>
                             </td>
                         </tr>
@@ -943,15 +894,15 @@
                         <b>Recent best FEV&#8321; or PEF &#60; 60% predicted</b>
                     </label>
                     <label>
-                        <input type="radio" name="recentBest">
+                        <input type="radio" value="yes" name="recentBest">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" name="recentBest">
+                        <input type="radio" value="no" name="recentBest">
                         No
                     </label>
                     <label>
-                        <input type="radio" name="recentBest">
+                        <input type="radio" value="unknown" name="recentBest">
                         Unknown
                     </label>
                     <label>
@@ -975,11 +926,11 @@
                         Unknown
                     </label>
                     <label>
-                        <input type="textbox" style="width:105px;" name="numberOfICUAdmissions"
+                        <input type="text" style="width:105px;" name="numberOfICUAdmissions"
                             placeholder="#ICU admissions">
                     </label>
                     <label>
-                        <input type="textbox" style="width:100px;" name="numberOfIntubations"
+                        <input type="text" style="width:100px;" name="numberOfIntubations"
                             placeholder="# intubations">
                     </label>
                     <br>
@@ -988,7 +939,7 @@
 
 
             <!-- Occupational -->
-            <div id="-section" class="section">
+            <div id="occupational-section" class="section">
                 <div class="accordion">
                     <span>
                         Occupational History
@@ -1005,41 +956,39 @@
                                 apply.</b></label>
                         <span>&nbsp;&nbsp;
                             <label>
-                                <input type="radio" name="employmentStatus" oscarDB=e$last#fullTimeEmployment>
+                                <input type="radio" name="employmentStatus"  value="full">
                                 Full-Time
                             </label>
                             <label>
-                                <input type="radio" name="employmentStatus" oscarDB=e$last#partTimeEmployment>
+                                <input type="radio" name="employmentStatus"  value="part">
                                 Part-Time
                             </label>                            
                             <label>
-                                <input type="radio" name="employmentStatus" oscarDB=e$last#retiredEmployment>
+                                <input type="radio" name="employmentStatus" value="retired">
                                 Retired
                             </label>
                             <br />
                             &nbsp;&nbsp;
                             <label>
-                                <input type="checkbox" name="shiftWorkEmployment" oscarDB=e$last#shiftWorkEmployment>
+                                <input type="checkbox" name="shiftWorkEmployment">
                                 Shift work
                             </label>
                             <label>
-                                <input type="checkbox" name="modifiedDutiesEmployment"
-                                    oscarDB=e$last#modifiedDutiesEmployment>
+                                <input type="checkbox" name="modifiedDutiesEmployment">
                                 Modified duties
                             </label>
                             <label>
-                                <input type="checkbox" name="offWorkRespiratoryEmployment"
-                                    oscarDB=e$last#offWorkRespiratoryEmployment>
+                                <input type="checkbox" name="offWorkRespiratoryEmployment">
                                 Off work due to respiratory health
                             </label>
                             <br>
                             <label>&nbsp;&nbsp;
-                                <input type="checkbox" oscarDB=e$last#otherEmployment name="otherEmployment"
+                                <input type="checkbox" name="otherEmployment"
                                     id="otherEmployment"
                                     onclick="toggleSectionInline('otherEmployment','otherDutiesSpecify')">
                                 Other
                                 <input id="otherDutiesSpecify" style="display:none; margin-left: 10px; width:300px"
-                                    type="textbox" name="otherDutiesSpecify" oscarDB=e$last#otherDutiesSpecify>
+                                    type="text" name="otherDutiesSpecify">
                             </label>
                         </span>
                     </div>
@@ -1048,44 +997,41 @@
                         <label style="width:35%">
                             <b>Current employment</b>
                         </label>
-                        <input type="textbox" name="currentEmployment" oscarDB=e$last#currentEmployment>
+                        <input type="text" name="currentEmployment">
                     </div>
                     <hr>
                     <div>
                         <label style="width:35%"><b>Did your asthma symptoms start at work?</b></label>
-                        <input type="hidden" id="pulled-workStart" oscarDB=e$last#workStart />
                         <label>
-                            <input type="radio" name="workStart" value="yes" v-model="workStart">
+                            <input type="radio" name="workStart" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="workStart" value="no" v-model="workStart">
+                            <input type="radio" name="workStart" value="no">
                             No
                         </label>
                     </div>
                     <hr>
                     <div>
                         <label style="width:35%"><b>Do/did your asthma symptoms worsen at work?</b></label>
-                        <input type="hidden" id="pulled-workWorsen" oscarDB=e$last#workWorsen />
                         <label>
-                            <input type="radio" name="workWorsen" value="yes" v-model="workWorsen">
+                            <input type="radio" name="workWorsen" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="workWorsen" value="no" v-model="workWorsen">
+                            <input type="radio" name="workWorsen" value="no">
                             No
                         </label>
                     </div>
                     <hr>
                     <div>
                         <label style="width:35%"><b>Complete WRASQ(L) today?</b></label>
-                        <input type="hidden" id="pulled-completeWrasql" oscarDB=e$last#completeWrasql />
                         <label>
-                            <input type="radio" name="completeWrasql" v-model="completeWrasql" value="yes">
+                            <input type="radio" name="completeWrasql" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="completeWrasql" v-model="completeWrasql" value="no">
+                            <input type="radio" name="completeWrasql" value="no">
                             No
                         </label>
                     </div>
@@ -1093,13 +1039,13 @@
             </div>
 
             <!-- Medications -->
-            <div id="-section" class="section">
+            <div id="medication-section" class="section">
                 <div class="accordion">
                     <span>
                         Medications
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="medicationNA"
+                        <input type="checkbox" id="medicationNA" name="medicationNA"
                             onclick="toggleSection('medicationNA', 'medicationContent')">
                         N/A
                     </span>
@@ -2025,7 +1971,7 @@
                         <label><b>Number of inhaled corticosteroid prescriptions
                                 filled in the last year</b></label>
                         <label>
-                            <input type=textbox style="width:30px;" name="numInhaledCorticosteroid" placeholder="#"
+                            <input type="text" style="width:30px;" name="numInhaledCorticosteroid" placeholder="#"
                                 id="selfReported_ICS_last12mos"></label>
                         <label><i>(Prescription = one month supply)</i></label>
 
@@ -2046,7 +1992,7 @@
                     <div>
                         <label style="width:35%"><b>Beta&#8322;-agonist free day(s) in the last 4 weeks?</b></label>
                         <label>
-                            <input type="textbox" name="beta2freeDays" id="SelfReported_b2free_last4wks"
+                            <input type="text" name="beta2freeDays" id="SelfReported_b2free_last4wks"
                                 style="width:30px" placeholder="#">
                         </label>
 
@@ -2089,10 +2035,10 @@
                         <label><b>Total number of times systemic steroid used within the last
                                 year</b></label>
                         <label>
-                            <input type="textbox" name="numSystemicSteroidLastYear" style="width:30px" placeholder="#">
+                            <input type="text" name="numSystemicSteroidLastYear" style="width:30px" placeholder="#">
                         </label>
                         <label>
-                            <input type="textbox" name="systemicSteroidDateLastUsed" placeholder="YYYY//MM/DD">
+                            <input type="text" name="systemicSteroidDateLastUsed" placeholder="YYYY/MM/DD">
                             Date last used
 
                         </label>
@@ -2118,13 +2064,13 @@
             </div>
 
             <!-- Asthma Control -->
-            <div id="-section" class="section">
+            <div id="asthma-control-section" class="section">
                 <div class="accordion">
                     <span>
                         Asthma Control
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="controlNA" onclick="toggleSection('controlNA', 'controlContent')">
+                        <input type="checkbox" id="controlNA" name="controlNA" onclick="toggleSection('controlNA', 'controlContent')">
                         N/A
                     </span>
                 </div>
@@ -2136,7 +2082,7 @@
                     <hr style="margin:2px 0px 2px 0px">
                     <div>
                         <label style="width:32%"><b>Daytime symptoms*</b></label>
-                        <input type="textbox" placeholder="# of days/week" name="daytimeSymptoms" id="daytimeSymptoms"
+                        <input type="text" placeholder="# of days/week" name="daytimeSymptoms" id="daytimeSymptoms"
                             onchange="calcIsControlled()">
                         <label>Control &#8804; 2</label>
                     </div>
@@ -2149,7 +2095,7 @@
                     <hr style="margin:2px 0px 2px 0px">
                     <div>
                         <label style="width:32%"><b>Nighttime symptoms*</b></label>
-                        <input type="textbox" name="nighttimeSymptoms" id="nighttimeSymptoms"
+                        <input type="text" name="nighttimeSymptoms" id="nighttimeSymptoms"
                             onchange="calcIsControlled()" placeholder="# of Nights/Week">
                         <label>Control &#8804; 1</label>
                     </div>
@@ -2185,7 +2131,7 @@
                                 value="no">No
                         </label>
                         <label>
-                            <input type="textbox" id="numberExacerbations" name="numberExacerbations"
+                            <input type="text" id="numberExacerbations" name="numberExacerbations"
                                 onchange="calcIsControlled()" placeholder="# of Exacerbations">
                         </label>
                     </div>
@@ -2197,10 +2143,10 @@
                     <div>
                         <label style="width:32%"><b>Dates of exacerbations</b></label>
                         <label>
-                            <input type="textbox" placeholder="YYYY/MM/DD" name="exacerbationDate1">
+                            <input type="text" placeholder="YYYY/MM/DD" name="exacerbationDate1">
                         </label>
                         <label>
-                            <input type="textbox" placeholder="YYYY/MM/DD" name="exacerbationDate2">
+                            <input type="text" placeholder="YYYY/MM/DD" name="exacerbationDate2">
                         </label>
                     </div>
                     <div>
@@ -2216,7 +2162,7 @@
                             <input type="radio" name="workSchoolAbsences" id="noWorkSchoolAbsences" value="no">No
                         </label>
                         <label>
-                            <input type="textbox" name="numberWorkSchoolAbsences" id="numberWorkSchoolAbsences"
+                            <input type="text" name="numberWorkSchoolAbsences" id="numberWorkSchoolAbsences"
                                 placeholder="# of days/week" onchange="calcIsControlled()">
                         </label>
                     </div>
@@ -2227,7 +2173,7 @@
                     <div>
                         <label style="width:32%"><b>Needs reliever*</b></label>
                         <label>
-                            <input type="textbox" placeholder="# of doses/week" onchange="calcIsControlled()"
+                            <input type="text" placeholder="# of doses/week" onchange="calcIsControlled()"
                                 name="needReliever" id="needReliever">
                         </label>
                         <label>Control &#8804; 2</label>
@@ -2245,7 +2191,7 @@
                             <input type="radio" name="sputumEosinophils" value="no">No
                         </label>
                         &nbsp;&nbsp;&nbsp;
-                        <input type="textbox" placeholder="%" style="width:40px">
+                        <input type="text" placeholder="%" style="width:40px" name="sputumEosinophilsControl">
                         <label>Control &#8804; 2-3%</label>
                     </div>
                     <div>
@@ -2256,26 +2202,26 @@
                         <label style="width:32%"><b>FEV&#8321; or PEF &#62;= 90% predicted or personal
                                 best</b></label>
                         <label>
-                            <input type="radio" name="FEVPersonalBest">Yes
+                            <input type="radio" value="yes" name="FEVPersonalBest">Yes
                         </label>
                         <label>
-                            <input type="radio" name="FEVPersonalBest">No
+                            <input type="radio" value="no" name="FEVPersonalBest">No
                         </label>
                     </div>
                     <hr style="margin:2px 0px 2px 0px">
                     <div>
                         <label><b>PEF Diurnal Variation <15% Over A 2 Week Period</b></label>
                         <label>
-                            <input type="radio" name="PEVDiurnalVariation">Yes
+                            <input type="radio" value="yes" name="PEVDiurnalVariation">Yes
                         </label>
                         <label>
-                            <input type="radio" name="PEVDiurnalVariation">No
+                            <input type="radio" value="no" name="PEVDiurnalVariation">No
                         </label>
                     </div>
                     <hr style="margin:2px 0px 2px 0px">
                     <label><b>Number of days missed from school or work due to asthma in last year
                         </b>
-                        <input type="textbox" name="numberDaysMissedLastYear" style="vertical-align: bottom; width:50px"
+                        <input type="text" name="numberDaysMissedLastYear" style="vertical-align: bottom; width:50px"
                             placeholder="#" id="Absences_SchoolWork_Last12mos">
                     </label>
                     <hr style="margin:2px 0px 2px 0px">
@@ -2302,13 +2248,13 @@
 
 
             <!-- Care and Management / Referrals -->
-            <div id="-section" class="section">
+            <div id="care-management-section" class="section">
                 <div class="accordion">
                     <span>
                         Care and Management / Referrals
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="careNA" onclick="toggleSection('careNA', 'careContent')">
+                        <input type="checkbox" id="careNA" name="careNA" onclick="toggleSection('careNA', 'careContent')">
                         N/A
                     </span>
                 </div>
@@ -2394,13 +2340,13 @@
 
 
             <!-- Asthma Action Plan -->
-            <div id="-section" class="section">
+            <div id="asthma-action-plan-section" class="section">
                 <div class="accordion">
                     <span>
                         Asthma Action Plan
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="actionPlanNA"
+                        <input type="checkbox" id="actionPlanNA" name="actionPlanNA"
                             onclick="toggleSection('actionPlanNA', 'actionPlanContent')">
                         N/A
                     </span>
@@ -2425,8 +2371,8 @@
                                 <label><input type="radio" name="writtenPlanProvided" value="no"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" name="writtenPlanProvidedDate"
-                                        placeholder="YYYY/MM/DDY"></label>
+                                <label><input type="text" name="writtenPlanProvidedDate"
+                                        placeholder="YYYY/MM/DD"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2441,8 +2387,8 @@
                                 <label><input type="radio" name="writtenPlanRevised" value="no"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" name="writtenPlanRevisedDate"
-                                        placeholder="YYYY/MM/DDY"></label>
+                                <label><input type="text" name="writtenPlanRevisedDate"
+                                        placeholder="YYYY/MM/DD"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2457,8 +2403,8 @@
                                 <label><input type="radio" name="reviewedNotChanged" value="no"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" name="reviewedNotChangedDate"
-                                        placeholder="YYYY/MM/DDY"></label>
+                                <label><input type="text" name="reviewedNotChangedDate"
+                                        placeholder="YYYY/MM/DD"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2472,7 +2418,7 @@
                                 <label><input type="radio" name="yellowOrRed" value="no"></label>
                             </td>
                             <td>
-                                <label><input type="textbox" name="yellowOrRedDate" placeholder="# of times"></label>
+                                <label><input type="text" name="yellowOrRedDate" placeholder="# of times"></label>
                             </td>
                         </tr>
                     </table>
@@ -2480,13 +2426,13 @@
 
             </div>
             <!-- Asthma Control Zone -->
-            <div id="-section" class="section">
+            <div id="asthma-control-zone-section" class="section">
                 <div class="accordion">
                     <span>
                         Asthma Control Zone
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="controlZoneNA"
+                        <input type="checkbox" id="controlZoneNA" name="controlZoneNA"
                             onclick="toggleSection('controlZoneNA', 'controlZoneContent')">
                         N/A
                     </span>
@@ -2497,8 +2443,6 @@
                     </label>
                     <hr style="margin:2px 0px 2px 0px">
                     <div>
-                        <!-- <label class="width-15"><b>Quit Duration</b></label> -->
-
                         <label>
                             <input type="radio" name="controlZone" value="green">
                             <b>Green</b>
@@ -2522,13 +2466,13 @@
             </div>
 
             <!-- Pulmonary Function Test -->
-            <div id="-section" class="section">
+            <div id="pulmonary-function-section" class="section">
                 <div class="accordion">
                     <span>
                         Pulmonary Function Test
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="pulmonaryNA"
+                        <input type="checkbox" id="pulmonaryNA" name="pulmonaryNA"
                             onclick="toggleSection('pulmonaryNA', 'pulmonaryContent')">
                         N/A
                     </span>
@@ -2567,13 +2511,13 @@
             </div>
 
             <!-- Assessment Tools -->
-            <div id="-section" class="section">
+            <div id="assessment-tools-section" class="section">
                 <div class="accordion">
                     <span>
                         Assessment Tools
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="assessmentToolsNA"
+                        <input type="checkbox" id="assessmentToolsNA" name="assessmentToolsNA"
                             onclick="toggleSection('assessmentToolsNA', 'assessmentToolsContent')">
                         N/A
                     </span>
@@ -2600,27 +2544,27 @@
                         <input type="radio" name="actionPlanSinceLast" value="no">
                         No
                     </label>
-                    <input type="number" id="score1" name="actionPlanSinceLastNum" placeholder="# of times"
+                    <input type="text" name="actionPlanSinceLastNum" placeholder="# of times"
                         style="width:80px; margin-left: 20px;">
                     <hr style="margin:2px 0px 2px 0px">
                     <label style="width:45%"><b>Mini Asthma Quality of Life Questionnaire score
                         </b></label>
-                    <input type="number" id="score1" name="score1" min="1" max="7" placeholder="#">
+                    <input type="text" name="questionnaireScore" min="1" max="7" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Asthma Control Questionnaire score
                         </b></label>
-                    <input type="number" id="score1" name="score1" min="0" max="6" placeholder="#">
+                    <input type="text" name="controlScore" min="0" max="6" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Asthma Control Test score
                         </b></label>
-                    <input type="number" id="score1" name="score1" min="5" max="25" placeholder="#">
+                    <input type="text" name="controlTestScore" min="5" max="25" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Child Asthma Control Test score
                         </b></label>
-                    <input style="margin-bottom: 5px;" type="number" id="score1" name="score1" min="0" max="27"
+                    <input style="margin-bottom: 5px;" type="text" name="childScore" min="0" max="27"
                         placeholder="#">
                 </div>
             </div>
@@ -2629,7 +2573,6 @@
                 <!-- Hide actual submit button to only hit programmatically after http response  -->
                 <input value="Save & Close" style="display: none;" name="SubmitButton" id="SubmitButton" type="submit"/>
             </div>
-           
         </div>
         <div id="severe-asthma-footer" class="severe-asthma-footer">
             Suspected severe asthma. Consider referral to an asthma specialist.
@@ -2642,9 +2585,5 @@
     <script type="text/javascript" src="https://asthmalife.ca/eAPI_Test/assets/js/lib/growl/growl-notification.min.js"></script>
     <script type="text/javascript" src="https://asthmalife.ca/eAPI_Test/assets/js/algorithm/SevereAlgorithm.js?v=3"></script>
     <script type="text/javascript" src="https://asthmalife.ca/eAPI_Test/assets/js/algorithm/Form.js?v=3"></script>
-    
-
-
 </body>
-
 </html>

@@ -33,7 +33,7 @@ i {
 }
 
 .paaf {
-    margin: 40px 4px 4px 4px;
+    margin: 20px 4px 4px 4px;
     border: 1px solid rgb(139, 139, 139);
     padding: 0 0 40px 0;            
     border-radius: 5px;
@@ -114,16 +114,18 @@ label[for] {
 }
 
 .accordion-banner {
-    display: inline-block;
-    background: #fcf8e3;
+    font-family: "Source Sans Pro", sans-serif;
+    /* display: inline-block; */
+    background: #f7d400;
     width: calc(100% - 10px);
-    color: #8a6d3b;
-    /* font-style: italic; */
     /* padding-left: 5px;
     padding-right: 5px; */
+    margin-bottom: 20px;
     padding: 5px;
     border-color: #faebcc;
-
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .close-btn {
@@ -233,4 +235,3 @@ tr label {
         border: 0px;
     }
 }
-

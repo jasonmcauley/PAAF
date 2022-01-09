@@ -62,15 +62,6 @@ toggleSectionInline = function (_checkBoxName, _sectionName) {
         document.getElementById(_sectionName).style.display = "none";
     }
 }
-toggleSectionFloat = function (_checkBoxName, _sectionName) {
-    if (document.getElementById(_checkBoxName).checked) {
-        document.getElementById(_sectionName).style.display = "none";
-
-    } else {
-        document.getElementById(_sectionName).style.display = "inline-block";
-        document.getElementById(_sectionName).style.float = "left";
-    }
-}
 
 top.window.moveTo(0, 0);
 if (document.all) {
@@ -98,25 +89,11 @@ var app = new Vue({
         youngPatient: false,
         ableSpirometry: document.getElementById("ableSpirometry").value,
         // warning banners if follow up assessment 
-        showDiagnosisBanner: false,
-        showFamilyHistoryBanner: false,
-        showSmokingBanner: false,
         //is controlled indicators
         // activityLimited: _activityLimited,
         asthmaControlled: null,
         asthmaControlledBool: null,
         encounterDate: document.getElementById("encounterDate").value,
-        diagnosis: document.getElementById("pulledDiagnosis").value,
-        cessationAsk: document.getElementById("pulled-cessationAsk").value,
-        cessationAdvise: document.getElementById("pulled-cessationAdvise").value,
-        cessationArrange: document.getElementById("pulled-cessationArrange").value,
-        quitIntentions: document.getElementById("pulled-quitIntentions").value,
-        vaping: document.getElementById("pulled-vaping").value,
-        cannabis: document.getElementById("pulled-cannabis").value,
-        secondHandSmoke: document.getElementById("pulled-secondHandSmoke").value,
-        workStart: document.getElementById("pulled-workStart").value,
-        workWorsen: document.getElementById("pulled-workWorsen").value,
-        completeWrasql: document.getElementById("pulled-completeWrasql").value,
         confirmedBySpecialist: document.getElementById("confirmedBySpecialist").checked,
         // smoking for pack years calc
         cigarettesDay: document.getElementById("cigarettesDay").value,
@@ -141,7 +118,7 @@ var app = new Vue({
         alvescoDose: document.getElementById("alvescoDose").value,
         alvescoFreq: document.getElementById("alvescoFreq").value,
         floventMDI: document.getElementById("floventMDI").checked,
-        floventMDIStrength: document.getElementById("floventMDIStrength").checked,
+        floventMDIStrength: document.getElementById("floventMDIStrength").value,
         floventMDIDose: document.getElementById("floventMDIDose").value,
         floventMDIFreq: document.getElementById("floventMDIFreq").value,
         floventDiskus: document.getElementById("floventDiskus").checked,
@@ -179,7 +156,9 @@ var app = new Vue({
         zenhaleMDI: document.getElementById("zenhaleMDI").checked,
         zenhaleMDIStrength: document.getElementById("zenhaleMDIStrength").value,
         zenhaleMDIFreq: document.getElementById("zenhaleMDIFreq").value,
-        zenhaleMDIDose: document.getElementById("zenhaleMDIDose").value
+        zenhaleMDIDose: document.getElementById("zenhaleMDIDose").value,
+        showFollowUpBanner: false,
+        showFirstBanner: true
     },
     watch: {
         // whenever question changes, this function will run
@@ -298,9 +277,8 @@ _checkboxList.forEach(function (element) {
 
 // if follow up assessment
 if (app.EMR_eAPIID) {
-    app.showDiagnosisBanner = true;
-    app.showFamilyHistoryBanner = true;
-    app.showSmokingBanner = true;
+    app.showFirstBanner = false;
+    app.showFollowUpBanner = true;
 }
 
 //overwrite visit id even if previously assessed
@@ -329,7 +307,7 @@ beforeSubmit = function () {
         //"API_ID": EMR INSTANCE
         "EMR_eAPIID": app.EMR_eAPIID,        
         "VisitDate": (app.encounterDate ? new Date(app.encounterDate) : null),
-        "Dx_Confirmed_by_PFTs": (app.diagnosis == "confirmed" ? true : false),
+        "Dx_Confirmed_by_PFTs": (document.getElementById("diagnosisConfirmed").checked ? true : false),
         "Monitored_Spirometry_Last12mos": document.getElementById("Monitored_Spirometry_Last12mos").checked,
         "isUsing_Inhaled_ICS": document.getElementById("isUsing_Inhaled_ICS").checked,
         "selfReported_ICS_last12mos": parseInt(document.getElementById("selfReported_ICS_last12mos").value),
@@ -348,7 +326,7 @@ beforeSubmit = function () {
         "hasReceivedWrittenActionPlan": (document.getElementById("writtenPlanProvidedYes").checked || document.getElementById("writtenPlanRevisedYes").checked || document.getElementById("reviewedNotChangedYes").checked ? true : false),
         "ReferredToCAE": document.getElementById("ReferredToCAE").checked,
         "NonSmoker": !document.getElementById("currentSmoker").checked,
-        "Smoking_Advised": (app.cessationAsk == "yes" || app.cessationAdvise == "yes" || app.cessationArrange == "yes" ? true : false),
+        "Smoking_Advised": (document.getElementById("cessationAskYes").checked || document.getElementById("cessationAdviseYes").checked || document.getElementById("cessationArrangeYes").checked ? true : false),
         "IsSevere" : document.getElementById("IsSevere").value
     }
 
@@ -356,7 +334,7 @@ beforeSubmit = function () {
 
     $("#initialSubmitButton").val("Saving...");
     $("#initialSubmitButton").prop('disabled', true);
-   
+
     $.ajax({
         type: 'POST',
         url: API_URL,
@@ -382,10 +360,15 @@ beforeSubmit = function () {
 }
 
 
-// check if new form based on existing encounter date data
-if (!app.encounterDate) {
+resetEncounterDate = function () {
     var d = new Date();
     app.encounterDate = (d.getFullYear() + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + ("0" + d.getDate()).slice(-2));
+    
+}
+
+// check if new form based on existing encounter date data
+if (!app.encounterDate) {
+    resetEncounterDate();
 }
 
 calcAge = function (_dob) {
@@ -460,5 +443,62 @@ calcIsControlled = function () {
     }
 
 }
+resetConditionalSections = function () {
+    smokingStatusChange();
+    calcIsControlled();
+    familyPhysicianVisitsChange();
+    toggleDiagnosisFields();
+    toggleSection('asthma-diagnosis-na', 'asthma-diagnosis-content');
+    toggleSection('lungDisease','lungDiseaseContent');
+    toggleSection('smokingNA', 'smokingContent');
+    toggleSection('asthmaSeverityNA', 'severityContent');
+    toggleSection('occupationalNA', 'occupationalContent');
+    toggleSection('medicationNA', 'medicationContent');
+    toggleSection('controlNA', 'controlContent');
+    toggleSection('careNA', 'careContent');
+    toggleSection('actionPlanNA', 'actionPlanContent');
+    toggleSection('controlZoneNA', 'controlZoneContent');
+    toggleSection('pulmonaryNA', 'pulmonaryContent');
+    toggleSection('assessmentToolsNA', 'assessmentToolsContent');
+    toggleSectionInline('otherEmployment','otherDutiesSpecify');
+}
+
+function startFollowUpAssessment() { 
+    // Don't clear: asthma-diagnosis-content, lungDiseaseContent, smokingContent, occupational-section, medication-section
+    resetEncounterDate();
+    clearDivInputFields("severity-section");
+    clearDivInputFields("asthma-control-section");
+    clearDivInputFields("care-management-section");
+    clearDivInputFields("asthma-action-plan-section");
+    clearDivInputFields("asthma-control-zone-section");
+    clearDivInputFields("assessment-tools-section");
+    $(".asthma-diagnosis-na").checked(false);
+    $(".lungDiseaseNA").checked(false);
+    $(".smokingNA").checked(false);
+    $(".asthmaSeverityNA").checked(false);
+    $(".occupationalNA").checked(false);
+    $(".medicationNA").checked(false);
+    $(".controlNA").checked(false);
+    $(".careNA").checked(false);
+    $(".actionPlanNA").checked(false);
+    $(".controlZoneNA").checked(false);
+    $(".pulmonaryNA").checked(false);
+    $(".assessmentToolsNA").checked(false);
+    resetConditionalSections();
+}
+
+function clearDivInputFields(div) {
+    $("#" + div + " :input").each(function() {
+        if (this.type == "radio" || this.type == "checkbox") {
+            this.checked = false;
+        } else {
+            this.value = "";
+        }
+    });
+}
+
 calcAge(app.dob);
-calcIsControlled()
+calcIsControlled();
+resetConditionalSections();
+calcIsControlled();
+calcSmokingYears();
