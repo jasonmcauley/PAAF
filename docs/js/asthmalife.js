@@ -48,7 +48,7 @@
     }
     
     function _handleError(msg) {
-        console.log('error');
+        console.log(msg);
     }
 
 })();

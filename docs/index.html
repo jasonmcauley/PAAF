@@ -1,11 +1,17 @@
 <html>
 <title>PAAF</title>
 <head>
-    <link rel="stylesheet" href="https://asthmalife.ca/eAPI_Test/assets/css/styles.css">
+    <!-- <link rel="stylesheet" href="https://jmcauley.com/oscar/css/styles.css"> -->
+    <link rel="stylesheet" href="https://jmcauley.com/oscar/css/styles.css">
+    <!-- <link rel="stylesheet" href="css/styles.css?v=1">  -->
+
 </head>
 <body>
     <form method="post" name="PAAF" id="PAAF" class="paaf">
         <div id="app">
+            <div id="severe-asthma-footer" class="severe-asthma-footer">
+                <!-- Suspected severe asthma. Consider referral to an asthma specialist. -->
+            </div>
             <div class="accordion-banner" v-show="showFollowUpBanner">
                 <span style="width:90%;"><b>Start Follow up Assessment?</b><br>This will reset the sections that should be filled in again. Saving will not overwrite the existing assessment.</span>
                 <span><input type="button" class="button" value="Yes" v-on:click="showFollowUpBanner = false" onclick="startFollowUpAssessment()"/>
@@ -16,16 +22,20 @@
                 <span style="width:90%;">If you are looking to complete a follow-up assessment, it is recommended you reopen the previously saved form.</span>
                 <input type="button" class="button" value="Dismiss" v-on:click="showFirstBanner = false"/>
             </div>
+            
+    
         
             <!-- Hidden fields -->
             <div style="display:none;">
-                <input type="text" id="EMR_PatientID" v-model="EMR_PatientID" oscarDB=patient_id>
-                <input type="text" id="PatientGender" v-model="PatientGender" oscarDB=sex>
-                <input type="text" id="EMR_eAPIID" v-model="EMR_eAPIID" name="EMR_eAPIID">
-                <input type="text" id="PatientGender" v-model="PatientGender" oscarDB=sex>
-                <input type="text" id="ProviderName" v-model="ProviderName" oscarDB=current_user>
-                <input type="text" id="ProviderIdentifier" v-model="ProviderIdentifier" oscarDB=current_user_id>
+                <input type="text" id="EMR_PatientID" name="EMR_PatientID" v-model="EMR_PatientID" oscarDB=patient_id>
+                <input type="text" id="PatientGender" name="PatientGender" v-model="PatientGender" oscarDB=sex>
+                <input type="text" id="EMR_eAPIID" name="EMR_eAPIID" v-model="EMR_eAPIID" name="EMR_eAPIID">
+                <input type="text" id="PatientGender" name="PatientGender" v-model="PatientGender" oscarDB=sex>
+                <input type="text" id="ProviderName" name="ProviderName" v-model="ProviderName" oscarDB=current_user>
+                <input type="text" id="ProviderIdentifier" name="ProviderIdentifier" v-model="ProviderIdentifier" oscarDB=current_user_id>
                 <input type="text" id="IsSevere" name="IsSevere">
+                <input type="text" id="PromptId" name="PromptId">
+                <input type="text" id="PromptText" name="PromptText">
             </div>
             <!-- Hidden fields end -->
             <div style="height:75px">
@@ -859,7 +869,7 @@
                                 <label><input type="radio" value="unknown" id="hospitalizedUnknown" name="Hospitalized"></label>
                             </td>
                             <td>
-                                <label><input type="text" style="width:30px;" name="hospitalizedLastYear"
+                                <label><input type="text" style="width:30px;" id="hospitalizedLastYear" name="hospitalizedLastYear"
                                         id="Number_UrgentCareVisits_Last12mos"></label>
                             </td>
                             <td>
@@ -881,7 +891,7 @@
                             </td>
                             <td>
                                 <label><input type="text" style="width:30px;"
-                                        name="nearFatalEpisodeLastYear"></label>
+                                        id="nearFatalEpisodeLastYear" name="nearFatalEpisodeLastYear"></label>
                             </td>
                             <td>
                                 <label><input type="text" name="nearFatalEpisodeTotalNumber"
@@ -2035,7 +2045,7 @@
                         <label><b>Total number of times systemic steroid used within the last
                                 year</b></label>
                         <label>
-                            <input type="text" name="numSystemicSteroidLastYear" style="width:30px" placeholder="#">
+                            <input type="text" id="numSystemicSteroidLastYear" name="numSystemicSteroidLastYear" style="width:30px" placeholder="#">
                         </label>
                         <label>
                             <input type="text" name="systemicSteroidDateLastUsed" placeholder="YYYY/MM/DD">
@@ -2191,7 +2201,7 @@
                             <input type="radio" name="sputumEosinophils" value="no">No
                         </label>
                         &nbsp;&nbsp;&nbsp;
-                        <input type="text" placeholder="%" style="width:40px" name="sputumEosinophilsControl">
+                        <input type="text" placeholder="%" style="width:40px" name="sputumEosinophilsControl" id="sputumEosinophilsControl" onchange="calcIsControlled()">
                         <label>Control &#8804; 2-3%</label>
                     </div>
                     <div>
@@ -2225,16 +2235,17 @@
                             placeholder="#" id="Absences_SchoolWork_Last12mos">
                     </label>
                     <hr style="margin:2px 0px 2px 0px">
-                    <div>
+                    <div id="asthmaControlledWrapper">
                         <label style="width:32%"><b>Asthma controlled</b></label>
                         <label v-show="false">
-                            <input type="radio" readonly name="asthmaControlled" v-model="asthmaControlled"
+                            <input type="radio"  name="asthmaControlled" v-model="asthmaControlled"
                                 id="asthmaControlled" value="yes">Yes
                         </label>
                         <label v-show="false">
-                            <input type="radio" readonly name="asthmaControlled" v-model="asthmaControlled"
+                            <input type="radio"  name="asthmaControlled" v-model="asthmaControlled"
                                 value="no">No
                         </label>
+                        <input id="hdnAsthmaControlled" name="hdnAsthmaControlled" type="hidden">
                         <span id="asthmaControlledSpan"><b>{{ asthmaControlled }}</b></span>
                     </div>
                     <div>
@@ -2554,17 +2565,17 @@
 
                     <label style="width:45%"><b>Asthma Control Questionnaire score
                         </b></label>
-                    <input type="text" name="controlScore" min="0" max="6" placeholder="#">
+                    <input type="text" id="controlScore"name="controlScore" min="0" max="6" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Asthma Control Test score
                         </b></label>
-                    <input type="text" name="controlTestScore" min="5" max="25" placeholder="#">
+                    <input type="text" id ='controlTestScore' name="controlTestScore" min="5" max="25" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Child Asthma Control Test score
                         </b></label>
-                    <input style="margin-bottom: 5px;" type="text" name="childScore" min="0" max="27"
+                    <input style="margin-bottom: 5px;" type="text" id="childScore" name="childScore" min="0" max="27"
                         placeholder="#">
                 </div>
             </div>
@@ -2574,16 +2585,27 @@
                 <input value="Save & Close" style="display: none;" name="SubmitButton" id="SubmitButton" type="submit"/>
             </div>
         </div>
-        <div id="severe-asthma-footer" class="severe-asthma-footer">
-            Suspected severe asthma. Consider referral to an asthma specialist.
-        </div>
+        
     </form>
     <!-------Script to optimize window on loading----------->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <script type="text/javascript" src="https://asthmalife.ca/eAPI_Test/assets/js/lib/lodash.js"></script>
-    <script type="text/javascript" src="https://asthmalife.ca/eAPI_Test/assets/js/lib/jquery-3.5.1.min.js"></script>
-    <script type="text/javascript" src="https://asthmalife.ca/eAPI_Test/assets/js/lib/growl/growl-notification.min.js"></script>
-    <script type="text/javascript" src="https://asthmalife.ca/eAPI_Test/assets/js/algorithm/SevereAlgorithm.js?v=3"></script>
-    <script type="text/javascript" src="https://asthmalife.ca/eAPI_Test/assets/js/algorithm/Form.js?v=3"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/lib/lodash.js"></script>
+    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/lib/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/lib/growl/growl-notification.min.js"></script>
+
+    <!-- <script type="text/javascript" src="js/algorithm/SevereAlgorithm.js"></script>
+    <script type="text/javascript" src="js/algorithm/Form.js"></script> -->
+
+    <script>
+        // $.getScript("https://asthmalife.ca/eAPI/assets/js/algorithm/SevereAlgorithm.js");
+        // $.getScript("https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js");
+        $.getScript("https://jmcauley.com/oscar/js/algorithm/SevereAlgorithm.js");
+        $.getScript("https://jmcauley.com/oscar/js/algorithm/Form.js");
+
+        //https://jmcauley.com/oscar/css/styles.css
+
+
+    </script>
+
 </body>
 </html>

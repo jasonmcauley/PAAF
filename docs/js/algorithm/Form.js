@@ -1,4 +1,6 @@
-const API_URL = 'https://asthmalife.ca/eAPI_Test/api/eAPI/AddeAPI'; //;  //'http://localhost:65431/api/eAPI/AddeAPI'
+//const API_URL = 'https://asthmalife.ca/eAPI/api/eAPI/AddeAPI'; // Prod Env
+const API_URL = 'https://asthmalife.ca/eAPI_Test/api/eAPI/AddeAPI' // Test Env
+//const API_URL = 'http://localhost:65431/api/eAPI/AddeAPI' // Local Env
 
 smokingStatusChange = function () {
     if (document.getElementById("currentSmoker").checked) {
@@ -290,6 +292,7 @@ function uuidv4() {
 }
 app.EMR_eAPIID = uuidv4();
 
+
 beforeSubmit = function () {
     
     _checkboxList.forEach(function (element) {
@@ -418,27 +421,33 @@ calcSmokingYears = function () {
 }
 
 calcIsControlled = function () {
+    
     if (document.getElementById('activityIsLimited').checked ||
-        parseInt(document.getElementById('needReliever').value) >= 2 ||
-        parseInt(document.getElementById("daytimeSymptoms").value) >= 2 ||
+        parseInt(document.getElementById('needReliever').value) >= 3 ||
+        parseInt(document.getElementById("daytimeSymptoms").value) >= 3 ||
         parseInt(document.getElementById("numberWorkSchoolAbsences").value) >= 1 ||
         parseInt(document.getElementById("nighttimeSymptoms").value) >= 1 ||
-        parseInt(document.getElementById("numberExacerbations").value) >= 1) {
+        parseInt(document.getElementById("numberExacerbations").value) >= 1 ||
+        parseInt(document.getElementById("sputumEosinophilsControl").value) >= 4) {
         app.asthmaControlled = "NO";
         app.asthmaControlledBool = false;
+        document.getElementById("hdnAsthmaControlled").value = false;
         document.getElementById('asthmaControlledSpan').style.color = "red";
     } else if (document.getElementById('activityNotLimited').checked &&
-        parseInt(document.getElementById('needReliever').value) < 2 &&
-        parseInt(document.getElementById("daytimeSymptoms").value) < 2 &&
+        parseInt(document.getElementById('needReliever').value) <= 2 &&
+        parseInt(document.getElementById("daytimeSymptoms").value) <= 2 &&
         document.getElementById("noWorkSchoolAbsences").checked &&
         parseInt(document.getElementById("nighttimeSymptoms").value) < 1 &&
+        parseInt(document.getElementById("sputumEosinophilsControl").value) < 4 &&
         document.getElementById("noExacerbationsSinceLast").checked) {
         app.asthmaControlled = "Yes";
         app.asthmaControlledBool = true;
+        document.getElementById("hdnAsthmaControlled").value = true;
         document.getElementById('asthmaControlledSpan').style.color = "black";
     } else {
         app.asthmaControlled = "-";
         app.asthmaControlledBool = null;
+        document.getElementById("hdnAsthmaControlled").value = ''
         document.getElementById('asthmaControlledSpan').style.color = "black";
     }
 
