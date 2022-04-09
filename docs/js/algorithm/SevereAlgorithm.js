@@ -65,6 +65,10 @@
             TriggerAlgorithm();
         });
 
+        $('input[name=childScore]').blur(function(){
+            TriggerAlgorithm();
+        });
+
         $('input[name=persistentAirflowObstruction]').click(function(){
             TriggerAlgorithm();
         });
