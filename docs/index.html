@@ -2212,7 +2212,7 @@
                         </label>
                         <label>
                             <input type="radio" name="exacerbationsSinceLast" id="noExacerbationsSinceLast"
-                                value="no">No
+                                value="no" onchange="calcIsControlled()">No
                         </label>
                         <label>
                             <input type="text" id="numberExacerbations" name="numberExacerbations"
@@ -2240,10 +2240,10 @@
                     <div>
                         <label><b>School/work/social activity absences due to asthma*</b></label>
                         <label>
-                            <input type="radio" name="workSchoolAbsences" value="yes">Yes
+                            <input type="radio" name="workSchoolAbsences" id="WorkSchoolAbsences" value="yes" onclick="calcIsControlled()">Yes
                         </label>
                         <label>
-                            <input type="radio" name="workSchoolAbsences" id="noWorkSchoolAbsences" value="no">No
+                            <input type="radio" name="workSchoolAbsences" id="noWorkSchoolAbsences" value="no" onclick="calcIsControlled()">No
                         </label>
                         <label>
                             <input type="text" name="numberWorkSchoolAbsences" id="numberWorkSchoolAbsences"

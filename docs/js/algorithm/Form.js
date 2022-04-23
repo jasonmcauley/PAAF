@@ -442,11 +442,11 @@ calcSmokingYears = function () {
     }
 }
 
-calcIsControlled = function () {    
+calcIsControlled = function () {        
     if (document.getElementById('activityIsLimited').checked ||
         parseInt(document.getElementById('needReliever').value) >= 3 ||
-        parseInt(document.getElementById("daytimeSymptoms").value) >= 3 ||
-        parseInt(document.getElementById("numberWorkSchoolAbsences").value) >= 1 ||
+        parseInt(document.getElementById("daytimeSymptoms").value) >= 3 ||        
+        document.getElementById("WorkSchoolAbsences").checked ||
         parseInt(document.getElementById("nighttimeSymptoms").value) > 0 ||
         parseInt(document.getElementById("numberExacerbations").value) >= 1 ||
         $('input[name=FEVPersonalBest]:checked').val()?.toUpperCase() == 'NO' ||
@@ -459,9 +459,11 @@ calcIsControlled = function () {
     } else if (document.getElementById('activityNotLimited').checked &&
         parseInt(document.getElementById('needReliever').value) <= 2 &&
         parseInt(document.getElementById("daytimeSymptoms").value) <= 2 &&
-        document.getElementById("noWorkSchoolAbsences").checked &&
+        document.getElementById("noWorkSchoolAbsences").checked &&        
         parseInt(document.getElementById("nighttimeSymptoms").value) < 1 &&
-        parseInt(document.getElementById("sputumEosinophilsControl").value) < 4 &&        
+        parseInt(document.getElementById("sputumEosinophilsControl").value) < 4 &&    
+        $('input[name=FEVPersonalBest]:checked').val()?.toUpperCase() == 'YES' &&
+        $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'NO' &&
         document.getElementById("noExacerbationsSinceLast").checked) {
         app.asthmaControlled = "Yes";
         app.asthmaControlledBool = true;
