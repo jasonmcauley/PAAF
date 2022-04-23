@@ -159,6 +159,14 @@ var app = new Vue({
         zenhaleMDIStrength: document.getElementById("zenhaleMDIStrength").value,
         zenhaleMDIFreq: document.getElementById("zenhaleMDIFreq").value,
         zenhaleMDIDose: document.getElementById("zenhaleMDIDose").value,
+        aermonyRespi: document.getElementById("aermonyRespi").checked,
+        aermonyRespiStrength: document.getElementById("aermonyRespiStrength").value,
+        aermonyRespiDose: document.getElementById("aermonyRespiDose").value,
+        aermonyRespiFreq: document.getElementById("aermonyRespiFreq").value,
+        atecturaBreezhaler: document.getElementById("atecturaBreezhaler").checked,
+        atecturaBreezhalerStrength: document.getElementById("atecturaBreezhalerStrength").value,
+        //aermonyRespiDose: document.getElementById("aermonyRespiDose").value,
+        atecturaBreezhalerFreq: document.getElementById("atecturaBreezhalerFreq").value,
         showFollowUpBanner: false,
         showFirstBanner: true
     },
@@ -263,6 +271,20 @@ var app = new Vue({
                 app.zenhaleMDIStrength = "";
                 app.zenhaleMDIFreq = "";
                 app.zenhaleMDIDose = "";
+            }
+        },
+        atecturaBreezhaler: function (v) {
+            if (!v) {
+                app.atecturaBreezhalerStrength = "";
+                app.atecturaBreezhalerFreq = "";
+                //app.atecturaBreezhalerDose = "";
+            }
+        },
+        aermonyRespi: function (v) {
+            if (!v) {
+                app.aermonyRespiStrength = "";
+                app.aermonyRespiFreq = "";
+                app.aermonyRespiDose = "";
             }
         }
     }
@@ -420,14 +442,15 @@ calcSmokingYears = function () {
     }
 }
 
-calcIsControlled = function () {
-    
+calcIsControlled = function () {    
     if (document.getElementById('activityIsLimited').checked ||
         parseInt(document.getElementById('needReliever').value) >= 3 ||
         parseInt(document.getElementById("daytimeSymptoms").value) >= 3 ||
         parseInt(document.getElementById("numberWorkSchoolAbsences").value) >= 1 ||
-        parseInt(document.getElementById("nighttimeSymptoms").value) >= 1 ||
+        parseInt(document.getElementById("nighttimeSymptoms").value) > 0 ||
         parseInt(document.getElementById("numberExacerbations").value) >= 1 ||
+        $('input[name=FEVPersonalBest]:checked').val()?.toUpperCase() == 'NO' ||
+        $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'YES' ||
         parseInt(document.getElementById("sputumEosinophilsControl").value) >= 4) {
         app.asthmaControlled = "NO";
         app.asthmaControlledBool = false;
@@ -438,7 +461,7 @@ calcIsControlled = function () {
         parseInt(document.getElementById("daytimeSymptoms").value) <= 2 &&
         document.getElementById("noWorkSchoolAbsences").checked &&
         parseInt(document.getElementById("nighttimeSymptoms").value) < 1 &&
-        parseInt(document.getElementById("sputumEosinophilsControl").value) < 4 &&
+        parseInt(document.getElementById("sputumEosinophilsControl").value) < 4 &&        
         document.getElementById("noExacerbationsSinceLast").checked) {
         app.asthmaControlled = "Yes";
         app.asthmaControlledBool = true;
@@ -450,7 +473,7 @@ calcIsControlled = function () {
         document.getElementById("hdnAsthmaControlled").value = ''
         document.getElementById('asthmaControlledSpan').style.color = "black";
     }
-
+    
 }
 resetConditionalSections = function () {
     smokingStatusChange();
