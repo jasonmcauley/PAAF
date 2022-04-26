@@ -447,10 +447,10 @@ calcIsControlled = function () {
         parseInt(document.getElementById('needReliever').value) >= 3 ||
         parseInt(document.getElementById("daytimeSymptoms").value) >= 3 ||        
         document.getElementById("WorkSchoolAbsences").checked ||
-        parseInt(document.getElementById("nighttimeSymptoms").value) > 0 ||
-        parseInt(document.getElementById("numberExacerbations").value) >= 1 ||
+        parseInt(document.getElementById("nighttimeSymptoms").value) > 0 ||        
+        $('input[name=exacerbationsSinceLast]:checked').val()?.toUpperCase() == 'YES' ||
         $('input[name=FEVPersonalBest]:checked').val()?.toUpperCase() == 'NO' ||
-        $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'YES' ||
+        $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'NO' ||
         parseInt(document.getElementById("sputumEosinophilsControl").value) >= 4) {
         app.asthmaControlled = "NO";
         app.asthmaControlledBool = false;
@@ -462,8 +462,9 @@ calcIsControlled = function () {
         document.getElementById("noWorkSchoolAbsences").checked &&        
         parseInt(document.getElementById("nighttimeSymptoms").value) < 1 &&
         parseInt(document.getElementById("sputumEosinophilsControl").value) < 4 &&    
+        $('input[name=exacerbationsSinceLast]:checked').val()?.toUpperCase() == 'NO' &&
         $('input[name=FEVPersonalBest]:checked').val()?.toUpperCase() == 'YES' &&
-        $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'NO' &&
+        $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'YES' &&
         document.getElementById("noExacerbationsSinceLast").checked) {
         app.asthmaControlled = "Yes";
         app.asthmaControlledBool = true;
