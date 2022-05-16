@@ -35,7 +35,7 @@
                 <input type="text" id="ProviderIdentifier" name="ProviderIdentifier" v-model="ProviderIdentifier" oscarDB=current_user_id>
                 <input type="text" id="IsSevere" name="IsSevere">
                 <input type="text" id="PromptId" name="PromptId">
-                <input type="text" id="PromptText" name="PromptText">
+                <input type="text" id="PromptText" name="PromptText">                
             </div>
             <!-- Hidden fields end -->
             <div style="height:75px">
@@ -1662,6 +1662,41 @@
                         </div>
                         <hr>
                         <div class="flex-center">
+                            <input class="severe-med-checkbox" type="checkbox" name="enerzairBreehaler" id="enerzairBreehaler" v-model="enerzairBreehaler">
+                            <label for="enerzairBreehaler" style="width:25%">
+                                <b>Enerzair Breezhaler</b>
+                                <br><i>Indacaterol/Glycopyrronium Bromide/Mometasone furoate</i>
+                            </label>
+                            <span v-show="enerzairBreehaler">
+                                <label>
+                                    Strength:
+                                    <select name="enerzairBreehalerStrength" id="enerzairBreehalerStrength"
+                                        v-model="enerzairBreehaler" style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="50.0">50mcg</option>
+                                        <option value="150.0">150mcg</option>                                        
+                                        <option value="160.0">160mcg</option>
+                                    </select>
+                                </label>
+                                <!-- <label>
+                                    Dose:
+                                    <select name="aermonyRespiDose" id="aermonyRespiDose" v-model="aermonyRespiDose"
+                                        style="width: 90px">
+                                        <option value=""></option>
+                                        <option value="1">1 puff</option>                                        
+                                    </select>
+                                </label> -->
+                                <label>
+                                    Frequency:
+                                    <select name="enerzairBreehalerFreq" id="enerzairBreehalerFreq" v-model="enerzairBreehalerFreq">
+                                        <option value=""></option>
+                                        <option value="1">od</option>                                        
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
                             <input class="severe-med-checkbox" type="checkbox" name="aermonyRespi" id="aermonyRespi" v-model="aermonyRespi">
                             <label for="aermonyRespi" style="width:25%">
                                 <b>Aermony RespiClick</b>
@@ -2694,13 +2729,14 @@
     <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/lib/growl/growl-notification.min.js"></script>
 
     <!-- <script type="text/javascript" src="js/algorithm/SevereAlgorithm.js"></script> -->
-    <!-- <script type="text/javascript" src="js/algorithm/Form.js"></script> -->
+    <script type="text/javascript" src="js/algorithm/Form.js"></script>
 
     <script>
         // $.getScript("https://asthmalife.ca/eAPI/assets/js/algorithm/SevereAlgorithm.js");
         // $.getScript("https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js");
+        
         $.getScript("https://jmcauley.com/oscar/js/algorithm/SevereAlgorithm.js");
-        $.getScript("https://jmcauley.com/oscar/js/algorithm/Form.js");
+        //$.getScript("https://jmcauley.com/oscar/js/algorithm/Form.js");
 
         //https://jmcauley.com/oscar/css/styles.css
 

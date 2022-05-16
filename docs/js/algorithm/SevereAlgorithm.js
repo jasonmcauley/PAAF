@@ -1,7 +1,7 @@
 //(function() {
     // Need to pull these 
-    const _Medications = [{"MedicationFieldID":"qvar","MedicationName":"QVAR (Beclomethasone dipropionate HFA)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"pulmicortTurbuhaler","MedicationName":"Pulmicort Turbuhaler (Budesonide)","IsSevere":true,"SevereThresholdAdult":800,"SevereThresholdChild":800,"BudesonideMultiplierChild":1,"BudesonideMultiplierAdult":1,"ControllersCount":1},{"MedicationFieldID":"symbicortTurbuhaler","MedicationName":"Symbicort Turbuhaler (Budesonide/formoterol)","IsSevere":true,"SevereThresholdAdult":800,"SevereThresholdChild":800,"BudesonideMultiplierChild":1,"BudesonideMultiplierAdult":1,"ControllersCount":2},{"MedicationFieldID":"alvesco","MedicationName":"Alvesco (Ciclesonide)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"floventMDI","MedicationName":"Flovent MDI and spacer (Fluticasone propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"floventDiskus","MedicationName":"Flovent Diskus (Fluticasone propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"advairDiskus","MedicationName":"Advair Diskus (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"advairPMDI","MedicationName":"Advair pMDI (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"wixelaInhub","MedicationName":"Wixela Inhub (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"arnuityEllipta","MedicationName":"Arnuity Ellipta (Fluticasone furoate)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":1},{"MedicationFieldID":"breoEllipta","MedicationName":"Breo Ellipta (Fluticasone/vilanterol Ellipta)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":2},{"MedicationFieldID":"trelegyEllipta","MedicationName":"Trelegy Ellipta (Fluticasone/vilanterol/umeclidinium)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":3},{"MedicationFieldID":"asmanexTwisthaler","MedicationName":"Asmanex Twisthaler (Mometasone furoate)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"zenhaleMDI","MedicationName":"Zenhale MDI (Mometasone/formoterol)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":2}];
-    const _DecisionSupport = JSON.parse('[{"PromptId":1,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":true,"SystemicSteroidPreviousYear":false,"AsthmaControlled":false,"Prompt":{"Adult":"Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist.","Child":"Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist."}},{"PromptId":2,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":false,"SystemicSteroidPreviousYear":false,"AsthmaControlled":false,"Prompt":{"Adult":"Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist","Child":"Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist"}},{"PromptId":3,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":true,"SystemicSteroidPreviousYear":false,"AsthmaControlled":true,"Prompt":{"Adult":"Asthma is controlled consider tapering to medium dose ICS medication and reassess asthma control.","Child":"Asthma is controlled consider tapering to medium dose ICS medication and refer to a specialist."}},{"PromptId":4,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":null,"SystemicSteroidPreviousYear":true,"AsthmaControlled":true,"Prompt":{"Adult":"Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist.","Child":"Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist."}},{"PromptId":5,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":null,"SystemicSteroidPreviousYear":true,"AsthmaControlled":false,"Prompt":{"Adult":"Patient meets criteria for severe asthma consider a referral to a specialist.","Child":"Patient meets criteria for severe asthma consider a referral to a specialist."}},{"PromptId":6,"DiagnosisStatus":["SUSPECTED","UNKNOWN"],"HighDoseICS":true,"SystemicSteroidPreviousYear":true,"AsthmaControlled":false,"Prompt":{"Adult":"Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist.","Child":"Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist."}}]');
+    const _Medications = [{"MedicationFieldID":"qvar","MedicationName":"QVAR (Beclomethasone dipropionate HFA)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"pulmicortTurbuhaler","MedicationName":"Pulmicort Turbuhaler (Budesonide)","IsSevere":true,"SevereThresholdAdult":800,"SevereThresholdChild":800,"BudesonideMultiplierChild":1,"BudesonideMultiplierAdult":1,"ControllersCount":1},{"MedicationFieldID":"symbicortTurbuhaler","MedicationName":"Symbicort Turbuhaler (Budesonide/formoterol)","IsSevere":true,"SevereThresholdAdult":800,"SevereThresholdChild":800,"BudesonideMultiplierChild":1,"BudesonideMultiplierAdult":1,"ControllersCount":2},{"MedicationFieldID":"alvesco","MedicationName":"Alvesco (Ciclesonide)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"floventMDI","MedicationName":"Flovent MDI and spacer (Fluticasone propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"floventDiskus","MedicationName":"Flovent Diskus (Fluticasone propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"advairDiskus","MedicationName":"Advair Diskus (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"advairPMDI","MedicationName":"Advair pMDI (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"wixelaInhub","MedicationName":"Wixela Inhub (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"arnuityEllipta","MedicationName":"Arnuity Ellipta (Fluticasone furoate)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":1},{"MedicationFieldID":"breoEllipta","MedicationName":"Breo Ellipta (Fluticasone/vilanterol Ellipta)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":2},{"MedicationFieldID":"trelegyEllipta","MedicationName":"Trelegy Ellipta (Fluticasone/vilanterol/umeclidinium)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":3},{"MedicationFieldID":"asmanexTwisthaler","MedicationName":"Asmanex Twisthaler (Mometasone furoate)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"zenhaleMDI","MedicationName":"Zenhale MDI (Mometasone/formoterol)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":2},{"MedicationFieldID":"aermonyRespi","MedicationName":"Aermony RespiClick (Fluticasone Propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"atecturaBreezhaler","MedicationName":"Atectura Breezhaler (Indacaterol/mometasone furoate)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"enerzairBreehaler","MedicationName":"Enerzair Breehaler ()","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":1}];
+    const _DecisionSupport = JSON.parse('[{"PromptId":1,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":true,"SystemicSteroidPreviousYear":false,"AsthmaControlled":false,"IsSevere":true,"Prompt":{"Adult":"Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist.","Child":"Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist."}},{"PromptId":2,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":false,"SystemicSteroidPreviousYear":false,"AsthmaControlled":false,"IsSevere":false,"Prompt":{"Adult":"Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist","Child":"Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist"}},{"PromptId":3,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":true,"SystemicSteroidPreviousYear":false,"AsthmaControlled":true,"IsSevere":false,"Prompt":{"Adult":"Asthma is controlled consider tapering to medium dose ICS medication and reassess asthma control.","Child":"Asthma is controlled consider tapering to medium dose ICS medication and refer to a specialist."}},{"PromptId":4,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":null,"SystemicSteroidPreviousYear":true,"AsthmaControlled":true,"IsSevere":true,"Prompt":{"Adult":"Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist.","Child":"Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist."}},{"PromptId":5,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":null,"SystemicSteroidPreviousYear":true,"AsthmaControlled":false,"IsSevere":true,"Prompt":{"Adult":"Patient meets criteria for severe asthma consider a referral to a specialist.","Child":"Patient meets criteria for severe asthma consider a referral to a specialist."}},{"PromptId":6,"DiagnosisStatus":["SUSPECTED","UNKNOWN"],"HighDoseICS":true,"SystemicSteroidPreviousYear":true,"AsthmaControlled":false,"IsSevere":false,"Prompt":{"Adult":"Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist.","Child":"Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist."}}]');
     //const _Medications = null;
     const _isAdult = true;
 
@@ -27,6 +27,227 @@
 
     });
 
+
+   
+
+    function TriggerAlgorithm() {        
+        let objPrompt = _getPromptObject();
+        _setPrompt(objPrompt);
+    }
+
+    function _getPromptObject() {
+        return _.find(_DecisionSupport, function(s) {            
+            if(_getDiagnosisType() === 'CONFIRMED') {                
+                return s.DiagnosisStatus.includes(_getDiagnosisType()) && 
+                       s.AsthmaControlled == _isAsthmaControlled() && 
+                       (s.HighDoseICS == _medSevere() || s.HighDoseICS == null) && 
+                       s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere();
+            }
+            else {
+                // Unconfirmed diagnosis types will display prompt if any of the three primary categories are problem
+                return  s.DiagnosisStatus.includes(_getDiagnosisType()) &&                          
+                        (s.AsthmaControlled == _isAsthmaControlled() || s.HighDoseICS == _medSevere() || s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere());
+            }
+        })
+    }
+
+    function _setPrompt(objPrompt){
+        if(objPrompt) {
+            let promptText = '';  
+            if (_isChild()) {
+                promptText = objPrompt.Prompt.Child;
+            }
+            else {
+                promptText = objPrompt.Prompt.Adult;
+            }
+
+            $(".severe-asthma-footer").show(); 
+            $(".severe-asthma-footer").html(promptText);
+
+            // Set field values for saving into OSCAR
+            $("#IsSevere").val(objPrompt.IsSevere); /// NEED TO TEST THIS STILL
+            $("#PromptId").val(objPrompt.PromptId);
+            $("#PromptText").val(promptText);
+        }
+        else {
+            $(".severe-asthma-footer").hide(); 
+            $(".severe-asthma-footer").html('');
+            $("#PromptId").val('');
+            $("#PromptText").val('');
+        }
+    }
+    
+    function _isAsthmaControlled() {
+        let isControlled;
+        if ($('#hdnAsthmaControlled').val().length > 0){
+            isControlled = ($('#hdnAsthmaControlled').val() === 'true');
+        }
+        else {
+            isControlled = null;
+        }        
+
+        // Even though these are outside the asthma control section of the form, they still affect the asthma control portion of the algorithm
+        if( parseInt($("#controlTestScore").val()) < 20 || 
+            parseFloat($("#controlScore").val()) > 1.5 ||
+            parseInt($("#childScore").val()) < 20 || 
+            parseInt($("#numSystemicSteroidLastYear").val()) > 1 || 
+            parseInt($("#hospitalizedLastYear").val()) > 0 || 
+            parseInt($("#nearFatalEpisodeLastYear").val()) > 0 || 
+            $('input[name=persistentAirflowObstruction]:checked').val() == 'yes' ||
+            $('input[name=icuAdmissions]:checked').val() == 'yes')
+        {
+            isControlled = false;
+        }
+
+
+
+        return isControlled;        
+    }
+
+    /* ********************************* */
+    /*  MED METHODS                      */
+    /* ********************************* */
+    function _medSevere() {        
+        const multiSevereMed = _hasMultiSevereMeds();
+        let medSevere = null;
+
+        if (multiSevereMed) {
+            medSevere = _isMultiMedSevere();
+        } 
+        else {            
+            medSevere = _isSingleMedSevere();
+        }
+
+        return medSevere;
+    }
+
+
+    function _CalculateDailyIntakeByMedName(medName) {
+        let dailyIntakeTotal = null;
+        const medStrength = $('#' + medName + 'Strength').val();
+        const medDose = $('#' + medName + 'Dose').val() || 1;
+        const medFreq = $('#' + medName + 'Freq').val();
+
+        if (medStrength && medDose && medFreq) {
+            dailyIntakeTotal = medStrength * medDose * medFreq;                    
+        }
+
+        return dailyIntakeTotal;
+    }
+
+    function _isSingleMedSevere() {        
+        let isSevereAmount = false;
+        let numberControllers = 0;
+
+        _Medications.forEach(function(med) {            
+            if ($("#" + med.MedicationFieldID + ":checked").val()){
+                const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);                        
+                if (medDailyIntake) {
+                    let medThreshhold = null;
+                    if (_isChild()) 
+                    {
+                        medThreshhold = med.SevereThresholdChild;
+                    }
+                    else {
+                        medThreshhold = med.SevereThresholdAdult;
+                    }
+                    
+                    isSevereAmount = medDailyIntake > medThreshhold;
+                    numberControllers += med.ControllersCount;
+                } 
+            }           
+        });
+        
+        numberControllers += _getNumberAdditionalControllers();
+
+        return isSevereAmount && numberControllers > 1;
+    }
+
+    function _isMultiMedSevere() {
+        const isChild = _isChild();
+        let medTotal = 0;
+        let budesonideMultiplier = 1;
+        let numberControllers = 0;        
+        _Medications.forEach(function(med) {            
+            if ($("#" + med.MedicationFieldID + ":checked").val()){                
+                const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);
+                
+                if (medDailyIntake) {
+                    // Multiplifer differs depending on adult or child
+                    if(isChild) {
+                        budesonideMultiplier = med.BudesonideMultiplierChild;
+                    }
+                    else {
+                        budesonideMultiplier = med.BudesonideMultiplierAdult;
+                    }
+                    
+                    medTotal += medDailyIntake * budesonideMultiplier;
+                    numberControllers += med.ControllersCount;
+                }
+            }
+        });
+
+        // Compare budsonide 
+        const budsonideObject = _getBudesonideObject();
+
+        let medThreshhold = null;
+        if (isChild) 
+        {
+            medThreshhold = budsonideObject.SevereThresholdChild;
+        }
+        else {
+            medThreshhold = budsonideObject.SevereThresholdAdult;
+        }
+
+        numberControllers +=  _getNumberAdditionalControllers();
+
+
+        
+
+        return medTotal > medThreshhold && numberControllers > 1;
+
+    }
+
+
+    function _isSystemicSteroidSevere() {
+        var corticosteroidUsedPreviousYear = $('input[name=corticosteroidUsedPreviousYear]:checked').val();        
+        if(corticosteroidUsedPreviousYear && corticosteroidUsedPreviousYear.toUpperCase() === "YES") {
+            return true;
+        }
+        return false;        
+    }
+
+    function _getDiagnosisType() {
+        var diagnosis = $('input[name=diagnosis]:checked').val();           
+        if(diagnosis) {
+            return diagnosis.toUpperCase();
+        }
+        return null;
+    }
+
+    function _getBudesonideObject() {
+        return foundSevereMed = _.find(_Medications, function(med) {
+            return med.MedicationFieldID  == "pulmicortTurbuhaler";                
+        });
+    }
+
+    function _getNumberAdditionalControllers() {        
+        return $('#additional-controllers input:checkbox:checked').length; 
+    }
+
+    function _hasMultiSevereMeds() {        
+        return $('.severe-med-checkbox:checked').length > 1
+    }
+
+    function _isChild() {
+        const encounterDateString = $('#encounterDate').val();
+        const birthdate = $('#dob').val();
+        const dob = new Date(birthdate);
+        const encounterDate = new Date(encounterDateString);        
+        const diffYears = encounterDate.getFullYear() - dob.getFullYear();
+        
+        return diffYears < 12;
+    }
 
     function _BindAlgorithmTriggerEvents() {
         // Medication checkbox event binding
@@ -95,225 +316,5 @@
 
     }
 
-    function TriggerAlgorithm() {        
-        let objPrompt = _getPromptObject();
-        _setPrompt(objPrompt);
-    }
 
-    function _getPromptObject() {
-        return _.find(_DecisionSupport, function(s) {
-            if(_getDiagnosisType() === 'CONFIRMED') {
-                return s.DiagnosisStatus.includes(_getDiagnosisType()) && 
-                       s.AsthmaControlled == _isAsthmaControlled() && 
-                       (s.HighDoseICS == _medSevere() || s.HighDoseICS == null) && 
-                       s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere();
-            }
-            else {
-                // Unconfirmed diagnosis types will display prompt if any of the three primary categories are problem
-                return  s.DiagnosisStatus.includes(_getDiagnosisType()) &&                          
-                        (s.AsthmaControlled == _isAsthmaControlled() || s.HighDoseICS == _medSevere() || s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere());
-            }
-        })
-    }
-
-    function _setPrompt(objPrompt){
-        if(objPrompt) {
-            let promptText = '';  
-            if (_isChild()) {
-                promptText = objPrompt.Prompt.Child;
-            }
-            else {
-                promptText = objPrompt.Prompt.Adult;
-            }
-
-            /**** LOOK HERE **** */
-            /* WE NEED TO SET $("#IsSevere").val(true); / $("#IsSevere").val(false);  FIELD!!!  BASED ON WHAT? JUST MEDS LIKE BEFORE?    JUST SET PROMPT TEXT>*/            
-            /**** LOOK HERE **** */
-            /**** LOOK HERE **** */
-            /**** LOOK HERE **** */
-
-            $(".severe-asthma-footer").show(); 
-            $(".severe-asthma-footer").html(promptText);
-
-            // Set field values for saving into OSCAR
-            $("#PromptId").val(objPrompt.PromptId);
-            $("#PromptText").val(promptText);
-        }
-        else {
-            $(".severe-asthma-footer").hide(); 
-            $(".severe-asthma-footer").html('');
-            $("#PromptId").val('');
-            $("#PromptText").val('');
-        }
-    }
-    
-    function _isAsthmaControlled() {
-        let isControlled;
-        if ($('#hdnAsthmaControlled').val().length > 0){
-            isControlled = ($('#hdnAsthmaControlled').val() === 'true');
-        }
-        else {
-            isControlled = null;
-        }        
-
-        // Even though these are outside the asthma control section of the form, they still affect the asthma control portion of the algorithm
-        if( parseInt($("#controlTestScore").val()) < 20 || 
-            parseFloat($("#controlScore").val()) > 1.5 ||
-            parseInt($("#childScore").val()) < 20 || 
-            parseInt($("#numSystemicSteroidLastYear").val()) > 1 || 
-            parseInt($("#hospitalizedLastYear").val()) > 0 || 
-            parseInt($("#nearFatalEpisodeLastYear").val()) > 0 || 
-            $('input[name=persistentAirflowObstruction]:checked').val() == 'yes' ||
-            $('input[name=icuAdmissions]:checked').val() == 'yes')
-        {
-            isControlled = false;
-        }
-
-
-
-        return isControlled;        
-    }
-
-    /* ********************************* */
-    /*  MED METHODS                      */
-    /* ********************************* */
-    function _medSevere() {
-        const multiSevereMed = _hasMultiSevereMeds();
-        let medSevere = null;
-
-        if (multiSevereMed) {
-            medSevere = _isMultiMedSevere();
-        } 
-        else {            
-            medSevere = _isSingleMedSevere();
-        }
-
-        return medSevere;
-    }
-
-
-    function _CalculateDailyIntakeByMedName(medName) {
-        let dailyIntakeTotal = null;
-        const medStrength = $('#' + medName + 'Strength').val();
-        const medDose = $('#' + medName + 'Dose').val();
-        const medFreq = $('#' + medName + 'Freq').val();
-
-        if (medStrength && medDose && medFreq) {
-            dailyIntakeTotal = medStrength * medDose * medFreq;                    
-        }
-
-        return dailyIntakeTotal;
-    }
-
-    function _isSingleMedSevere() {        
-        let isSevereAmount = false;
-        let numberControllers = 0;
-
-        _Medications.forEach(function(med) {            
-            if ($("#" + med.MedicationFieldID + ":checked").val()){
-                const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);                        
-                if (medDailyIntake) {
-                    let medThreshhold = null;
-                    if (_isChild()) 
-                    {
-                        medThreshhold = med.SevereThresholdChild;
-                    }
-                    else {
-                        medThreshhold = med.SevereThresholdAdult;
-                    }
-                    
-                    isSevereAmount = medDailyIntake > medThreshhold;
-                    numberControllers += med.ControllersCount;
-                } 
-            }           
-        });
-        
-        numberControllers += _getNumberAdditionalControllers();
-
-        return isSevereAmount && numberControllers > 1;
-    }
-
-    function _isMultiMedSevere() {
-        const isChild = _isChild();
-        let medTotal = 0;
-        let budesonideMultiplier = 1;
-        let numberControllers = 0;
-
-        _Medications.forEach(function(med) {            
-            if ($("#" + med.MedicationFieldID + ":checked").val()){
-                const medDailyIntake = _CalculateDailyIntakeByMedName(med.MedicationFieldID);
-                if (medDailyIntake) {
-                    // Multiplifer differs depending on adult or child
-                    if(isChild) {
-                        budesonideMultiplier = med.BudesonideMultiplierChild;
-                    }
-                    else {
-                        budesonideMultiplier = med.BudesonideMultiplierAdult;
-                    }
-                    
-                    medTotal += medDailyIntake * budesonideMultiplier;                    
-                    numberControllers += med.ControllersCount;
-
-                }
-            }
-        });
-
-        // Compare budsonide 
-        const budsonideObject = _getBudesonideObject();
-
-        let medThreshhold = null;
-        if (isChild) 
-        {
-            medThreshhold = budsonideObject.SevereThresholdChild;
-        }
-        else {
-            medThreshhold = budsonideObject.SevereThresholdAdult;
-        }
-
-        numberControllers +=  _getNumberAdditionalControllers();
-
-        return medTotal > medThreshhold && numberControllers > 1;
-
-    }
-
-
-    function _isSystemicSteroidSevere() {
-        var corticosteroidUsedPreviousYear = $('input[name=corticosteroidUsedPreviousYear]:checked').val();        
-        if(corticosteroidUsedPreviousYear && corticosteroidUsedPreviousYear.toUpperCase() === "YES") {
-            return true;
-        }
-        return false;        
-    }
-
-    function _getDiagnosisType() {
-        var diagnosis = $('input[name=diagnosis]:checked').val();           
-        if(diagnosis) {
-            return diagnosis.toUpperCase();
-        }
-        return null;
-    }
-
-    function _getBudesonideObject() {
-        return foundSevereMed = _.find(_Medications, function(med) {
-            return med.MedicationFieldID  == "pulmicortTurbuhaler";                
-        });
-    }
-
-    function _getNumberAdditionalControllers() {        
-        return $('#additional-controllers input:checkbox:checked').length; 
-    }
-
-    function _hasMultiSevereMeds() {        
-        return $('.severe-med-checkbox:checked').length > 1
-    }
-
-    function _isChild() {
-        const encounterDateString = $('#encounterDate').val();
-        const birthdate = $('#dob').val();
-        const dob = new Date(birthdate);
-        const encounterDate = new Date(encounterDateString);        
-        const diffYears = encounterDate.getFullYear() - dob.getFullYear();
-        
-        return diffYears < 12;
-    }
 //})();

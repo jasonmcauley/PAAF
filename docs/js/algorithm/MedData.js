@@ -138,5 +138,35 @@
         "BudesonideMultiplierChild": 4,
         "BudesonideMultiplierAdult": 2,
         "ControllersCount": 2
+    },
+    {        
+        "MedicationFieldID": "aermonyRespi",
+        "MedicationName": "Aermony RespiClick (Fluticasone Propionate)",        
+        "IsSevere": true,
+        "SevereThresholdAdult": 500,
+        "SevereThresholdChild": 400,
+        "BudesonideMultiplierChild": 2,
+        "BudesonideMultiplierAdult": 1.6,
+        "ControllersCount": 1    
+    },
+    {        
+        "MedicationFieldID": "atecturaBreezhaler",
+        "MedicationName": "Atectura Breezhaler (Indacaterol/mometasone furoate)",        
+        "IsSevere": true,
+        "SevereThresholdAdult": 400,
+        "SevereThresholdChild": 399,
+        "BudesonideMultiplierChild": 4,
+        "BudesonideMultiplierAdult": 2,
+        "ControllersCount": 1 
+    },
+    {        
+        "MedicationFieldID": "enerzairBreehaler",
+        "MedicationName": "Enerzair Breehaler ()",
+        "IsSevere": true,
+        "SevereThresholdAdult": 400,
+        "SevereThresholdChild": 399,
+        "BudesonideMultiplierChild": 4,
+        "BudesonideMultiplierAdult": 2,
+        "ControllersCount": 1
     }
 ]

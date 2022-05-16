@@ -167,6 +167,10 @@ var app = new Vue({
         atecturaBreezhalerStrength: document.getElementById("atecturaBreezhalerStrength").value,
         //aermonyRespiDose: document.getElementById("aermonyRespiDose").value,
         atecturaBreezhalerFreq: document.getElementById("atecturaBreezhalerFreq").value,
+        enerzairBreehaler: document.getElementById("enerzairBreehaler").checked,
+        enerzairBreehalerStrength: document.getElementById("enerzairBreehalerStrength").value,
+        //enerzairBreehalerDose: document.getElementById("enerzairBreehalerDose").value,
+        enerzairBreehalerFreq: document.getElementById("enerzairBreehalerFreq").value,
         showFollowUpBanner: false,
         showFirstBanner: true
     },
@@ -285,6 +289,13 @@ var app = new Vue({
                 app.aermonyRespiStrength = "";
                 app.aermonyRespiFreq = "";
                 app.aermonyRespiDose = "";
+            }
+        },
+        enerzairBreehaler: function (v) {
+            if (!v) {
+                app.enerzairBreehalerStrength = "";
+                app.enerzairBreehalerFreq = "";
+                //app.enerzairBreehalerDose = "";
             }
         }
     }
