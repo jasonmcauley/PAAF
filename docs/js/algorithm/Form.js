@@ -1,5 +1,5 @@
 //const API_URL = 'https://asthmalife.ca/eAPI/api/eAPI/AddeAPI'; // Prod Env
-const API_URL = 'https://asthmalife.ca/eAPI_Test/api/eAPI/AddeAPI' // Test Env
+const API_URL = 'https://asthmalife.ca/eAPI_Test/api/eAPI/AddeAPI'; // Test Env
 //const API_URL = 'http://localhost:65431/api/eAPI/AddeAPI' // Local Env
 
 smokingStatusChange = function () {
@@ -75,6 +75,7 @@ else if (document.layers || document.getElementById) {
         top.window.outerWidth = 1050;
     }
 }
+
 
 var app = new Vue({
     el: '#app',
@@ -354,9 +355,9 @@ beforeSubmit = function () {
         "Asthma_wellControlled_last4wks": app.asthmaControlledBool,
         "Symptom_Free_Days_Last4wks": 7 - parseInt(document.getElementById("daytimeSymptoms").value),
         "Absences_SchoolWork_Last12mos": parseInt(document.getElementById("Absences_SchoolWork_Last12mos").value),
-        "Patient_MoreThanOne_Exacerbation_Last12mos": (~~parseInt(document.getElementById("asthmaExacerbationLastYear").value) > 1 ? true : false),
+        "Patient_MoreThanOne_Exacerbation_Last12mos": (~~parseInt(document.getElementById("asthmaExacerbationLastYear").value) > 1 ? true : false),  
         "Number_EDVisits_Last12mos": parseInt(document.getElementById("Number_EDVisits_Last12mos").value),
-        "Number_UrgentCareVisits_Last12mos": parseInt(document.getElementById("Number_UrgentCareVisits_Last12mos").value),
+        "Number_UrgentCareVisits_Last12mos": parseInt(document.getElementById("hospitalizedLastYear").value),
         "Number_PrimaryCareVisits_Last12mos": ~~parseInt(document.getElementById("routinePrimaryVisits").value) + ~~parseInt(document.getElementById("urgentPrimaryVisits").value),
         // "hasRoutineHCP": Always yes
         "hasReceivedWrittenActionPlan": (document.getElementById("writtenPlanProvidedYes").checked || document.getElementById("writtenPlanRevisedYes").checked || document.getElementById("reviewedNotChangedYes").checked ? true : false),
@@ -371,28 +372,32 @@ beforeSubmit = function () {
     $("#initialSubmitButton").val("Saving...");
     $("#initialSubmitButton").prop('disabled', true);
 
-    $.ajax({
-        type: 'POST',
-        url: API_URL,
-        data: JSON.stringify(asthmaLifePayload),
-        success: function() {                    
-            $("#initialSubmitButton").val("Save & Close");
-            $("#initialSubmitButton").prop('disabled', false);
-            $("#PAAF").submit();                    
-        },                
-        error: function() {
-            $("#initialSubmitButton").val("Save & Close");
-            $("#initialSubmitButton").prop('disabled', false);
-            $("#PAAF").submit();
-        },
-        fail: function() {                    
-            $("#initialSubmitButton").val("Save & Close");
-            $("#initialSubmitButton").prop('disabled', false);
-            $("#PAAF").submit();
-        },
-        contentType: "application/json",
-        dataType: 'JSON'
-        });
+    // $.ajax({
+    //     type: 'POST',
+    //     url: API_URL,
+    //     data: JSON.stringify(asthmaLifePayload),
+    //     success: function() {                    
+    //         $("#initialSubmitButton").val("Save & Close");
+    //         $("#initialSubmitButton").prop('disabled', false);
+    //         $("#PAAF").submit();                    
+    //     },                
+    //     error: function() {
+    //         $("#initialSubmitButton").val("Save & Close");
+    //         $("#initialSubmitButton").prop('disabled', false);
+    //         $("#PAAF").submit();
+    //     },
+    //     fail: function() {                    
+    //         $("#initialSubmitButton").val("Save & Close");
+    //         $("#initialSubmitButton").prop('disabled', false);
+    //         $("#PAAF").submit();
+    //     },
+    //     contentType: "application/json",
+    //     dataType: 'JSON'
+    //     });
+
+        // $("#initialSubmitButton").val("Save & Close");
+        //     $("#initialSubmitButton").prop('disabled', false);
+        //     $("#PAAF").submit();     
 }
 
 
@@ -453,15 +458,38 @@ calcSmokingYears = function () {
     }
 }
 
-calcIsControlled = function () {        
+calcIsControlled = function () {  
+    let exacerbationsSinceLast;
+    let FEVPersonalBest;
+    let PEVDiurnalVariation; 
+
+    
+    if($('input[name=exacerbationsSinceLast]:checked').val())
+    {
+        exacerbationsSinceLast = $('input[name=exacerbationsSinceLast]:checked').val().toUpperCase();
+    }
+
+    if($('input[name=FEVPersonalBest]:checked').val())
+    {
+        FEVPersonalBest = $('input[name=FEVPersonalBest]:checked').val().toUpperCase();
+    }
+
+    if($('input[name=PEVDiurnalVariation]:checked').val())
+    {
+        PEVDiurnalVariation = $('input[name=PEVDiurnalVariation]:checked').val().toUpperCase();
+    }
+
     if (document.getElementById('activityIsLimited').checked ||
         parseInt(document.getElementById('needReliever').value) >= 3 ||
         parseInt(document.getElementById("daytimeSymptoms").value) >= 3 ||        
         document.getElementById("WorkSchoolAbsences").checked ||
-        parseInt(document.getElementById("nighttimeSymptoms").value) > 0 ||        
-        $('input[name=exacerbationsSinceLast]:checked').val()?.toUpperCase() == 'YES' ||
-        $('input[name=FEVPersonalBest]:checked').val()?.toUpperCase() == 'NO' ||
-        $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'NO' ||
+        parseInt(document.getElementById("nighttimeSymptoms").value) > 0 ||      
+        exacerbationsSinceLast == 'YES' ||
+        FEVPersonalBest == 'NO' ||
+        PEVDiurnalVariation == 'NO' ||
+        // $('input[name=exacerbationsSinceLast]:checked').val()?.toUpperCase() == 'YES' ||
+        // $('input[name=FEVPersonalBest]:checked').val()?.toUpperCase() == 'NO' ||
+        // $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'NO' ||
         parseInt(document.getElementById("sputumEosinophilsControl").value) >= 4) {
         app.asthmaControlled = "NO";
         app.asthmaControlledBool = false;
@@ -472,10 +500,13 @@ calcIsControlled = function () {
         parseInt(document.getElementById("daytimeSymptoms").value) <= 2 &&
         document.getElementById("noWorkSchoolAbsences").checked &&        
         parseInt(document.getElementById("nighttimeSymptoms").value) < 1 &&
-        parseInt(document.getElementById("sputumEosinophilsControl").value) < 4 &&    
-        $('input[name=exacerbationsSinceLast]:checked').val()?.toUpperCase() == 'NO' &&
-        $('input[name=FEVPersonalBest]:checked').val()?.toUpperCase() == 'YES' &&
-        $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'YES' &&
+        parseInt(document.getElementById("sputumEosinophilsControl").value) < 4 &&  
+        exacerbationsSinceLast == 'NO' ||
+        FEVPersonalBest == 'YES' ||
+        PEVDiurnalVariation == 'YES' ||  
+        // $('input[name=exacerbationsSinceLast]:checked').val()?.toUpperCase() == 'NO' &&
+        // $('input[name=FEVPersonalBest]:checked').val()?.toUpperCase() == 'YES' &&
+        // $('input[name=PEVDiurnalVariation]:checked').val()?.toUpperCase() == 'YES' &&
         document.getElementById("noExacerbationsSinceLast").checked) {
         app.asthmaControlled = "Yes";
         app.asthmaControlledBool = true;

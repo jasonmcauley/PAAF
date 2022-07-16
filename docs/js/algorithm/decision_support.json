@@ -6,6 +6,7 @@
         "SystemicSteroidPreviousYear" : false,
         "AsthmaControlled": false,
         "IsSevere": true,
+        "ShowSpecialistSection": true,
         "Prompt": {
             "Adult": "Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist.",
             "Child": "Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist."
@@ -17,7 +18,8 @@
         "HighDoseICS": false,
         "SystemicSteroidPreviousYear" : false,
         "AsthmaControlled": false,
-        "IsSevere": false,        
+        "IsSevere": false,     
+        "ShowSpecialistSection": true,   
         "Prompt": {
             "Adult": "Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist",
             "Child": "Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist"
@@ -29,7 +31,8 @@
         "HighDoseICS": true,
         "SystemicSteroidPreviousYear" : false,
         "AsthmaControlled": true,
-        "IsSevere": false,     
+        "IsSevere": false,    
+        "ShowSpecialistSection": true, 
         "Prompt": {
             "Adult": "Asthma is controlled consider tapering to medium dose ICS medication and reassess asthma control.",
             "Child": "Asthma is controlled consider tapering to medium dose ICS medication and refer to a specialist."
@@ -42,6 +45,7 @@
         "SystemicSteroidPreviousYear" : true,        
         "AsthmaControlled": true,
         "IsSevere": true,
+        "ShowSpecialistSection": true,
         "Prompt": {
             "Adult": "Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist.",
             "Child": "Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist."
@@ -53,7 +57,8 @@
         "HighDoseICS": null,
         "SystemicSteroidPreviousYear" : true,        
         "AsthmaControlled": false,
-        "IsSevere": true,     
+        "IsSevere": true,    
+        "ShowSpecialistSection": true, 
         "Prompt": {
             "Adult": "Patient meets criteria for severe asthma consider a referral to a specialist.",
             "Child": "Patient meets criteria for severe asthma consider a referral to a specialist."
@@ -65,7 +70,8 @@
         "HighDoseICS": true,
         "SystemicSteroidPreviousYear" : true,
         "AsthmaControlled": false,
-        "IsSevere": false,       
+        "IsSevere": false,   
+        "ShowSpecialistSection": true,    
         "Prompt": {
             "Adult": "Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist.",
             "Child": "Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist."

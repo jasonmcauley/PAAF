@@ -33,7 +33,7 @@ i {
 }
 
 .paaf {
-    margin: 60px 4px 4px 4px;
+    margin: 40px 4px 4px 4px;
     border: 1px solid rgb(139, 139, 139);
     padding: 0 0 40px 0;            
     border-radius: 5px;
@@ -182,24 +182,40 @@ tr label {
     float: right;
 }
 
-.severe-asthma-footer {
+.severe-asthma-header {
     position: fixed;
     top: 0;
     margin: 0;
     padding: 0;
     display: none;
+    width: 890px;                        
+}
+
+.severe-asthma-prompt {
     padding: 10px;
     text-align: center;
     background: #f66;
-    font-weight:bold;
-    width: 870px;                        
+    font-weight:bold;                      
 }
 
+.severe-specialist-section {
+    padding: 10px;
+    background:#abedff;
+}
+
+.SpecialistSeenYear {
+    width: 60px;
+}
+
+.specialist-seen-date {
+    font-size: 14px;
+    margin-left: 25px;
+}
 
 @media print {
     /*CSS that removes textarea and textbox borders when printing ---(put this inbetween <header></header>)*/
     img {
-        /* insure images don't get cut */
+        /* ensure images don't get cut */
         max-width: 100% !important;
     }
 

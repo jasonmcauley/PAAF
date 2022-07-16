@@ -1,8 +1,10 @@
+
 //(function() {
     // Need to pull these 
     const _Medications = [{"MedicationFieldID":"qvar","MedicationName":"QVAR (Beclomethasone dipropionate HFA)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"pulmicortTurbuhaler","MedicationName":"Pulmicort Turbuhaler (Budesonide)","IsSevere":true,"SevereThresholdAdult":800,"SevereThresholdChild":800,"BudesonideMultiplierChild":1,"BudesonideMultiplierAdult":1,"ControllersCount":1},{"MedicationFieldID":"symbicortTurbuhaler","MedicationName":"Symbicort Turbuhaler (Budesonide/formoterol)","IsSevere":true,"SevereThresholdAdult":800,"SevereThresholdChild":800,"BudesonideMultiplierChild":1,"BudesonideMultiplierAdult":1,"ControllersCount":2},{"MedicationFieldID":"alvesco","MedicationName":"Alvesco (Ciclesonide)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"floventMDI","MedicationName":"Flovent MDI and spacer (Fluticasone propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"floventDiskus","MedicationName":"Flovent Diskus (Fluticasone propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"advairDiskus","MedicationName":"Advair Diskus (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"advairPMDI","MedicationName":"Advair pMDI (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"wixelaInhub","MedicationName":"Wixela Inhub (Fluticasone/salmeterol)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":2},{"MedicationFieldID":"arnuityEllipta","MedicationName":"Arnuity Ellipta (Fluticasone furoate)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":1},{"MedicationFieldID":"breoEllipta","MedicationName":"Breo Ellipta (Fluticasone/vilanterol Ellipta)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":2},{"MedicationFieldID":"trelegyEllipta","MedicationName":"Trelegy Ellipta (Fluticasone/vilanterol/umeclidinium)","IsSevere":true,"SevereThresholdAdult":199,"SevereThresholdChild":null,"BudesonideMultiplierChild":null,"BudesonideMultiplierAdult":4,"ControllersCount":3},{"MedicationFieldID":"asmanexTwisthaler","MedicationName":"Asmanex Twisthaler (Mometasone furoate)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"zenhaleMDI","MedicationName":"Zenhale MDI (Mometasone/formoterol)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":2},{"MedicationFieldID":"aermonyRespi","MedicationName":"Aermony RespiClick (Fluticasone Propionate)","IsSevere":true,"SevereThresholdAdult":500,"SevereThresholdChild":400,"BudesonideMultiplierChild":2,"BudesonideMultiplierAdult":1.6,"ControllersCount":1},{"MedicationFieldID":"atecturaBreezhaler","MedicationName":"Atectura Breezhaler (Indacaterol/mometasone furoate)","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":1},{"MedicationFieldID":"enerzairBreehaler","MedicationName":"Enerzair Breehaler ()","IsSevere":true,"SevereThresholdAdult":400,"SevereThresholdChild":399,"BudesonideMultiplierChild":4,"BudesonideMultiplierAdult":2,"ControllersCount":1}];
-    const _DecisionSupport = JSON.parse('[{"PromptId":1,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":true,"SystemicSteroidPreviousYear":false,"AsthmaControlled":false,"IsSevere":true,"Prompt":{"Adult":"Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist.","Child":"Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist."}},{"PromptId":2,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":false,"SystemicSteroidPreviousYear":false,"AsthmaControlled":false,"IsSevere":false,"Prompt":{"Adult":"Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist","Child":"Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist"}},{"PromptId":3,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":true,"SystemicSteroidPreviousYear":false,"AsthmaControlled":true,"IsSevere":false,"Prompt":{"Adult":"Asthma is controlled consider tapering to medium dose ICS medication and reassess asthma control.","Child":"Asthma is controlled consider tapering to medium dose ICS medication and refer to a specialist."}},{"PromptId":4,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":null,"SystemicSteroidPreviousYear":true,"AsthmaControlled":true,"IsSevere":true,"Prompt":{"Adult":"Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist.","Child":"Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist."}},{"PromptId":5,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":null,"SystemicSteroidPreviousYear":true,"AsthmaControlled":false,"IsSevere":true,"Prompt":{"Adult":"Patient meets criteria for severe asthma consider a referral to a specialist.","Child":"Patient meets criteria for severe asthma consider a referral to a specialist."}},{"PromptId":6,"DiagnosisStatus":["SUSPECTED","UNKNOWN"],"HighDoseICS":true,"SystemicSteroidPreviousYear":true,"AsthmaControlled":false,"IsSevere":false,"Prompt":{"Adult":"Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist.","Child":"Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist."}}]');
+    const _DecisionSupport = JSON.parse('[{"PromptId":1,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":true,"SystemicSteroidPreviousYear":false,"AsthmaControlled":false,"IsSevere":true,"ShowSpecialistSection":true,"Prompt":{"Adult":"Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist.","Child":"Assess and address reasons for poor control. If patient remains uncontrolled refer to a specialist."}},{"PromptId":2,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":false,"SystemicSteroidPreviousYear":false,"AsthmaControlled":false,"IsSevere":false,"ShowSpecialistSection":true,"Prompt":{"Adult":"Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist","Child":"Assess and address reasons for poor asthma control, if patient remains uncontrolled optimize medications or consider referral to a specialist"}},{"PromptId":3,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":true,"SystemicSteroidPreviousYear":false,"AsthmaControlled":true,"IsSevere":false,"ShowSpecialistSection":true,"Prompt":{"Adult":"Asthma is controlled consider tapering to medium dose ICS medication and reassess asthma control.","Child":"Asthma is controlled consider tapering to medium dose ICS medication and refer to a specialist."}},{"PromptId":4,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":null,"SystemicSteroidPreviousYear":true,"AsthmaControlled":true,"IsSevere":true,"ShowSpecialistSection":true,"Prompt":{"Adult":"Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist.","Child":"Patient is on systemic steroids for 50% of the previous year to maintain asthma control, consider a referral to a specialist."}},{"PromptId":5,"DiagnosisStatus":["CONFIRMED"],"HighDoseICS":null,"SystemicSteroidPreviousYear":true,"AsthmaControlled":false,"IsSevere":true,"ShowSpecialistSection":true,"Prompt":{"Adult":"Patient meets criteria for severe asthma consider a referral to a specialist.","Child":"Patient meets criteria for severe asthma consider a referral to a specialist."}},{"PromptId":6,"DiagnosisStatus":["SUSPECTED","UNKNOWN"],"HighDoseICS":true,"SystemicSteroidPreviousYear":true,"AsthmaControlled":false,"IsSevere":false,"ShowSpecialistSection":true,"Prompt":{"Adult":"Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist.","Child":"Attempt to confirm asthma diagnosis by objective measures, if unable to confirm diagnosis consider a referral to a specialist."}}]');
     //const _Medications = null;
+    
     const _isAdult = true;
 
     $(document).ready(function(){        
@@ -25,6 +27,13 @@
         // Tigger on initial load
         TriggerAlgorithm();
 
+        _specialistSectionInit();
+
+        $("#severe-asthma-header").show();
+        //$(".paaf").css('margin-top', '80px');
+
+        
+
     });
 
 
@@ -37,17 +46,30 @@
 
     function _getPromptObject() {
         return _.find(_DecisionSupport, function(s) {            
+            // if(_getDiagnosisType() === 'CONFIRMED') {                
+            //     return s.DiagnosisStatus.includes(_getDiagnosisType()) && 
+            //            s.AsthmaControlled == _isAsthmaControlled() && 
+            //            (s.HighDoseICS == _medSevere() || s.HighDoseICS == null) && 
+            //            s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere();
+            // }
+            // else {
+            //     // Unconfirmed diagnosis types will display prompt if any of the three primary categories are problem
+            //     return  s.DiagnosisStatus.includes(_getDiagnosisType()) &&                          
+            //             (s.AsthmaControlled == _isAsthmaControlled() || s.HighDoseICS == _medSevere() || s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere());
+            // }
+
             if(_getDiagnosisType() === 'CONFIRMED') {                
-                return s.DiagnosisStatus.includes(_getDiagnosisType()) && 
+                return s.DiagnosisStatus.indexOf(_getDiagnosisType()) != -1 && 
                        s.AsthmaControlled == _isAsthmaControlled() && 
                        (s.HighDoseICS == _medSevere() || s.HighDoseICS == null) && 
                        s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere();
             }
             else {
                 // Unconfirmed diagnosis types will display prompt if any of the three primary categories are problem
-                return  s.DiagnosisStatus.includes(_getDiagnosisType()) &&                          
+                return  s.DiagnosisStatus.indexOf(_getDiagnosisType()) != -1 &&                          
                         (s.AsthmaControlled == _isAsthmaControlled() || s.HighDoseICS == _medSevere() || s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere());
             }
+
         })
     }
 
@@ -61,8 +83,17 @@
                 promptText = objPrompt.Prompt.Adult;
             }
 
-            $(".severe-asthma-footer").show(); 
-            $(".severe-asthma-footer").html(promptText);
+            // Determine if prompt requires user to enter specialist seen reason
+            _showSpecialistSeenSection(objPrompt.ShowSpecialistSection);
+
+            $("#severe-asthma-prompt").show(); 
+            $("#severe-asthma-prompt").html(promptText);
+
+            if(!$("#severe-asthma-prompt").data("prompt-section-open")) {                
+                $(".paaf").css('margin-top', (parseInt(($(".paaf").css('margin-top')) + 'px', 10) + 20) + 'px');    
+            }
+            
+            $("#severe-asthma-prompt").data("prompt-section-open", true);
 
             // Set field values for saving into OSCAR
             $("#IsSevere").val(objPrompt.IsSevere); /// NEED TO TEST THIS STILL
@@ -70,10 +101,17 @@
             $("#PromptText").val(promptText);
         }
         else {
-            $(".severe-asthma-footer").hide(); 
-            $(".severe-asthma-footer").html('');
+            $("#severe-asthma-prompt").hide(); 
+            $("#severe-asthma-prompt").html('');
             $("#PromptId").val('');
             $("#PromptText").val('');
+
+            if($("#severe-asthma-prompt").data("prompt-section-open")) { 
+                $(".paaf").css('margin-top', (parseInt(($(".paaf").css('margin-top')) + 'px', 10) - 20) + 'px');
+            }
+            
+            $("#severe-asthma-prompt").data("prompt-section-open", false);
+
         }
     }
     
@@ -99,9 +137,61 @@
             isControlled = false;
         }
 
-
-
         return isControlled;        
+    }
+
+
+    function _specialistSectionInit() {      
+        //debugger;  
+        //console.log('INIT', $("#SeenSpecialistReason").val());
+        if($("#SeenSpecialistReason").val() != -1){
+            _showSpecialistSeenSection(true);
+        }
+        else {
+            _showSpecialistSeenSection(false);
+        }
+    }
+
+    function _showSpecialistSeenSection(showSection){
+        const sectionPreloaded = false;
+        //console.log(showSection, $("#SeenSpecialistSection").val());
+
+        if(showSection && !sectionPreloaded){            
+            $("#SeenSpecialistSection").show();
+            $("#SeenSpecialistReason").show();
+            
+            if(!$("#SeenSpecialistSection").data("seenspecialist-section-open")) {
+                $(".paaf").css('margin-top', (parseInt(($(".paaf").css('margin-top')) + 'px', 10) + 22) + 'px');
+            }
+            
+            $("#SeenSpecialistSection").data("seenspecialist-section-open", true);
+
+        }
+        else {                        
+            //console.log('clearing value');
+            $("#SeenSpecialistSection").hide();            
+            $("#SeenSpecialistReason").hide();
+            $("#SeenSpecialistReason").val(-1);
+
+            if($("#SeenSpecialistSection").data("seenspecialist-section-open")) {
+                $(".paaf").css('margin-top', (parseInt(($(".paaf").css('margin-top')) + 'px', 10) - 22) + 'px');
+            }
+
+            $("#SeenSpecialistSection").data("seenspecialist-section-open", false);
+            
+        }
+
+        ShowSpecialistSeenDate();
+    }
+
+    function ShowSpecialistSeenDate() {
+        if ($("#SeenSpecialistReason").val() == 2) {
+            $("#specialist-seen-date").show();
+        }
+        else{
+            $("#SpecialistSeenYear").val("");
+            $("#specialist-seen-date").hide();
+        }
     }
 
     /* ********************************* */
@@ -315,6 +405,8 @@
         })
 
     }
+
+    
 
 
 //})();
