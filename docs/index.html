@@ -60,9 +60,8 @@
         
             <!-- Hidden fields -->
             <div style="display:none;">
-                <input type="text" id="EMR_PatientID" name="EMR_PatientID" v-model="EMR_PatientID" oscarDB=patient_id>
-                <input type="text" id="PatientGender" name="PatientGender" v-model="PatientGender" oscarDB=sex>
-                <input type="text" id="EMR_eAPIID" name="EMR_eAPIID" v-model="EMR_eAPIID" name="EMR_eAPIID">
+                <input type="text" id="EMR_PatientID" name="EMR_PatientID" v-model="EMR_PatientID" oscarDB=patient_id>                
+                <input type="text" id="EMR_eAPIID" name="EMR_eAPIID" v-model="EMR_eAPIID">
                 <input type="text" id="PatientGender" name="PatientGender" v-model="PatientGender" oscarDB=sex>
                 <input type="text" id="ProviderName" name="ProviderName" v-model="ProviderName" oscarDB=current_user>
                 <input type="text" id="ProviderIdentifier" name="ProviderIdentifier" v-model="ProviderIdentifier" oscarDB=current_user_id>
@@ -185,7 +184,7 @@
 
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox" name="PreferredSpiroReversibleAirflowObs">
+                                <td rowspan="2"><input type="checkbox" name="PreferredSpiroRevAirflowObs">
                                 </td>
                                 <td colspan="3" style="border-bottom:none">
                                     <i>PREFERRED: Spirometry showing reversible
@@ -735,6 +734,7 @@
                         <label><b>Visit(s) to family physician in the last year for asthma symptoms</b></label>
                         <label>
                             <input type="radio" id="yesFamilyPhysicianVisits" name="physicianVisits" value="yes">
+
                             Yes
                         </label>
                         <label>
@@ -2751,7 +2751,7 @@
                 <input value="Save & Close" style="display: none;" name="SubmitButton" id="SubmitButton" type="submit"/>
             </div>
         </div>
-        
+        <div id="hiddenfields"></div>
     </form>
 
 
@@ -2763,7 +2763,11 @@
 
 
     <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/algorithm/SevereAlgorithm.js"></script>
-    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js"></script>
+    <!-- <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js"></script> -->
+    <script type="text/javascript" src="https://jmcauley.com/oscar/js/algorithm/Form.js"></script>
+
+    
+
 
     <!-- <script>
             $(window).on( "load", function() {
