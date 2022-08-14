@@ -1,9 +1,7 @@
 <html>
 <title>PAAF</title>
-<head>
-    <link rel="stylesheet" href="https://jmcauley.com/oscar/css/styles.css?v=2">    
-    <!-- <link rel="stylesheet" href="css/styles.css?v=1">  -->
-
+<head>    
+    <link rel="stylesheet" href="https://asthmalife.ca/eAPI/assets/css/styles.css?v=10">    
 </head>
 <body>
     <form method="post" name="PAAF" id="PAAF" class="paaf">
@@ -13,14 +11,17 @@
                     <!-- Suspected severe asthma. Consider referral to an asthma specialist. -->   
                 </div>
                 <div id="SeenSpecialistSection" class="severe-specialist-section">
-                    <select id="SeenSpecialistReason"  name="SeenSpecialistReason" onchange="ShowSpecialistSeenDate()" style="display:inline;">
-                        <option value="-1">- Specialist Referral Status - </option>
-                        <option value="1">Referral sent to asthma specialist</option>
-                        <!-- <option value="2" selected="selected">Patient seen by asthma specialist</option> -->
-                        <option value="2" >Patient seen by asthma specialist</option>
+                    <select id="SeenSpecialistReason"  name="SeenSpecialistStatusId" class="SeenSpecialistReason" onchange="ShowSpecialistSeenDate()" style="display:inline;">
+                        <option value=" ">- Specialist Referral Status - </option>
+                        <option value="1">Referral sent to asthma specialist</option>                        
+                        <option value="2">Patient seen by asthma specialist</option>
                         <option value="3">N/A - Patient being followed by an asthma specialist</option>
                     </select>
-    
+                    <div style="display:none;">
+                        <input type="text" id="SeenSpecialistStatusText" name="SeenSpecialistStatusText">
+                    </div>
+                    
+
                     <div id="specialist-seen-date" class="specialist-seen-date" style="display:inline;">
                         Seen Date:
                         <select id="SpecialistSeenMonth" name="SpecialistSeenMonth">
@@ -153,7 +154,7 @@
                         <label style="width:15%"></label>
                         <label style="width:25%">
                             Age asthma was confirmed
-                            <input type="text" id="ageConfirmed" name="ageConfirmed" style="width:50px">
+                            <input type="text" id="ageConfirmed" name="ageAsthmaConfirmed" style="width:50px">
                         </label>
                     </span>
                     <span v-show="youngPatient">
@@ -184,7 +185,7 @@
 
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption1">
+                                <td rowspan="2"><input type="checkbox" name="PreferredSpiroReversibleAirflowObs">
                                 </td>
                                 <td colspan="3" style="border-bottom:none">
                                     <i>PREFERRED: Spirometry showing reversible
@@ -208,7 +209,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption2"></td>
+                                <td rowspan="2"><input type="checkbox" name="AlternativePEF"></td>
                                 <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Peak expiratory flow (PEF)
                                         variability</i></td>
 
@@ -233,7 +234,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption3"></td>
+                                <td rowspan="2"><input type="checkbox" name="AlternativePositiveChallengeTest"></td>
                                 <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Positive challenge test</i>
                                 </td>
 
@@ -283,7 +284,7 @@
                                     <b>Documentation of airflow obstruction</b>
                                 </td>
                                 <td style="text-align: left; border-right: none; border-bottom: none;">
-                                    <input type="checkbox" name="methodChartYoungFirstSectionPreferred">
+                                    <input type="checkbox" name="PreferredWheezingAirflowObservHCP">
                                 </td>
                                 <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
                                     <i>Preferred</i><br>
@@ -293,7 +294,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align: left; border-right: none;">
-                                    <input type="checkbox" name="methodChartYoungFirstSectionAlt">
+                                    <input type="checkbox" name="AlternativeParentalReportWheezingOther">
 
                                 </td>
                                 <td style="text-align: left; border-left: none; padding-left: 5px">
@@ -309,7 +310,7 @@
                                     <b>Documentation of reversibility of airflow obstruction</b>
                                 </td>
                                 <td style="text-align: left; border-right: none; border-bottom: none;">
-                                    <input type="checkbox" name="methodChartYoungSecondSectionPreferred">
+                                    <input type="checkbox" name="AlternativeDocumentationReversibilityAirflow">
 
                                 </td>
                                 <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
@@ -319,7 +320,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align: left; border-right: none; border-bottom: none;">
-                                    <input type="checkbox" name="methodChartYoungSecondSectionAlt1">
+                                    <input type="checkbox" name="AlternativeResponseAntiInflammatory">
 
                                 </td>
                                 <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
@@ -333,7 +334,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align: left; border-right: none;">
-                                    <div><input type="checkbox" name="methodChartYoungSecondSectionAlt2">
+                                    <div><input type="checkbox" name="AlternativeResponseBronchodilator">
                                     </div>
 
                                 </td>
@@ -530,16 +531,16 @@
                 <div id="smokingContent">
                     <label style="width:25%;"><b>Smoking status</b> <i>(Cigarettes)</i></label>
                     <label onclick="smokingStatusChange()">
-                        <input type="radio" id="nonSmoker" name="smokingStatus" value="nonSmoker">
+                        <input type="radio"  name="smokingStatus" id="nonSmoker" value="nonSmoker">
                         Non-smoker
                     </label>
                     <label onclick="smokingStatusChange()">
-                        <input type="radio" id="exSmoker" name="smokingStatus" value="exSmoker">
+                        <input type="radio"  name="smokingStatus" id="exSmoker" value="exSmoker">
                         Ex-smoker
                     </label>
 
                     <label onclick="smokingStatusChange()">
-                        <input type="radio" id="currentSmoker" name="smokingStatus" value="currentSmoker">
+                        <input type="radio"  name="smokingStatus" id="currentSmoker" value="currentSmoker">
                         Current smoker
                     </label>
 
@@ -549,16 +550,16 @@
                         <div>
                             <label style="width:25%;"><b>Quit duration</b></label>
                             <label>
-                                <input type="radio" id="quitDuration" name="allergy" value="nonSmoker">
+                                <input type="radio" id="quitDuration6Month" name="quitDuration" value="6 months">
                                 &#62; 6 months
                             </label>
                             <label>
-                                <input type="radio" id="quitDuration" name="allergy" value="exSmoker">
+                                <input type="radio" id="quitDuration16Month" name="quitDuration" value="1-6 months">
                                 1-6 months
                             </label>
 
                             <label>
-                                <input type="radio" id="quitDuration" name="allergy" value="currentSmoker">
+                                <input type="radio" id="quitDuration1Month" name="quitDuration" value="1 month">
                                 &#60; 1 month
                             </label>
                         </div>
@@ -613,7 +614,7 @@
                                 Yes
                             </label>
                             <label>
-                                <input type="radio" name="cessationAsk" value='no'>
+                                <input type="radio" name="cessationAsk" id="cessationAskNo" value='no'>
                                 No
                             </label>
                             <br>
@@ -623,7 +624,7 @@
                                 Yes
                             </label>
                             <label>
-                                <input type="radio" name="cessationAdvise" value="no">
+                                <input type="radio" name="cessationAdvise" id="cessationAdviseNo" value="no">
                                 No
                             </label>
                             <br>
@@ -633,7 +634,7 @@
                                 Yes
                             </label>
                             <label>
-                                <input type="radio" name="cessationArrange" value="no">
+                                <input type="radio" name="cessationArrange" id="cessationArrangeNo" value="no">
                                 No
                             </label>
                         </div>
@@ -641,22 +642,22 @@
                             <hr style="width:100%; margin:2px 0px 2px 0px; display:block">
                             <label style="width:25%;"><b>Smoking cessation quit intentions</b></label>
                             <label>
-                                <input type="radio" name="quitIntentions"
+                                <input type="radio" name="quitIntentions" id="withinMonth"
                                     value="withinMonth">
                                 Within a month
                             </label>
                             <label>
-                                <input type="radio"name="quitIntentions"
+                                <input type="radio"name="quitIntentions" id="within6Months"
                                     value="within6months">
                                 Within 6 months
                             </label>
                             <label>
-                                <input type="radio"name="quitIntentions"
+                                <input type="radio"name="quitIntentions" id="beyond6Months"
                                     value="beyond6months">
                                 Beyond 6 months
                             </label>
                             <label>
-                                <input type="radio" name="quitIntentions"
+                                <input type="radio" name="quitIntentions" id="notPlanningQuit"
                                     value="none">
                                 Not planning to quit
                             </label>
@@ -669,15 +670,15 @@
                     <div>
                         <label style="width:25%;"><b>E-cigarette/vaping</b></label>
                         <label>
-                            <input type="radio" name="vaping" value="current">
+                            <input type="radio" name="vaping"  id="vapingCurrent" value="current">
                             Current
                         </label>
                         <label>
-                            <input type="radio" name="vaping" value="past">
+                            <input type="radio" name="vaping" id="vapingPast"  value="past">
                             Past
                         </label>
                         <label>
-                            <input type="radio" name="vaping" value="never">
+                            <input type="radio" name="vaping" id="vapingNever"  value="never">
                             Never
                         </label>
                     </div>
@@ -685,15 +686,15 @@
                     <div>
                         <label style="width:25%;"><b>Cannabis use</b></label>
                         <label>
-                            <input type="radio" name="cannabis" value="current">
+                            <input type="radio" name="cannabis" id="cannabisCurrent" value="current">
                             Current
                         </label>
                         <label>
-                            <input type="radio" name="cannabis" value="past">
+                            <input type="radio" name="cannabis" id="cannabisPast" value="past">
                             Past
                         </label>
                         <label>
-                            <input type="radio" name="cannabis" value="never">
+                            <input type="radio" name="cannabis" id="cannabisNever" value="never">
                             Never
                         </label>
                     </div>
@@ -701,15 +702,15 @@
                     <div>
                         <label style="width:25%;"><b>Exposure to second-hand smoke</b></label>
                         <label>
-                            <input type="radio" name="secondHandSmoke" value="current">
+                            <input type="radio" name="secondHandSmoke" id="secondHandSmokeCurrent" value="current">
                             Current
                         </label>
                         <label>
-                            <input type="radio" name="secondHandSmoke" value="past">
+                            <input type="radio" name="secondHandSmoke" id="secondHandSmokePast"  value="past">
                             Past
                         </label>
                         <label>
-                            <input type="radio" name="secondHandSmoke" value="never">
+                            <input type="radio" name="secondHandSmoke" id="secondHandSmokeNever"  value="never">
                             Never
                         </label>
                     </div>
@@ -769,16 +770,16 @@
                                 <b>Respirologist</b>
                             </td>
                             <td>
-                                <label><input type="radio" value="yes" id="SpecialistVisitsRespirologistYes" name="specialistVisitsRespirologist"></label>
+                                <input type="radio" id="specialistVisitsRespirologistYes" name="specialistVisitsRespirologist" value="yes">
                             </td>
                             <td>
-                                <label><input type="radio" value="no" id="SpecialistVisitsRespirologistNo" name="specialistVisitsRespirologist"></label>
+                                <input type="radio" id="specialistVisitsRespirologistNo" name="specialistVisitsRespirologist" value="no">
                             </td>
                             <td>
-                                <label><input type="radio" value="unknown" id="SpecialistVisitsRespirologistUnknown" name="specialistVisitsRespirologist"></label>
+                                <input type="radio" id="specialistVisitsRespirologistUnknown" name="specialistVisitsRespirologist" value="unknown">
                             </td>
                             <td>
-                                <label><input type="checkbox" id="SpecialistVisitsRespirologistRecent" name="specialistVisitsRespirologistRecent"></label>
+                                <input type="checkbox" id="SpecialistVisitsRespirologistRecent" name="specialistVisitsRespirologistRecent">
                             </td>
                         </tr>
                         <tr>
@@ -934,15 +935,15 @@
                         <b>Recent best FEV&#8321; or PEF &#60; 60% predicted</b>
                     </label>
                     <label>
-                        <input type="radio" value="yes" name="recentBest">
+                        <input type="radio" id="recentBestFEV60PredictedYes" value="yes" name="recentBestFEV60Predicted">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" value="no" name="recentBest">
+                        <input type="radio" id="recentBestFEV60PredictedNo" value="no" name="recentBestFEV60Predicted">
                         No
                     </label>
                     <label>
-                        <input type="radio" value="unknown" name="recentBest">
+                        <input type="radio" id="recentBestFEV60PredictedUnknown" value="unknown" name="recentBestFEV60Predicted">
                         Unknown
                     </label>
                     <label>
@@ -954,15 +955,15 @@
                         <b>ICU admissions</b> &le;<b> 1 year</b>
                     </label>
                     <label>
-                        <input type="radio" name="icuAdmissions" value="yes">
+                        <input type="radio" id="icuAdmissionsYes" name="icuAdmissions" value="yes">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" name="icuAdmissions" value="no">
+                        <input type="radio" id="icuAdmissionsNo"  name="icuAdmissions" value="no">
                         No
                     </label>
                     <label>
-                        <input type="radio" name="icuAdmissions" value="unknown">
+                        <input type="radio" id="icuAdmissionsUnknown" name="icuAdmissions" value="unknown">
                         Unknown
                     </label>
                     <label>
@@ -996,15 +997,15 @@
                                 apply.</b></label>
                         <span>&nbsp;&nbsp;
                             <label>
-                                <input type="radio" name="employmentStatus"  value="full">
+                                <input type="radio" id="currentEmploymentStatusFull" name="currentEmploymentStatus"  value="full">
                                 Full-Time
                             </label>
                             <label>
-                                <input type="radio" name="employmentStatus"  value="part">
+                                <input type="radio" id="currentEmploymentStatusPart" name="currentEmploymentStatus"  value="part">
                                 Part-Time
                             </label>                            
                             <label>
-                                <input type="radio" name="employmentStatus" value="retired">
+                                <input type="radio" id="currentEmploymentStatusRetired" name="currentEmploymentStatus" value="retired">
                                 Retired
                             </label>
                             <br />
@@ -1043,11 +1044,11 @@
                     <div>
                         <label style="width:35%"><b>Did your asthma symptoms start at work?</b></label>
                         <label>
-                            <input type="radio" name="workStart" value="yes">
+                            <input type="radio" id="asthmaSymptomsWorkStartYes" name="asthmaSymptomsWorkStart" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="workStart" value="no">
+                            <input type="radio" id="asthmaSymptomsWorkStartNo" name="asthmaSymptomsWorkStart" value="no">
                             No
                         </label>
                     </div>
@@ -1055,11 +1056,11 @@
                     <div>
                         <label style="width:35%"><b>Do/did your asthma symptoms worsen at work?</b></label>
                         <label>
-                            <input type="radio" name="workWorsen" value="yes">
+                            <input type="radio" id="workWorsenYes" name="workWorsen" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="workWorsen" value="no">
+                            <input type="radio" id="workWorsenNo" name="workWorsen" value="no">
                             No
                         </label>
                     </div>
@@ -1067,11 +1068,11 @@
                     <div>
                         <label style="width:35%"><b>Complete © WRASQ(L) © today?</b></label>
                         <label>
-                            <input type="radio" name="completeWrasql" value="yes">
+                            <input type="radio" id="completeWrasqlYes" name="completeWrasql" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="completeWrasql" value="no">
+                            <input type="radio" id="completeWrasqlNo" name="completeWrasql" value="no">
                             No
                         </label>
                     </div>
@@ -1701,7 +1702,7 @@
                                 <label>
                                     Strength:
                                     <select name="enerzairBreehalerStrength" id="enerzairBreehalerStrength"
-                                        v-model="enerzairBreehaler" style="width: 90px">
+                                        v-model="enerzairBreehalerStrength" style="width: 90px">
                                         <option value=""></option>
                                         <option value="50.0">50mcg</option>
                                         <option value="150.0">150mcg</option>                                        
@@ -2016,13 +2017,13 @@
                                 <b>Is patient using inhaled corticosteroids (ICS)?</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="ics" value="yes" id="isUsing_Inhaled_ICS"></label>
+                                <label><input type="radio" name="usingIcs" value="yes" id="isUsing_Inhaled_ICS"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="ics" value="no"></label>
+                                <label><input type="radio" name="usingIcs" value="no" id="usingIcsNo"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="ics" value="unknown"></label>
+                                <label><input type="radio" name="usingIcs" value="unknown" id="usingIcsUnknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2030,13 +2031,13 @@
                                 <b>Beta-Blockers </b>
                             </td>
                             <td>
-                                <label><input type="radio" name="betaBlockers" value="yes"></label>
+                                <label><input type="radio" name="betaBlockers" value="yes" id="betaBlockersYes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="betaBlockers" value="no"></label>
+                                <label><input type="radio" name="betaBlockers" value="no" id="betaBlockersNo"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="betaBlockers" value="unknown"></label>
+                                <label><input type="radio" name="betaBlockers" value="unknown" id="betaBlockersUnknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2044,13 +2045,13 @@
                                 <b>NSAIDS</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="nsaids" value="yes"></label>
+                                <label><input type="radio" name="nsaids" value="yes" id="nsaidsYes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="nsaids" value="no"></label>
+                                <label><input type="radio" name="nsaids" value="no" id="nsaidsNo"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="nsaids" value="unknown"></label>
+                                <label><input type="radio" name="nsaids" value="unknown" id="nsaidsUnknown" ></label>
                             </td>
                         </tr>
                         <tr>
@@ -2058,13 +2059,13 @@
                                 <b>Patient has a spacing device</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="spacingDevice" value="yes"></label>
+                                <label><input type="radio" name="spacingDevice" value="yes" id="spacingDeviceYes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="spacingDevice" value="no"></label>
+                                <label><input type="radio" name="spacingDevice" value="no" id="spacingDeviceNo"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="spacingDevice" value="unknown"></label>
+                                <label><input type="radio" name="spacingDevice" value="unknown" id="spacingDeviceUnknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2073,13 +2074,13 @@
                                     used?</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="spacingDeviceAllowed" value="yes"></label>
+                                <label><input type="radio" name="spacingDeviceAllowed" value="yes" id="spacingDeviceAllowedYes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="spacingDeviceAllowed" value="no"></label>
+                                <label><input type="radio" name="spacingDeviceAllowed" value="no" id="spacingDeviceAllowedNo"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="spacingDeviceAllowed" value="unknown"></label>
+                                <label><input type="radio" name="spacingDeviceAllowed" value="unknown" id="spacingDeviceAllowedUnknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2087,13 +2088,13 @@
                                 <b>Adherence issues known or suspected</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="adherenceIssues" value="yes"></label>
+                                <label><input type="radio" name="adherenceIssues" value="yes" id="adherenceIssuesYes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="adherenceIssues" value="no"></label>
+                                <label><input type="radio" name="adherenceIssues" value="no" id="adherenceIssuesNo"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="adherenceIssues" value="unknown"></label>
+                                <label><input type="radio" name="adherenceIssues" value="unknown" id="adherenceIssuesUnknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2105,13 +2106,13 @@
                                     not obtained.)</i>
                             </td>
                             <td>
-                                <label><input type="radio" name="unfilledPrescriptions" value="yes"></label>
+                                <label><input type="radio" name="unfilledPrescriptions" value="yes" id="unfilledPrescriptionsYes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="unfilledPrescriptions" value="no"></label>
+                                <label><input type="radio" name="unfilledPrescriptions" value="no" id="unfilledPrescriptionsNo"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="unfilledPrescriptions" value="unknown"></label>
+                                <label><input type="radio" name="unfilledPrescriptions" value="unknown" id="unfilledPrescriptionsUnknown"></label>
                             </td>
                         </tr>
                     </table>
@@ -2120,7 +2121,7 @@
                         <label><b>Number of inhaled corticosteroid prescriptions
                                 filled in the last year</b></label>
                         <label>
-                            <input type="text" style="width:30px;" name="numInhaledCorticosteroid" placeholder="#"
+                            <input type="text" style="width:30px;" name="inhaledCorticosteroidFilledLastYear" placeholder="#"
                                 id="selfReported_ICS_last12mos"></label>
                         <label><i>(Prescription = one month supply)</i></label>
 
@@ -2129,7 +2130,7 @@
                     <div>
                         <label style="width:35%"><b>Short-Acting Beta Agonists use</b></label>
                         <label>
-                            <select name="saba" id="saba">
+                            <select name="sabaUse" id="sabaUse">
                                 <option value="unknown">Unknown</option>
                                 <option value="less-than-1">&#60; 1 canister a month</option>
                                 <option value="1-2">1-2 canister(s) a month</option>
@@ -2150,15 +2151,15 @@
                     <div>
                         <label style="width:35%"><b>Systemic steroid use ever</b></label>
                         <label>
-                            <input type="radio" name="systemicSteroid" value="yes">
+                            <input type="radio" name="systemicSteroidEver" value="yes" id="systemicSteroidEverYes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="systemicSteroid" value="no">
+                            <input type="radio" name="systemicSteroidEver" value="no" id="systemicSteroidEverNo">
                             No
                         </label>
                         <label>
-                            <input type="radio" name="systemicSteroid" value="unknown">
+                            <input type="radio" name="systemicSteroidEver" value="unknown" id="systemicSteroidEverUnknown">
                             Unknown
                         </label>
                     </div>
@@ -2167,15 +2168,15 @@
                     <div>
                         <label style="width:35%"><b>If yes, indication for systemic steroid use</b></label>
                         <label>
-                            <input type="radio" name="steroidIndication" value="asthma">
+                            <input type="radio" name="steroidIndication" value="asthma" id="steroidIndicationAsthma">
                             Asthma
                         </label>
                         <label>
-                            <input type="radio" name="steroidIndication" value="copd">
+                            <input type="radio" name="steroidIndication" value="copd" id="steroidIndicationCOPD">
                             COPD
                         </label>
                         <label>
-                            <input type="radio" name="steroidIndication" value="both">
+                            <input type="radio" name="steroidIndication" value="both" id="steroidIndicationBoth">
                             Both
                         </label>
                     </div>
@@ -2197,15 +2198,15 @@
                         <label><b>Systemic steroid used for 50% of the previous year</b>
                         </label>
                         <label>
-                            <input type="radio" name="corticosteroidUsedPreviousYear" value="yes" > <!-- TESTME checked-->
+                            <input type="radio" name="corticosteroidUsedPreviousYear" id="corticosteroidUsedPreviousYearYes" value="yes" >
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="corticosteroidUsedPreviousYear" value="no">
+                            <input type="radio" name="corticosteroidUsedPreviousYear" id="corticosteroidUsedPreviousYearNo" value="no">
                             No
                         </label>
                         <label>
-                            <input type="radio" name="corticosteroidUsedPreviousYear" value="unknown">
+                            <input type="radio" name="corticosteroidUsedPreviousYear" id="corticosteroidUsedPreviousYearUnknown" value="unknown">
                             Unknown
                         </label>
                     </div>
@@ -2272,7 +2273,7 @@
                     <div>
                         <label style="width:32%"><b>Exacerbations since last visit</b></label>
                         <label>
-                            <input type="radio" name="exacerbationsSinceLast" value="yes"
+                            <input type="radio" name="exacerbationsSinceLast" value="yes" id="exacerbationsSinceLastYes"
                                 onchange="calcIsControlled()">Yes
                         </label>
                         <label>
@@ -2334,10 +2335,10 @@
                     <div>
                         <label style="width:32%"><b>Sputum eosinophils</b></label>
                         <label>
-                            <input type="radio" name="sputumEosinophils" value="yes">Yes
+                            <input type="radio" name="sputumEosinophils" id="sputumEosinophilsYes" value="yes">Yes
                         </label>
                         <label>
-                            <input type="radio" name="sputumEosinophils" value="no">No
+                            <input type="radio" name="sputumEosinophils" id="sputumEosinophilsNo" value="no">No
                         </label>
                         &nbsp;&nbsp;&nbsp;
                         <input type="text" placeholder="%" style="width:40px" name="sputumEosinophilsControl" id="sputumEosinophilsControl" onchange="calcIsControlled()">
@@ -2361,10 +2362,10 @@
                     <div>
                         <label><b>PEF Diurnal Variation <15% Over A 2 Week Period</b></label>
                         <label>
-                            <input type="radio" value="yes" name="PEVDiurnalVariation" onclick="calcIsControlled()">Yes
+                            <input type="radio" value="yes" id="PEVDiurnalVariationYes" name="PEVDiurnalVariation" onclick="calcIsControlled()">Yes
                         </label>
                         <label>
-                            <input type="radio" value="no" name="PEVDiurnalVariation" onclick="calcIsControlled()">No
+                            <input type="radio" value="no" id="PEVDiurnalVariationNo" name="PEVDiurnalVariation" onclick="calcIsControlled()">No
                         </label>
                     </div>
                     <hr style="margin:2px 0px 2px 0px">
@@ -2381,7 +2382,7 @@
                                 id="asthmaControlled" value="yes">Yes
                         </label>
                         <label v-show="false">
-                            <input type="radio"  name="asthmaControlled" v-model="asthmaControlled"
+                            <input type="radio" id="asthmaControlledNo"  name="asthmaControlled" v-model="asthmaControlled"
                                 value="no">No
                         </label>
                         <input id="hdnAsthmaControlled" name="hdnAsthmaControlled" type="hidden">
@@ -2420,11 +2421,11 @@
                                 <b>Device Technique Assessed</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="techniqueAssessed" value="yes"
+                                <label><input type="radio" name="techniqueAssessed"  value="yes"
                                         id="Demonstrated_Correct_Technique"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="techniqueAssessed" value="no"></label>
+                                <label><input type="radio" name="techniqueAssessed" id="techniqueAssessedNo" value="no"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2432,11 +2433,11 @@
                                 <b>Device Technique Corrected</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="techniqueCorrected" value="yes"
+                                <label><input type="radio" name="techniqueCorrected"  value="yes"
                                         id="Demonstrated_Corrected"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="techniqueCorrected" value="no"></label>
+                                <label><input type="radio" name="techniqueCorrected" id="techniqueCorrectedNo" value="no"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2444,10 +2445,10 @@
                                 <b>Triggers addressed</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="triggersAddressed" value="yes"></label>
+                                <label><input type="radio" name="triggersAddressed" id="triggersAddressedYes" value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="triggersAddressed" value="no"></label>
+                                <label><input type="radio" name="triggersAddressed" id="triggersAddressedNo" value="no"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2455,10 +2456,10 @@
                                 <b>Environmental controls reviewed</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="environmentalControlsReviewed" value="yes"></label>
+                                <label><input type="radio" name="environmentalControlsReviewed" id="environmentalControlsReviewedYes" value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="environmentalControlsReviewed" value="no"></label>
+                                <label><input type="radio" name="environmentalControlsReviewed" id="environmentalControlsReviewedNo" value="no"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2466,10 +2467,10 @@
                                 <b>Barriers addressed</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="barriersAddressed" value="yes"></label>
+                                <label><input type="radio" name="barriersAddressed" id="barriersAddressedYes" value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="barriersAddressed" value="no"></label>
+                                <label><input type="radio" name="barriersAddressed" id="barriersAddressedNo" value="no"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2481,7 +2482,7 @@
                                         value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="referralToEducation" value="no"></label>
+                                <label><input type="radio" name="referralToEducation" id="ReferredToCAENo" value="no"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2489,11 +2490,11 @@
                                 <b>Expected Severe Asthma</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="expectedSevereAsthma" 
+                                <label><input type="radio" name="expectedSevereAsthma" id="expectedSevereAsthmaYes"
                                         value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="expectedSevereAsthma" value="no"></label>
+                                <label><input type="radio" name="expectedSevereAsthma" id="expectedSevereAsthmaNo" value="no"></label>
                             </td>
                         </tr>
                         <tr>
@@ -2501,11 +2502,11 @@
                                 <b>Referred to Asthma Specialist for Suspected Severe Asthma</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="referredSpecialistSuspectedSevereAsthma"
+                                <label><input type="radio" name="referredSpecialistSuspectedSevereAsthma" id="referredSpecialistSuspectedSevereAsthmaYes"
                                         value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="referredSpecialistSuspectedSevereAsthma" value="no"></label>
+                                <label><input type="radio" name="referredSpecialistSuspectedSevereAsthma" id="referredSpecialistSuspectedSevereAsthmaNo" value="no"></label>
                             </td>
                         </tr>
                     </table>
@@ -2538,14 +2539,14 @@
                                 <b>Written asthma action plan provided</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="writtenPlanProvided" id="writtenPlanProvidedYes"
+                                <label><input type="radio" name="actionPlanProvided" id="writtenPlanProvidedYes"
                                         value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="writtenPlanProvided" value="no"></label>
+                                <label><input type="radio" name="actionPlanProvided" id="writtenPlanProvidedNo" value="no"></label>
                             </td>
                             <td>
-                                <label><input type="text" name="writtenPlanProvidedDate"
+                                <label><input type="text" name="actionPlanProvidedDate"
                                         placeholder="YYYY/MM/DD"></label>
                             </td>
                         </tr>
@@ -2554,14 +2555,14 @@
                                 <b>Written asthma action plan revised</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="writtenPlanRevised" id="writtenPlanRevisedYes"
+                                <label><input type="radio" name="actionPlanWrittenPlanRevised" id="writtenPlanRevisedYes"
                                         value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="writtenPlanRevised" value="no"></label>
+                                <label><input type="radio" name="actionPlanWrittenPlanRevised" id="writtenPlanRevisedNo" value="no"></label>
                             </td>
                             <td>
-                                <label><input type="text" name="writtenPlanRevisedDate"
+                                <label><input type="text" name="actionPlanWrittenPlanRevisedDate"
                                         placeholder="YYYY/MM/DD"></label>
                             </td>
                         </tr>
@@ -2570,14 +2571,14 @@
                                 <b>Asthma action plan reviewed & not changed</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="reviewedNotChanged" id="reviewedNotChangedYes"
+                                <label><input type="radio" name="actionPlanReviewedNotChanged" id="reviewedNotChangedYes"
                                         value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="reviewedNotChanged" value="no"></label>
+                                <label><input type="radio" name="actionPlanReviewedNotChanged" id="reviewedNotChangedNo" value="no"></label>
                             </td>
                             <td>
-                                <label><input type="text" name="reviewedNotChangedDate"
+                                <label><input type="text" name="actionPlanReviewedNotChangedDate"
                                         placeholder="YYYY/MM/DD"></label>
                             </td>
                         </tr>
@@ -2586,13 +2587,13 @@
                                 <b>Yellow or red zone of action plan followed since last visit</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="yellowOrRed" value="yes"></label>
+                                <label><input id="yellowOrRedActionPlanLastVisitYes" type="radio" name="yellowOrRedActionPlanLastVisit" value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="yellowOrRed" value="no"></label>
+                                <label><input id="yellowOrRedActionPlanLastVisitNo" type="radio" name="yellowOrRedActionPlanLastVisit" value="no"></label>
                             </td>
                             <td>
-                                <label><input type="text" name="yellowOrRedDate" placeholder="# of times"></label>
+                                <label><input type="text" name="yellowOrRedActionPlanLastVisitDate" placeholder="# of times"></label>
                             </td>
                         </tr>
                     </table>
@@ -2618,15 +2619,15 @@
                     <hr style="margin:2px 0px 2px 0px">
                     <div>
                         <label>
-                            <input type="radio" name="controlZone" value="green">
+                            <input type="radio" name="controlZone" id="controlZoneGreen" value="green">
                             <b>Green</b>
                         </label>
                         <label>
-                            <input type="radio" name="controlZone" value="yellow">
+                            <input type="radio" name="controlZone" id="controlZoneYellow" value="yellow">
                             <b>Yellow</b>
                         </label>
                         <label>
-                            <input type="radio" name="controlZone" value="red">
+                            <input type="radio" name="controlZone"  id="controlZoneRed" value="red">
                             <b>Red</b>
                         </label>
                     </div>
@@ -2658,18 +2659,18 @@
                         Yes
                     </label>
                     <label>
-                        <input type="radio" name="spirometryLast12" value="no">
+                        <input type="radio" name="spirometryLast12" id="spirometryLast12No" value="no">
                         No
                     </label>
 
                     <hr style="margin:2px 0px 2px 0px">
                     <label style="width:45%"><b>Persistent airflow obstruction</b></label>
                     <label>
-                        <input type="radio" name="persistentAirflowObstruction" value="yes">
+                        <input type="radio" name="persistentAirflowObstruction" id="persistentAirflowObstructionYes" value="yes">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" name="persistentAirflowObstruction" value="no">
+                        <input type="radio" name="persistentAirflowObstruction" id="persistentAirflowObstructionNo" value="no">
                         No
                     </label>
                     <label> <i>
@@ -2700,11 +2701,11 @@
                     <label style="width:45%"><b>Quality of Life assessment completed
                         </b></label>
                     <label>
-                        <input type="radio" name="qualityAssessmentCompleted" value="yes">
+                        <input type="radio" name="QOLAssessmentCompleted" id="QOLAssessmentCompletedYes" value="yes">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" name="qualityAssessmentCompleted" value="no">
+                        <input type="radio" name="QOLAssessmentCompleted" id="QOLAssessmentCompletedNo" value="no">
                         No
                     </label>
                     <input type="text" name="qualityAssessmentScore" placeholder="#"
@@ -2713,34 +2714,34 @@
                     <label style="width:45%"><b>Yellow or Red Zone of Action plan followed since last visit
                         </b></label>
                     <label>
-                        <input type="radio" name="actionPlanSinceLast" value="yes">
+                        <input type="radio" name="yellowRedActionPlanSinceLast" id="yellowRedActionPlanSinceLastYes" value="yes">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" name="actionPlanSinceLast" value="no">
+                        <input type="radio" name="yellowRedActionPlanSinceLast" id="yellowRedActionPlanSinceLastNo" value="no">
                         No
                     </label>
-                    <input type="text" name="actionPlanSinceLastNum" placeholder="# of times"
+                    <input type="text" name="yellowRedActionPlanSinceLastNum" placeholder="# of times"
                         style="width:80px; margin-left: 20px;">
                     <hr style="margin:2px 0px 2px 0px">
                     <label style="width:45%"><b>Mini Asthma Quality of Life Questionnaire score
                         </b></label>
-                    <input type="text" name="questionnaireScore" min="1" max="7" placeholder="#">
+                    <input type="text" name="miniAsthmaQOLQuestionnaireScore" min="1" max="7" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Asthma Control Questionnaire score
                         </b></label>
-                    <input type="text" id="controlScore"name="controlScore" min="0" max="6" placeholder="#">
+                    <input type="text" id="asthmaControlQuestionnaireScore" name="asthmaControlQuestionnaireScore" min="0" max="6" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Asthma Control Test score
                         </b></label>
-                    <input type="text" id ='controlTestScore' name="controlTestScore" min="5" max="25" placeholder="#">
+                    <input type="text" id ='controlTestScore' name="asthmaControlTestScore" min="5" max="25" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Child Asthma Control Test score
                         </b></label>
-                    <input style="margin-bottom: 5px;" type="text" id="childScore" name="childScore" min="0" max="27"
+                    <input style="margin-bottom: 5px;" type="text" id="childScore" name="childAsthmaControlTestScore" min="0" max="27"
                         placeholder="#">
                 </div>
             </div>
@@ -2753,48 +2754,54 @@
         
     </form>
 
-<script type="text/javascript">
-
-if (!Array.prototype.includess) {
-    Array.prototype.includess = function(search, start) {
-      'use strict';
-      if (typeof start !== 'number') {
-        start = 0;
-      }
-  
-      if (start + search.length > this.length) {
-        return false;
-      } else {
-        return this.indexOf(search, start) !== -1;
-      }
-    };
-  }
-
-</script>
 
     <!-------Script to optimize window on loading----------->
-	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/lib/vue.js"></script>
     <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/lib/lodash.js"></script>
     <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/lib/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/lib/growl/growl-notification.min.js"></script>
 
-     <script type="text/javascript" src="js/algorithm/SevereAlgorithm.js"></script>
-    <script type="text/javascript" src="js/algorithm/Form.js"></script>
 
-    <!-- <script type="text/javascript" src="https://jmcauley.com/oscar/js/algorithm/SevereAlgorithm.js?v=10"></script>
-    <script type="text/javascript" src="https://jmcauley.com/oscar/js/algorithm/Form.js?v=10"></script> -->
+    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/algorithm/SevereAlgorithm.js"></script>
+    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js"></script>
 
-    <script>
-         //$.getScript("https://asthmalife.ca/eAPI/assets/js/algorithm/SevereAlgorithm.js");
-        // $.getScript("https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js");
-        
-        // $.getScript("https://jmcauley.com/oscar/js/algorithm/SevereAlgorithm.js");
-        // $.getScript("https://jmcauley.com/oscar/js/algorithm/Form.js");
+    <!-- <script>
+            $(window).on( "load", function() {
+                $.getScript("https://asthmalife.ca/eAPI/assets/js/algorithm/SevereAlgorithm.js");
+                $.getScript("https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js");
+            });        
+    </script> -->
 
-        //https://jmcauley.com/oscar/css/styles.css
+<script>
+
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
 
 
-    </script>
+const excludeItems = ['undefined', undefined, "SubmitButton", "EMR_PatientID", "EMR_eAPIID"]
+
+     var arr =[];
+    $("input, select").each(function(){
+    
+        arr.push($(this).attr('name'));
+    });
+    
+    var unique = arr.filter(onlyUnique);
+    var str;
+    unique.forEach(function(item){
+        if(!excludeItems.includes(item))
+        str += item +','
+    }
+    )
+
+    console.log(str.substring(0, str.length - 1));
+
+
+
+
+</script>
+
 
 </body>
 </html>

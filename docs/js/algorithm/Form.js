@@ -372,28 +372,28 @@ beforeSubmit = function () {
     $("#initialSubmitButton").val("Saving...");
     $("#initialSubmitButton").prop('disabled', true);
 
-    // $.ajax({
-    //     type: 'POST',
-    //     url: API_URL,
-    //     data: JSON.stringify(asthmaLifePayload),
-    //     success: function() {                    
-    //         $("#initialSubmitButton").val("Save & Close");
-    //         $("#initialSubmitButton").prop('disabled', false);
-    //         $("#PAAF").submit();                    
-    //     },                
-    //     error: function() {
-    //         $("#initialSubmitButton").val("Save & Close");
-    //         $("#initialSubmitButton").prop('disabled', false);
-    //         $("#PAAF").submit();
-    //     },
-    //     fail: function() {                    
-    //         $("#initialSubmitButton").val("Save & Close");
-    //         $("#initialSubmitButton").prop('disabled', false);
-    //         $("#PAAF").submit();
-    //     },
-    //     contentType: "application/json",
-    //     dataType: 'JSON'
-    //     });
+    $.ajax({
+        type: 'POST',
+        url: API_URL,
+        data: JSON.stringify(asthmaLifePayload),
+        success: function() {                    
+            $("#initialSubmitButton").val("Save & Close");
+            $("#initialSubmitButton").prop('disabled', false);
+            $("#PAAF").submit();                    
+        },                
+        error: function() {
+            $("#initialSubmitButton").val("Save & Close");
+            $("#initialSubmitButton").prop('disabled', false);
+            $("#PAAF").submit();
+        },
+        fail: function() {                    
+            $("#initialSubmitButton").val("Save & Close");
+            $("#initialSubmitButton").prop('disabled', false);
+            $("#PAAF").submit();
+        },
+        contentType: "application/json",
+        dataType: 'JSON'
+        });
 
         // $("#initialSubmitButton").val("Save & Close");
         //     $("#initialSubmitButton").prop('disabled', false);

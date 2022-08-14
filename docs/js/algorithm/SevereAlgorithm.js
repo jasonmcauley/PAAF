@@ -7,7 +7,7 @@
     
     const _isAdult = true;
 
-    $(document).ready(function(){        
+    //$(document).ready(function(){        
         // $.ajax({
         //     url: 'MedData.json',
         //     dataType: 'json',
@@ -17,7 +17,7 @@
         //         _Medications = data;
         //     }
         // });
-
+        
         
         /* ***********************************************************************/
         // Comment out two function calls below to disable algorithm from running//
@@ -34,7 +34,7 @@
 
         
 
-    });
+    //});
 
 
    
@@ -96,7 +96,7 @@
             $("#severe-asthma-prompt").data("prompt-section-open", true);
 
             // Set field values for saving into OSCAR
-            $("#IsSevere").val(objPrompt.IsSevere); /// NEED TO TEST THIS STILL
+            $("#IsSevere").val(objPrompt.IsSevere); 
             $("#PromptId").val(objPrompt.PromptId);
             $("#PromptText").val(promptText);
         }
@@ -115,7 +115,7 @@
         }
     }
     
-    function _isAsthmaControlled() {
+    function _isAsthmaControlled() {        
         let isControlled;
         if ($('#hdnAsthmaControlled').val().length > 0){
             isControlled = ($('#hdnAsthmaControlled').val() === 'true');
@@ -141,9 +141,7 @@
     }
 
 
-    function _specialistSectionInit() {      
-        //debugger;  
-        //console.log('INIT', $("#SeenSpecialistReason").val());
+    function _specialistSectionInit() {              
         if($("#SeenSpecialistReason").val() != -1){
             _showSpecialistSeenSection(true);
         }
@@ -189,7 +187,7 @@
             $("#specialist-seen-date").show();
         }
         else{
-            $("#SpecialistSeenYear").val("");
+            //$("#SpecialistSeenYear").val("");
             $("#specialist-seen-date").hide();
         }
     }
@@ -340,69 +338,76 @@
     }
 
     function _BindAlgorithmTriggerEvents() {
-        // Medication checkbox event binding
-        $('.med-calc-section input[type=checkbox]').each(function() {
-            $(this).click(function(e) {
+
+
+        setTimeout(function(){
+            // Medication checkbox event binding
+            $('.med-calc-section input[type=checkbox]').each(function() {
+                $(this).click(function(e) {
+                    TriggerAlgorithm();
+                })
+            });
+
+            // Stength / Dose / Frequency event binding 
+            $(".med-calc-section select").each(function(index){
+                $(this).blur(function(e) {
+                    TriggerAlgorithm();
+                })
+            });
+
+            $("#controlContent input").each(function(index){
+                $(this).blur(function(e) {
+                    console.log('control blur')
+                    TriggerAlgorithm();
+                })
+            });
+
+            $('input[name=diagnosis]').click(function(){
                 TriggerAlgorithm();
-            })
-        });
+            });
 
-        // Stength / Dose / Frequency event binding 
-        $(".med-calc-section select").each(function(index){
-            $(this).blur(function(e) {
+            $('input[name=corticosteroidUsedPreviousYear]').click(function(){
                 TriggerAlgorithm();
-            })
-        });
+            });
 
-        $("#controlContent input").each(function(index){
-            $(this).blur(function(e) {
+            $('input[name=asthmaControlTestScore]').blur(function(){
                 TriggerAlgorithm();
-            })
-        });
+            });
 
-        $('input[name=diagnosis]').click(function(){
-            TriggerAlgorithm();
-        });
+            $('#asthmaControlQuestionnaireScore').blur(function(){
+                TriggerAlgorithm();
+            });
 
-        $('input[name=corticosteroidUsedPreviousYear]').click(function(){
-            TriggerAlgorithm();
-        });
+            console.log($('input[name=childAsthmaControlTestScore]').attr('id'));
+            $('input[name=childAsthmaControlTestScore]').blur(function(){
+                console.log('in blur');
+                TriggerAlgorithm();
+            });
 
-        $('input[name=controlTestScore]').blur(function(){
-            TriggerAlgorithm();
-        });
+            $('input[name=persistentAirflowObstruction]').click(function(){
+                TriggerAlgorithm();
+            });
 
-        $('input[name=controlScore]').blur(function(){
-            TriggerAlgorithm();
-        });
+            $('input[name=numSystemicSteroidLastYear]').blur(function(){
+                TriggerAlgorithm();
+            });
 
-        $('input[name=childScore]').blur(function(){
-            TriggerAlgorithm();
-        });
+            $('input[name=hospitalizedLastYear]').blur(function(){
+                TriggerAlgorithm();
+            });
+            
+            $('input[name=nearFatalEpisodeLastYear]').blur(function(){
+                TriggerAlgorithm();
+            });
 
-        $('input[name=persistentAirflowObstruction]').click(function(){
-            TriggerAlgorithm();
-        });
+            $('input[name=icuAdmissions]').click(function(){
+                TriggerAlgorithm();
+            });
 
-        $('input[name=numSystemicSteroidLastYear]').blur(function(){
-            TriggerAlgorithm();
-        });
-
-        $('input[name=hospitalizedLastYear]').blur(function(){
-            TriggerAlgorithm();
-        });
-        
-        $('input[name=nearFatalEpisodeLastYear]').blur(function(){
-            TriggerAlgorithm();
-        });
-
-        $('input[name=icuAdmissions]').click(function(){
-            TriggerAlgorithm();
-        });
-
-        $('#dob').blur(function(){
-            TriggerAlgorithm();
-        })
+            $('#dob').blur(function(){
+                TriggerAlgorithm();
+            });
+        }, 750);
 
     }
 

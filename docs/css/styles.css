@@ -210,6 +210,11 @@ tr label {
 .specialist-seen-date {
     font-size: 14px;
     margin-left: 25px;
+    display: inline;
+}
+
+.SeenSpecialistReason{
+    display: inline;
 }
 
 @media print {
