@@ -369,8 +369,6 @@ beforeSubmit = function () {
 
     //console.log(JSON.stringify(asthmaLifePayload));
 
-    prepRadio();
-
     $("#initialSubmitButton").val("Saving...");
     $("#initialSubmitButton").prop('disabled', true);
 
@@ -402,23 +400,6 @@ beforeSubmit = function () {
         //     $("#PAAF").submit();     
 }
 
-prepRadio = function() {
-    
-    $("#PAAF input[type=radio]:checked").each(function() {
-        var input = document.createElement("input");
-        input.setAttribute("type", "hidden");
-        input.setAttribute("name", this.name);
-        input.setAttribute("value", this.value);        
-        document.getElementById("hiddenfields").appendChild(input);
-    });
-
-    $("#PAAF input[type=radio]").each(function() {
-        $(this).attr('name', '');
-    });
-
-    $("#PAAF").submit();     
-
-}
 
 
 resetEncounterDate = function () {
