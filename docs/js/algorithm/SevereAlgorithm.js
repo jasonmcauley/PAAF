@@ -46,18 +46,6 @@
 
     function _getPromptObject() {
         return _.find(_DecisionSupport, function(s) {            
-            // if(_getDiagnosisType() === 'CONFIRMED') {                
-            //     return s.DiagnosisStatus.includes(_getDiagnosisType()) && 
-            //            s.AsthmaControlled == _isAsthmaControlled() && 
-            //            (s.HighDoseICS == _medSevere() || s.HighDoseICS == null) && 
-            //            s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere();
-            // }
-            // else {
-            //     // Unconfirmed diagnosis types will display prompt if any of the three primary categories are problem
-            //     return  s.DiagnosisStatus.includes(_getDiagnosisType()) &&                          
-            //             (s.AsthmaControlled == _isAsthmaControlled() || s.HighDoseICS == _medSevere() || s.SystemicSteroidPreviousYear == _isSystemicSteroidSevere());
-            // }
-
             if(_getDiagnosisType() === 'CONFIRMED') {                
                 return s.DiagnosisStatus.indexOf(_getDiagnosisType()) != -1 && 
                        s.AsthmaControlled == _isAsthmaControlled() && 
@@ -356,8 +344,7 @@
             });
 
             $("#controlContent input").each(function(index){
-                $(this).blur(function(e) {
-                    console.log('control blur')
+                $(this).blur(function(e) {                    
                     TriggerAlgorithm();
                 })
             });
@@ -379,8 +366,7 @@
             });
 
             console.log($('input[name=childAsthmaControlTestScore]').attr('id'));
-            $('input[name=childAsthmaControlTestScore]').blur(function(){
-                console.log('in blur');
+            $('input[name=childAsthmaControlTestScore]').blur(function(){                
                 TriggerAlgorithm();
             });
 

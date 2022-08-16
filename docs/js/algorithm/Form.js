@@ -395,9 +395,7 @@ beforeSubmit = function () {
         dataType: 'JSON'
         });
 
-        // $("#initialSubmitButton").val("Save & Close");
-        //     $("#initialSubmitButton").prop('disabled', false);
-        //     $("#PAAF").submit();     
+       
 }
 
 
