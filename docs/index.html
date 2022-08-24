@@ -12,7 +12,7 @@
                 </div>
                 <div id="SeenSpecialistSection" class="severe-specialist-section">
                     <select id="SeenSpecialistReason"  name="SeenSpecialistStatusId" class="SeenSpecialistReason" onchange="ShowSpecialistSeenDate()" style="display:inline;">
-                        <option value=" ">- Specialist Referral Status - </option>
+                        <option value="-1">- Specialist Referral Status - </option>
                         <option value="1">Referral sent to asthma specialist</option>                        
                         <option value="2">Patient seen by asthma specialist</option>
                         <option value="3">N/A - Patient being followed by an asthma specialist</option>
@@ -39,7 +39,7 @@
                             <option value="NOV">November</option>
                             <option value="DEC">December</option>
                         </select>
-                        <input id="SpecialistSeenYear" class="SpecialistSeenYear" name="SpecialistSeenYear" type="number" placeholder="YYYY" maxlength="4"/>
+                        <input type="text" id="SpecialistSeenYear" class="SpecialistSeenYear" name="SpecialistSeenYear"  placeholder="YYYY" />
                     </div>
                 </div>
                 
@@ -283,7 +283,7 @@
                                     <b>Documentation of airflow obstruction</b>
                                 </td>
                                 <td style="text-align: left; border-right: none; border-bottom: none;">
-                                    <input type="checkbox" name="PreferredWheezingAirflowObservHCP">
+                                    <input type="checkbox" name="PrefWheezingAirflowObservHCP">
                                 </td>
                                 <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
                                     <i>Preferred</i><br>
@@ -293,7 +293,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align: left; border-right: none;">
-                                    <input type="checkbox" name="AlternativeParentalReportWheezingOther">
+                                    <input type="checkbox" name="AltParentalReportWheezeOther">
 
                                 </td>
                                 <td style="text-align: left; border-left: none; padding-left: 5px">
@@ -309,7 +309,7 @@
                                     <b>Documentation of reversibility of airflow obstruction</b>
                                 </td>
                                 <td style="text-align: left; border-right: none; border-bottom: none;">
-                                    <input type="checkbox" name="AlternativeDocumentationReversibilityAirflow">
+                                    <input type="checkbox" name="AltDocumentationRevAirflow">
 
                                 </td>
                                 <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
@@ -319,7 +319,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align: left; border-right: none; border-bottom: none;">
-                                    <input type="checkbox" name="AlternativeResponseAntiInflammatory">
+                                    <input type="checkbox" name="AltResponseAntiInflammatory">
 
                                 </td>
                                 <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
@@ -333,7 +333,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align: left; border-right: none;">
-                                    <div><input type="checkbox" name="AlternativeResponseBronchodilator">
+                                    <div><input type="checkbox" name="AltResponseBronchodilator">
                                     </div>
 
                                 </td>
@@ -770,16 +770,16 @@
                                 <b>Respirologist</b>
                             </td>
                             <td>
-                                <input type="radio" id="specialistVisitsRespirologistYes" name="specialistVisitsRespirologist" value="yes">
+                                <input type="radio" id="specialistVisitsRespirologistYes" name="specialistVisitsResp" value="yes">
                             </td>
                             <td>
-                                <input type="radio" id="specialistVisitsRespirologistNo" name="specialistVisitsRespirologist" value="no">
+                                <input type="radio" id="specialistVisitsRespirologistNo" name="specialistVisitsResp" value="no">
                             </td>
                             <td>
-                                <input type="radio" id="specialistVisitsRespirologistUnknown" name="specialistVisitsRespirologist" value="unknown">
+                                <input type="radio" id="specialistVisitsRespirologistUnknown" name="specialistVisitsResp" value="unknown">
                             </td>
                             <td>
-                                <input type="checkbox" id="SpecialistVisitsRespirologistRecent" name="specialistVisitsRespirologistRecent">
+                                <input type="checkbox" id="SpecialistVisitsRespirologistRecent" name="specialistVisitsRespRecent">
                             </td>
                         </tr>
                         <tr>
@@ -787,16 +787,16 @@
                                 <b>General Internist</b>
                             </td>
                             <td>
-                                <label><input type="radio" value="yes" id="generalInternistYes" name="specialistVisitsGeneralInternist"></label>
+                                <label><input type="radio" value="yes" id="generalInternistYes" name="specialistVisitsGenInt"></label>
                             </td>
                             <td>
-                                <label><input type="radio" value="no" id="generalInternistNo" name="specialistVisitsGeneralInternist"></label>
+                                <label><input type="radio" value="no" id="generalInternistNo" name="specialistVisitsGenInt"></label>
                             </td>
                             <td>
-                                <label><input type="radio" value="unknown" id="generalInternistUnknown" name="specialistVisitsGeneralInternist"></label>
+                                <label><input type="radio" value="unknown" id="generalInternistUnknown" name="specialistVisitsGenInt"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" id="generalInternistRecent" name="specialistVisitsGeneralInternistRecent"></label>
+                                <label><input type="checkbox" id="generalInternistRecent" name="specialistVisitsGeneralIntRecent"></label>
                             </td>
                         </tr>
                         <tr>
@@ -804,16 +804,16 @@
                                 <b>Allergist</b>
                             </td>
                             <td>
-                                <label><input type="radio" value="yes" id="allergistYes" name="specialistVisitsAllergist"></label>
+                                <label><input type="radio" value="yes" id="allergistYes" name="specialistVisitsAllerg"></label>
                             </td>
                             <td>
-                                <label><input type="radio" value="no" id="allergistNo" name="specialistVisitsAllergist"></label>
+                                <label><input type="radio" value="no" id="allergistNo" name="specialistVisitsAllerg"></label>
                             </td>
                             <td>
-                                <label><input type="radio" value="unknown" id="allergistUnknown" name="specialistVisitsAllergist"></label>
+                                <label><input type="radio" value="unknown" id="allergistUnknown" name="specialistVisitsAllerg"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" id="allergistRecent" name="specialistVisitsAllergistRecent"></label>
+                                <label><input type="checkbox" id="allergistRecent" name="specialistVisitsAllergRecent"></label>
                             </td>
                         </tr>
                         <tr>
@@ -821,16 +821,16 @@
                                 <b>Pediatrician</b>
                             </td>
                             <td>
-                                <label><input type="radio" value="yes" id="pediatricianYes" name="specialistVisitsPediatrician"></label>
+                                <label><input type="radio" value="yes" id="pediatricianYes" name="specialistVisitsPed"></label>
                             </td>
                             <td>
-                                <label><input type="radio" value="no" id="pediatricianNo" name="specialistVisitsPediatrician"></label>
+                                <label><input type="radio" value="no" id="pediatricianNo" name="specialistVisitsPed"></label>
                             </td>
                             <td>
-                                <label><input type="radio" value="unknown" id="pediatricianUnknown" name="specialistVisitsPediatrician"></label>
+                                <label><input type="radio" value="unknown" id="pediatricianUnknown" name="specialistVisitsPed"></label>
                             </td>
                             <td>
-                                <label><input type="checkbox" id="pediatricianRecent" name="specialistVisitsPediatricianRecent"></label>
+                                <label><input type="checkbox" id="pediatricianRecent" name="specialistVisitsPedRecent"></label>
                             </td>
                         </tr>
                     </table>
@@ -997,15 +997,15 @@
                                 apply.</b></label>
                         <span>&nbsp;&nbsp;
                             <label>
-                                <input type="radio" id="currentEmploymentStatusFull" name="currentEmploymentStatus"  value="full">
+                                <input type="radio" id="currentEmploymentStatusFull" name="currentEmployStatus"  value="full">
                                 Full-Time
                             </label>
                             <label>
-                                <input type="radio" id="currentEmploymentStatusPart" name="currentEmploymentStatus"  value="part">
+                                <input type="radio" id="currentEmploymentStatusPart" name="currentEmployStatus"  value="part">
                                 Part-Time
                             </label>                            
                             <label>
-                                <input type="radio" id="currentEmploymentStatusRetired" name="currentEmploymentStatus" value="retired">
+                                <input type="radio" id="currentEmploymentStatusRetired" name="currentEmployStatus" value="retired">
                                 Retired
                             </label>
                             <br />
@@ -2121,7 +2121,7 @@
                         <label><b>Number of inhaled corticosteroid prescriptions
                                 filled in the last year</b></label>
                         <label>
-                            <input type="text" style="width:30px;" name="inhaledCorticosteroidFilledLastYear" placeholder="#"
+                            <input type="text" style="width:30px;" name="inhaledCorticoFilledLastYear" placeholder="#"
                                 id="selfReported_ICS_last12mos"></label>
                         <label><i>(Prescription = one month supply)</i></label>
 
@@ -2502,11 +2502,11 @@
                                 <b>Referred to Asthma Specialist for Suspected Severe Asthma</b>
                             </td>
                             <td>
-                                <label><input type="radio" name="referredSpecialistSuspectedSevereAsthma" id="referredSpecialistSuspectedSevereAsthmaYes"
+                                <label><input type="radio" name="refSpecialistSuspectSevAsthma" id="referredSpecialistSuspectedSevereAsthmaYes"
                                         value="yes"></label>
                             </td>
                             <td>
-                                <label><input type="radio" name="referredSpecialistSuspectedSevereAsthma" id="referredSpecialistSuspectedSevereAsthmaNo" value="no"></label>
+                                <label><input type="radio" name="refSpecialistSuspectSevAsthma" id="referredSpecialistSuspectedSevereAsthmaNo" value="no"></label>
                             </td>
                         </tr>
                     </table>
@@ -2714,24 +2714,24 @@
                     <label style="width:45%"><b>Yellow or Red Zone of Action plan followed since last visit
                         </b></label>
                     <label>
-                        <input type="radio" name="yellowRedActionPlanSinceLast" id="yellowRedActionPlanSinceLastYes" value="yes">
+                        <input type="radio" name="yellowRedActPlanSinceLast" id="yellowRedActionPlanSinceLastYes" value="yes">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" name="yellowRedActionPlanSinceLast" id="yellowRedActionPlanSinceLastNo" value="no">
+                        <input type="radio" name="yellowRedActPlanSinceLast" id="yellowRedActionPlanSinceLastNo" value="no">
                         No
                     </label>
-                    <input type="text" name="yellowRedActionPlanSinceLastNum" placeholder="# of times"
+                    <input type="text" name="yellowRedActPlanSinceLastNum" placeholder="# of times"
                         style="width:80px; margin-left: 20px;">
                     <hr style="margin:2px 0px 2px 0px">
                     <label style="width:45%"><b>Mini Asthma Quality of Life Questionnaire score
                         </b></label>
-                    <input type="text" name="miniAsthmaQOLQuestionnaireScore" min="1" max="7" placeholder="#">
+                    <input type="text" name="miniAsthmaQOLQuestionScore" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Asthma Control Questionnaire score
                         </b></label>
-                    <input type="text" id="asthmaControlQuestionnaireScore" name="asthmaControlQuestionnaireScore" min="0" max="6" placeholder="#">
+                    <input type="text" id="asthmaControlQuestionnaireScore" name="asthmaControlQuestionScore" min="0" max="6" placeholder="#">
                     <hr style="margin:2px 0px 2px 0px">
 
                     <label style="width:45%"><b>Asthma Control Test score
@@ -2745,7 +2745,9 @@
                         placeholder="#">
                 </div>
             </div>
-            <div>
+            <div style="padding-left:170px;">
+                Both patient and provider consent to sending assessment information to asthmalife.ca
+                <input style="margin-top:10px;" type="checkbox" />
                 <input value="Save & Close" class="button" type="button" onclick="beforeSubmit()" id="initialSubmitButton" />
                 <!-- Hide actual submit button to only hit programmatically after http response  -->
                 <input value="Save & Close" style="display: none;" name="SubmitButton" id="SubmitButton" type="submit"/>
@@ -2762,12 +2764,9 @@
     <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/lib/growl/growl-notification.min.js"></script>
 
 
-    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/algorithm/SevereAlgorithm.js"></script>
-    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js"></script>
-    <!-- <script type="text/javascript" src="https://jmcauley.com/oscar/js/algorithm/Form.js"></script> -->
-
+    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/algorithm/SevereAlgorithm.js?v=1660553587249"></script>
+    <script type="text/javascript" src="https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js?v=1660593583834"></script>
     
-
 
     <!-- <script>
             $(window).on( "load", function() {
@@ -2775,36 +2774,6 @@
                 $.getScript("https://asthmalife.ca/eAPI/assets/js/algorithm/Form.js");
             });        
     </script> -->
-
-<script>
-
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
-}
-
-
-const excludeItems = ['undefined', undefined, "SubmitButton", "EMR_PatientID", "EMR_eAPIID"]
-
-     var arr =[];
-    $("input, select").each(function(){
-    
-        arr.push($(this).attr('name'));
-    });
-    
-    var unique = arr.filter(onlyUnique);
-    var str;
-    unique.forEach(function(item){
-        if(!excludeItems.includes(item))
-        str += item +','
-    }
-    )
-
-    console.log(str.substring(0, str.length - 1));
-
-
-
-
-</script>
 
 
 </body>
