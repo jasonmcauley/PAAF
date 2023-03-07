@@ -114,7 +114,7 @@
 
         // Even though these are outside the asthma control section of the form, they still affect the asthma control portion of the algorithm
         if( parseInt($("#controlTestScore").val()) < 20 || 
-            parseFloat($("#controlScore").val()) > 1.5 ||
+            parseFloat($("#asthmaControlQuestionnaireScore").val()) > 1.5 ||
             parseInt($("#childScore").val()) < 20 || 
             parseInt($("#numSystemicSteroidLastYear").val()) > 1 || 
             parseInt($("#hospitalizedLastYear").val()) > 0 || 
